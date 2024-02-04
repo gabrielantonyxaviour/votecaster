@@ -1,11 +1,14 @@
-const express = require("express");
-const app = express();
-const port = 3000; // You can choose any available port
+// pages/api/hello.ts
 
-// Define a route
-app.get("/", (req, res) => {
-  res.status(200).send(`
-  <!DOCTYPE html>
+import { NextApiRequest, NextApiResponse } from "next";
+
+export default function handler(req: NextApiRequest, res: NextApiResponse) {
+  // Handle the request and send the response
+  let imageUrl = "https://picsum.photos/200/300";
+
+  res.status(200).send(
+    `
+    <!DOCTYPE html>
       <html>
         <head>
           <title>Vote Recorded</title>
@@ -19,10 +22,6 @@ app.get("/", (req, res) => {
         <body>
           <p>hello</p>
         </body>
-      </html>`);
-});
-
-// Start the server
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
-});
+      </html>`
+  );
+}
