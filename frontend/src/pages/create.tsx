@@ -1,5 +1,5 @@
 import React from "react";
 
 export default function CreatePage() {
-  return <div></div>;
+  return <div className="">Createe</div>;
 }
