@@ -1,5 +1,5 @@
 import React from "react";
 
-export default function PollsPage() {
+export default function Home() {
   return <div></div>;
 }
