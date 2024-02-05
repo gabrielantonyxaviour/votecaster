@@ -15,10 +15,10 @@ export default async function handler(
   const pollData = {
     question: "Which programming language do you prefer?",
     options: [
-      { text: "JavaScript", percentOfTotal: 30 },
-      { text: "Python", percentOfTotal: 25 },
-      { text: "Java", percentOfTotal: 20 },
-      { text: "C++", percentOfTotal: 25 },
+      { key: 1, text: "JavaScript", percentOfTotal: 30 },
+      { key: 2, text: "Python", percentOfTotal: 25 },
+      { key: 3, text: "Java", percentOfTotal: 20 },
+      { key: 4, text: "C++", percentOfTotal: 25 },
     ],
   };
   const showResults = true;
@@ -51,6 +51,7 @@ export default async function handler(
         {pollData.options.map((opt, index) => {
           return (
             <div
+              key={opt.key}
               style={{
                 backgroundColor: showResults ? "#007bff" : "",
                 color: "#fff",
