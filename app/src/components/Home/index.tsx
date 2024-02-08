@@ -1,4 +1,10 @@
 import React from "react";
+import circuit from "@/utils/circuit.json";
+import {
+  BarretenbergBackend,
+  CompiledCircuit,
+} from "@noir-lang/backend_barretenberg";
+import { Noir } from "@noir-lang/noir_js";
 
 const setup = async () => {
   await Promise.all([
@@ -24,11 +30,23 @@ const setup = async () => {
 export default function Home() {
   const [guess, setGuess] = React.useState(0);
   const [logs, setLogs] = React.useState<string[]>([]);
-  const [proof, setProof] = React.useState("");
+  const [proof, setProof] = React.useState<Uint8Array>();
 
   async function guessValue() {
     try {
+      const backend = new BarretenbergBackend(circuit as CompiledCircuit);
+      const noir = new Noir(circuit as CompiledCircuit, backend);
+      setLogs((prev) => [...prev, "Generating proof... ⏳"]);
+      const proof = await noir.generateFinalProof({ x: guess, y: 10 });
+      setProof(proof.proof);
       setLogs((prev) => [...prev, "Guessed it right 😏"]);
+      setLogs((prev) => [...prev, "Verifying proof... ⏳"]);
+      const isValid = await noir.verifyFinalProof(proof);
+      if (isValid) {
+        setLogs((prev) => [...prev, "Proof verified ✅"]);
+      } else {
+        setLogs((prev) => [...prev, "Proof verification failed ❌"]);
+      }
     } catch (err) {
       setLogs((prev) => [...prev, "Wrong guess 💔"]);
     }
@@ -61,15 +79,21 @@ export default function Home() {
           <p
             key={index}
             className={
-              log == "Guessed it right 😏" ? "text-[#00ff00]" : "text-[#ff0000]"
+              log == "Guessed it right 😏" || log == "Proof verified ✅"
+                ? "text-[#00ff00]"
+                : log == "Wrong guess 💔" ||
+                  log == "Proof verification failed ❌"
+                ? "text-[#ff0000]"
+                : "text-[#0000ff]"
             }
           >
             {log}
           </p>
         ))}
       </div>
-      <div className="w-[60%] my-6 border border-[1px] border-white p-4 rounded-lg">
-        <p className="mb-2 text-xl font-semibold">Proof</p>
+      <div className="w-[60%] my-6 border border-[1px] border-white p-4 rounded-lg  ">
+        <p className="mb-2 text-xl font-semibold whitespace-wrap">Proof</p>
+        <p className="whitespace-normal overflow-x-auto">{proof?.toString()}</p>
       </div>
     </div>
   );
