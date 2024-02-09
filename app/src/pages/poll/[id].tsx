@@ -58,8 +58,8 @@ export default function PollPage() {
         <p>
           {JSON.stringify({
             "fc:frame": "vNext",
-            "fc:frame:post_url": `${process.env["HOST"]}api/vote?id=2`,
-            "fc:frame:image": `${process.env["HOST"]}api/image?id=2`,
+            "fc:frame:post_url": `${process.env["HOST"]}/api/vote?id=2`,
+            "fc:frame:image": `${process.env["HOST"]}/api/image?id=2`,
           })}
         </p>{" "}
       </div>
