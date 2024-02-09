@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "npx sharp-cli install"
   },
   "dependencies": {
     "@farcaster/hub-nodejs": "^0.10.24",
