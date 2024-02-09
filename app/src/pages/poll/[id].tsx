@@ -41,7 +41,7 @@ export async function generateMetadata(
     title: poll.question,
     openGraph: {
       title: poll.question,
-      images: [`https://picsum.photos/400`],
+      images: [`/api/image?id=${id}`],
     },
     other: {
       ...fcMetadata,
@@ -51,18 +51,15 @@ export async function generateMetadata(
 }
 
 export default function PollPage() {
-  const host = process.env["HOST"];
   return (
-    host && (
-      <div>
-        <p>
-          {JSON.stringify({
-            "fc:frame": "vNext",
-            "fc:frame:post_url": `${process.env["HOST"]}/api/vote?id=2`,
-            "fc:frame:image": `${process.env["HOST"]}/api/image?id=2`,
-          })}
-        </p>{" "}
-      </div>
-    )
+    <div>
+      <p>
+        {JSON.stringify({
+          "fc:frame": "vNext",
+          "fc:frame:post_url": `${process.env["HOST"]}/api/vote?id=2`,
+          "fc:frame:image": `${process.env["HOST"]}/api/image?id=2`,
+        })}
+      </p>{" "}
+    </div>
   );
 }
