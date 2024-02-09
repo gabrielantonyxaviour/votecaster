@@ -29,6 +29,8 @@ export async function generateMetadata(
     "fc:frame": "vNext",
     "fc:frame:post_url": `${process.env["HOST"]}/api/vote?id=${id}`,
     "fc:frame:image": `${process.env["HOST"]}/api/image?id=${id}`,
+    "og:image:": `${process.env["HOST"]}/api/image?id=${id}`,
+    "og:title": poll.question,
   };
   poll.options
     .map((option) => option.text)
