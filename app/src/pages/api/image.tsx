@@ -5,13 +5,12 @@ import satori from "satori";
 import sharp from "sharp";
 import { join } from "path";
 import * as fs from "fs";
-
+const fontFilePath = join(process.cwd(), "Lato-Regular.ttf");
+let fontData = fs.readFileSync(fontFilePath);
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const fontFilePath = join(process.cwd(), "Lato-Regular.ttf");
-  let fontData = fs.readFileSync(fontFilePath);
   const pollData = {
     question: "Which programming language do you prefer?",
     options: [
@@ -46,7 +45,7 @@ export default async function handler(
         }}
       >
         <h2 style={{ textAlign: "center", color: "lightgray" }}>
-          {"poll.title"}
+          {pollData.question}
         </h2>
         {pollData.options.map((opt, index) => {
           return (
