@@ -51,5 +51,5 @@ export async function generateMetadata(
 }
 
 export default function PollPage() {
-  return <div></div>;
+  return <div> Hello </div>;
 }
