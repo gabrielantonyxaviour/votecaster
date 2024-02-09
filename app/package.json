@@ -6,8 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "postinstall": "npm rebuild --update-binary"
+    "lint": "next lint"
   },
   "dependencies": {
     "@farcaster/hub-nodejs": "^0.10.24",
