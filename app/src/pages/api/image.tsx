@@ -6,8 +6,8 @@ import sharp from "sharp";
 import { join } from "path";
 import * as fs from "fs";
 
-const fontPath = join(process.cwd(), "Lato-Regular.ttf");
-let fontData = fs.readFileSync(fontPath);
+// const fontPath = join(process.cwd(), "Lato-Regular.ttf");
+// let fontData = fs.readFileSync(fontPath);
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -73,14 +73,15 @@ export default async function handler(
     {
       width: 600,
       height: 400,
-      fonts: [
-        {
-          data: fontData,
-          name: "Roboto",
-          style: "normal",
-          weight: 400,
-        },
-      ],
+      fonts: [],
+      // fonts: [
+      //   {
+      //     data: fontData,
+      //     name: "Roboto",
+      //     style: "normal",
+      //     weight: 400,
+      //   },
+      // ],
     }
   );
 
