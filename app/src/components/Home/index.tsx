@@ -55,7 +55,7 @@ export default function Home() {
   return (
     <div className="w-full flex flex-col items-center justify-center  text-center mt-10">
       <p className="font-bold text-4xl">Noir app</p>
-      <div className="w-[20%] my-6 border border-[1px] border-white p-4 rounded-lg">
+      <div className="w-[20%] my-6  border-[1px] border-white p-4 rounded-lg">
         <p className="mb-2 text-xl font-semibold">Your Guess</p>
         <input
           type="number"
@@ -68,13 +68,13 @@ export default function Home() {
           }}
         ></input>
         <button
-          className="bg-white px-3 py-2 rounded-lg border border-2 border-black text-black hover:border-white mt-4 hover:bg-black hover:text-white transition-all duration-300 ease-in-out"
+          className="bg-white px-3 py-2 rounded-lg  border-2 border-black text-black hover:border-white mt-4 hover:bg-black hover:text-white transition-all duration-300 ease-in-out"
           onClick={guessValue}
         >
           Submit
         </button>
       </div>
-      <div className="w-[40%] my-6 border border-[1px] border-white p-4 rounded-lg">
+      <div className="w-[40%] my-6  border-[1px] border-white p-4 rounded-lg">
         <p className="mb-2 text-xl font-semibold">Logs</p>
         {logs.map((log, index) => (
           <p
@@ -92,7 +92,7 @@ export default function Home() {
           </p>
         ))}
       </div>
-      <div className="w-[60%] my-6 border border-[1px] border-white p-4 rounded-lg  ">
+      <div className="w-[60%] my-6  border-[1px] border-white p-4 rounded-lg  ">
         <p className="mb-2 text-xl font-semibold whitespace-wrap">Proof</p>
         <p className="whitespace-normal overflow-x-auto">{proof?.toString()}</p>
       </div>

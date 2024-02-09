@@ -14,6 +14,7 @@ export default async function handler(
 
   const pollData = {
     question: "Which programming language do you prefer?",
+    cybil: true,
     options: [
       { key: 1, text: "JavaScript", percentOfTotal: 30 },
       { key: 2, text: "Python", percentOfTotal: 25 },
@@ -45,6 +46,7 @@ export default async function handler(
           padding: 20,
         }}
       >
+        <h1>priv.cast</h1>
         <h2 style={{ textAlign: "center", color: "lightgray" }}>
           {pollData.question}
         </h2>
