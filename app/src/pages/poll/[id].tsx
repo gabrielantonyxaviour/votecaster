@@ -7,7 +7,7 @@ type Props = {
   searchParams: { [key: string]: string | string[] | undefined };
 };
 
-const pollData = {
+const poll = {
   question: "Which programming language do you prefer?",
   options: [
     { key: 1, text: "JavaScript", percentOfTotal: 30 },
@@ -17,37 +17,38 @@ const pollData = {
   ],
 };
 
-// export async function generateMetadata(
-//   { params, searchParams }: Props,
-//   parent: ResolvingMetadata
-// ): Promise<Metadata> {
-// // read route params
-// const id = params.id;
-// const poll = await getPoll(id);
+export async function generateMetadata(
+  { params, searchParams }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  // read route params
+  const id = params.id;
+  // const poll = await getPoll(id);
 
-// const fcMetadata: Record<string, string> = {
-//   "fc:frame": "vNext",
-//   "fc:frame:post_url": `${process.env["HOST"]}/api/vote?id=${id}`,
-//   "fc:frame:image": `${process.env["HOST"]}/api/image?id=${id}`,
-// };
-// [poll.option1, poll.option2, poll.option3, poll.option4]
-//   .filter((o) => o !== "")
-//   .map((option, index) => {
-//     fcMetadata[`fc:frame:button:${index + 1}`] = option;
-//   });
+  const fcMetadata: Record<string, string> = {
+    "fc:frame": "vNext",
+    "fc:frame:post_url": `${process.env["HOST"]}/api/vote?id=${id}`,
+    "fc:frame:image": `${process.env["HOST"]}/api/image?id=${id}`,
+  };
+  poll.options
+    .map((option) => option.text)
+    .filter((o) => o !== "")
+    .map((option, index) => {
+      fcMetadata[`fc:frame:button:${index + 1}`] = option;
+    });
 
-//   return {
-//     title: "poll.title",
-//     openGraph: {
-//       title: "poll.title",
-//       images: [`/api/image?id=${id}`],
-//     },
-//     other: {
-//       ...fcMetadata,
-//     },
-//     metadataBase: new URL(process.env["HOST"] || ""),
-//   };
-// }
+  return {
+    title: poll.question,
+    openGraph: {
+      title: poll.question,
+      images: [`https://picsum.photos/400`],
+    },
+    other: {
+      ...fcMetadata,
+    },
+    metadataBase: new URL(process.env["HOST"] || ""),
+  };
+}
 
 export default function PollPage() {
   return <div></div>;
