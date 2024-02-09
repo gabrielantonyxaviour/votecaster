@@ -6,12 +6,12 @@ import sharp from "sharp";
 import { join } from "path";
 import * as fs from "fs";
 
-// const fontPath = join(process.cwd(), "Lato-Regular.ttf");
-// let fontData = fs.readFileSync(fontPath);
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  const fontFilePath = join(process.cwd(), "public", "Lato-Regular.ttf");
+  let fontData = fs.readFileSync(fontFilePath);
   const pollData = {
     question: "Which programming language do you prefer?",
     options: [
@@ -73,15 +73,14 @@ export default async function handler(
     {
       width: 600,
       height: 400,
-      fonts: [],
-      // fonts: [
-      //   {
-      //     data: fontData,
-      //     name: "Roboto",
-      //     style: "normal",
-      //     weight: 400,
-      //   },
-      // ],
+      fonts: [
+        {
+          data: fontData,
+          name: "Lato-Regular",
+          style: "normal",
+          weight: 400,
+        },
+      ],
     }
   );
 
