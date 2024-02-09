@@ -66,7 +66,7 @@ function getMeta(poll: any) {
   );
 }
 
-export default function PollPage() {
+export default function PollPage({ params }: { params: { id: string } }) {
   return (
     process.env["HOST"] && (
       <div>
