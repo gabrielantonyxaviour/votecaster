@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "npx sharp-cli install"
+    "postinstall": "npm rebuild --update-binary"
   },
   "dependencies": {
     "@farcaster/hub-nodejs": "^0.10.24",
