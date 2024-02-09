@@ -31,8 +31,9 @@
 
 // }
 
-fn main(x: Field, y: Field) {
+fn main(x: Field, y: Field) -> pub Field {
     assert(x == y, "x is not equal to y");
+    x + y
 }
 
 #[test]

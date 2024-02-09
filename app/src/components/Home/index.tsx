@@ -37,7 +37,8 @@ export default function Home() {
       const backend = new BarretenbergBackend(circuit as CompiledCircuit);
       const noir = new Noir(circuit as CompiledCircuit, backend);
       setLogs((prev) => [...prev, "Generating proof... ⏳"]);
-      const proof = await noir.generateFinalProof({ x: guess, y: 10 });
+      const proof = await noir.generateFinalProof({ x: guess, y: 5 });
+      console.log(proof);
       setProof(proof.proof);
       setLogs((prev) => [...prev, "Guessed it right 😏"]);
       setLogs((prev) => [...prev, "Verifying proof... ⏳"]);
