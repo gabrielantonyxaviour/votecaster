@@ -1,6 +1,6 @@
 // pages/api/hello.ts
 
-import { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiRequest, NextApiResponse } from "next";
 import satori from "satori";
 import sharp from "sharp";
 import { join } from "path";
@@ -10,7 +10,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const fontFilePath = join(process.cwd(), "public", "Lato-Regular.ttf");
+  const fontFilePath = join(process.cwd(), "Lato-Regular.ttf");
   let fontData = fs.readFileSync(fontFilePath);
   const pollData = {
     question: "Which programming language do you prefer?",
