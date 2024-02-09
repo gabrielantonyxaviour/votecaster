@@ -31,13 +31,17 @@ export async function generateMetadata(
     "fc:frame:image": `${process.env["HOST"]}/api/image?id=${id}`,
     "og:image:": `${process.env["HOST"]}/api/image?id=${id}`,
     "og:title": poll.question,
+    "fc:frame:button:1": "JavaScript",
+    "fc:frame:button:2": "Python",
+    "fc:frame:button:3": "Java",
+    "fc:frame:button:4": "C++",
   };
-  poll.options
-    .map((option) => option.text)
-    .filter((o) => o !== "")
-    .map((option, index) => {
-      fcMetadata[`fc:frame:button:${index + 1}`] = option;
-    });
+  // poll.options
+  //   .map((option) => option.text)
+  //   .filter((o) => o !== "")
+  //   .map((option, index) => {
+  //     fcMetadata[`fc:frame:button:${index + 1}`] = option;
+  //   });
   console.log(fcMetadata);
   return {
     title: poll.question,
@@ -52,16 +56,34 @@ export async function generateMetadata(
   };
 }
 
+function getMeta(poll: any) {
+  // This didn't work for some reason
+  return (
+    <Head>
+      <meta property="og:image" content="" key="test"></meta>
+      <meta property="og:title" content="My page title" key="title" />
+    </Head>
+  );
+}
+
 export default function PollPage() {
   return (
-    <div>
-      <p>
-        {JSON.stringify({
-          "fc:frame": "vNext",
-          "fc:frame:post_url": `${process.env["HOST"]}/api/vote?id=2`,
-          "fc:frame:image": `${process.env["HOST"]}/api/image?id=2`,
-        })}
-      </p>{" "}
-    </div>
+    process.env["HOST"] && (
+      <div>
+        <p>
+          {JSON.stringify({
+            "fc:frame": "vNext",
+            "fc:frame:post_url": `${process.env["HOST"]}/api/vote?id=${2}`,
+            "fc:frame:image": `${process.env["HOST"]}/api/image?id=${2}`,
+            "og:image:": `${process.env["HOST"]}/api/image?id=${2}`,
+            "og:title": poll.question,
+            "fc:frame:button:1": "JavaScript",
+            "fc:frame:button:2": "Python",
+            "fc:frame:button:3": "Java",
+            "fc:frame:button:4": "C++",
+          })}
+        </p>{" "}
+      </div>
+    )
   );
 }
