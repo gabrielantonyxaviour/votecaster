@@ -1,9 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 // import {Poll, POLL_EXPIRY} from "@/app/types";
-import { getSSLHubRpcClient, Message } from "@farcaster/hub-nodejs";
+// import { getSSLHubRpcClient, Message } from "@farcaster/hub-nodejs";
 
-const HUB_URL = process.env["HUB_URL"];
-const client = HUB_URL ? getSSLHubRpcClient(HUB_URL) : undefined;
+// const HUB_URL = process.env["HUB_URL"];
+// const client = HUB_URL ? getSSLHubRpcClient(HUB_URL) : undefined;
 
 export default async function handler(
   req: NextApiRequest,
@@ -20,25 +20,24 @@ export default async function handler(
         return res.status(400).send("Missing poll ID");
       }
 
-      let validatedMessage: Message | undefined = undefined;
+      // let validatedMessage: Message | undefined = undefined;
       try {
-        const frameMessage = Message.decode(
-          Buffer.from(req.body?.trustedData?.messageBytes || "", "hex")
-        );
-        const result = await client?.validateMessage(frameMessage);
-        if (result && result.isOk() && result.value.valid) {
-          validatedMessage = result.value.message;
-        }
-
-        // Also validate the frame url matches the expected url
-        let urlBuffer = validatedMessage?.data?.frameActionBody?.url || [];
-        const urlString = Buffer.from(urlBuffer).toString("utf-8");
-        if (
-          validatedMessage &&
-          !urlString.startsWith(process.env["HOST"] || "")
-        ) {
-          return res.status(400).send(`Invalid frame url: ${urlBuffer}`);
-        }
+        // const frameMessage = Message.decode(
+        //   Buffer.from(req.body?.trustedData?.messageBytes || "", "hex")
+        // );
+        // const result = await client?.validateMessage(frameMessage);
+        // if (result && result.isOk() && result.value.valid) {
+        //   validatedMessage = result.value.message;
+        // }
+        // // Also validate the frame url matches the expected url
+        // let urlBuffer = validatedMessage?.data?.frameActionBody?.url || [];
+        // const urlString = Buffer.from(urlBuffer).toString("utf-8");
+        // if (
+        //   validatedMessage &&
+        //   !urlString.startsWith(process.env["HOST"] || "")
+        // ) {
+        //   return res.status(400).send(`Invalid frame url: ${urlBuffer}`);
+        // }
       } catch (e) {
         return res.status(400).send(`Failed to validate message: ${e}`);
       }
@@ -46,21 +45,21 @@ export default async function handler(
       let buttonId = 0,
         fid = 0;
       // If HUB_URL is not provided, don't validate and fall back to untrusted data
-      if (client) {
-        buttonId = validatedMessage?.data?.frameActionBody?.buttonIndex || 0;
-        fid = validatedMessage?.data?.fid || 0;
-      } else {
-        buttonId = req.body?.untrustedData?.buttonIndex || 0;
-        fid = req.body?.untrustedData?.fid || 0;
-      }
+      // if (client) {
+      //   buttonId = validatedMessage?.data?.frameActionBody?.buttonIndex || 0;
+      //   fid = validatedMessage?.data?.fid || 0;
+      // } else {
+      //   buttonId = req.body?.untrustedData?.buttonIndex || 0;
+      //   fid = req.body?.untrustedData?.fid || 0;
+      // }
 
       // Clicked create poll
-      if ((results || voted) && buttonId === 2) {
-        return res
-          .status(302)
-          .setHeader("Location", `${process.env["HOST"]}`)
-          .send("Redirecting to create poll");
-      }
+      // if ((results || voted) && buttonId === 2) {
+      //   return res
+      //     .status(302)
+      //     .setHeader("Location", `${process.env["HOST"]}`)
+      //     .send("Redirecting to create poll");
+      // }
 
       // const voteExists = await kv.sismember(`poll:${pollId}:voted`, fid)
       // voted = voted || !!voteExists

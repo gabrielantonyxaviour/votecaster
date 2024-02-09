@@ -21,7 +21,7 @@ export default async function handler(
       { key: 4, text: "C++", percentOfTotal: 25 },
     ],
   };
-  const showResults = true;
+  const showResults = false;
   // // Handle the request and send the response
   let imageUrl = "https://picsum.photos/400/200";
   const svg = await satori(
@@ -32,7 +32,7 @@ export default async function handler(
         display: "flex",
         width: "100%",
         height: "100%",
-        backgroundColor: "f4f4f4",
+        backgroundColor: "#450C63",
         padding: 50,
         lineHeight: 1.2,
         fontSize: 24,

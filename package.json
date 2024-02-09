@@ -1,5 +1,0 @@
-{
-	"dependencies": {
-		"@noir-lang/noirc_abi": "^0.23.0"
-	}
-}
