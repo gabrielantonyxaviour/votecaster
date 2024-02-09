@@ -6,7 +6,7 @@ settings:
 
 dependencies:
   '@farcaster/hub-nodejs':
-    specifier: ^0.10.24
+    specifier: ^0.10.23
     version: 0.10.24(typescript@5.3.3)
   '@fortawesome/fontawesome-svg-core':
     specifier: ^6.5.1
@@ -17,6 +17,9 @@ dependencies:
   '@fortawesome/react-fontawesome':
     specifier: ^0.2.0
     version: 0.2.0(@fortawesome/fontawesome-svg-core@6.5.1)(react@18.2.0)
+  '@noir-lang/acvm_js':
+    specifier: ^0.39.0
+    version: 0.39.0
   '@noir-lang/backend_barretenberg':
     specifier: 0.19.4
     version: 0.19.4
@@ -618,6 +621,10 @@ packages:
 
   /@noir-lang/acvm_js@0.35.0:
     resolution: {integrity: sha512-LiQUSF3P4/1VGfMZc0hSivLs4oiPsRt+ADFBMF7sOg4oaImeQ4L6tu0Og2Wh1Pc0k2y1EXdv1EKxN2N1WRDdKg==}
+    dev: false
+
+  /@noir-lang/acvm_js@0.39.0:
+    resolution: {integrity: sha512-Y77qyfamkYSIzzKFkewTwExzTvxYcRd1XBqo950ti4uKMdu18GthkOssqC7CGacwx5PdrdOGFGRJbVtjoXeKIg==}
     dev: false
 
   /@noir-lang/backend_barretenberg@0.19.4:
