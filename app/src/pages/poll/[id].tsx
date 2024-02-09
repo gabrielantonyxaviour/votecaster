@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import Head from "next/head";
 import { Metadata, ResolvingMetadata } from "next";
@@ -36,7 +36,7 @@ export async function generateMetadata(
     .map((option, index) => {
       fcMetadata[`fc:frame:button:${index + 1}`] = option;
     });
-
+  console.log(fcMetadata);
   return {
     title: poll.question,
     openGraph: {
@@ -51,5 +51,18 @@ export async function generateMetadata(
 }
 
 export default function PollPage() {
-  return <div> Hello </div>;
+  const host = process.env["HOST"];
+  return (
+    host && (
+      <div>
+        <p>
+          {JSON.stringify({
+            "fc:frame": "vNext",
+            "fc:frame:post_url": `${process.env["HOST"]}api/vote?id=2`,
+            "fc:frame:image": `${process.env["HOST"]}api/image?id=2`,
+          })}
+        </p>{" "}
+      </div>
+    )
+  );
 }
