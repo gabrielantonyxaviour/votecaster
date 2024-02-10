@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import circuit from "@/utils/circuit.json";
 import {
