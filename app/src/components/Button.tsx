@@ -8,10 +8,13 @@ export default function Button({
   click: () => void;
 }) {
   return (
-    <div className="bg-[#4A0C63]  rounded-sm">
+    <div className="bg-[#4A0C63]  rounded-sm" onClick={click}>
       <div
         className="bg-[#8A08BF]  -translate-y-1 -translate-x-1 rounded-sm border-2 border-[#4A0C63] cursor-pointer"
-        onClick={click}
+        onClick={() => {
+          console.log("clicked");
+          click();
+        }}
       >
         <p className="text-white text-sm font-semibold mx-3 my-1">{text}</p>
       </div>
