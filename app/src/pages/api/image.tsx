@@ -42,25 +42,13 @@ export default async function handler(
           flex: 1,
         }}
       >
-        <p
-          style={{
-            fontSize: 32,
-            fontWeight: "bold",
-            color: "#fff",
-            marginLeft: "auto",
-            marginRight: "auto",
-            lineHeight: 1,
-            marginBottom: 20,
-          }}
-        >
-          priv.cast
-        </p>
         <div
           style={{
             flex: 1,
             width: "80%",
             backgroundColor: "#FBF6FF",
             margin: "auto",
+            marginTop: 50,
             display: "flex",
             flexDirection: "column",
             padding: 20,
@@ -93,7 +81,7 @@ export default async function handler(
           </p>
           <div
             style={{
-              flex: 1,
+              flex: 2,
               display: "flex",
               justifyContent: "center",
               width: "100%",
@@ -167,6 +155,11 @@ export default async function handler(
               </p>
             </div>
           </div>
+          <div
+            style={{
+              flex: 1,
+            }}
+          ></div>
         </div>
         {/* <h2 style={{ textAlign: "center", color: "lightgray" }}>
           {pollData.question}
