@@ -1,39 +1,18 @@
-// use dep::std;
-// use dep::ecrecover;
+use dep::std;
 
-// // Oracle
-// fn check_farcaster_id(farcasterId: Field, voter: Field)-> pub bool {
-//   true
-// }
+#[oracle(getSqrt)]
+unconstrained fn sqrt(number: Field) -> Field { }
 
-// fn main(
-//   pub_key_x: [u8; 32],
-//   pub_key_y: [u8; 32],
-//   signature: [u8; 64],
-//   merkle_path: [Field; 4],
-//   voter: Field,
-//   farcasterId: Field,
-//   nullifier: pub Field,
-//   new_merkle_root: pub Field,
-//   vote: pub u8
-//   ) {
-//     // verify signature (Aim: Check if he intented to vote)
+unconstrained fn get_sqrt(number: Field) -> Field {
+    sqrt(number)
+}
 
-//     // find a way for nullifier (Aim: Check if already voted)
-//     // recursive proofs hopefully
-
-//     // check farcaster id (Aim: Check validity of the farcaster id)
-//     // Use oracle
-// }
-
-// #[test]
-// fn test_main() {
-
-// }
-
-fn main(x: Field, y: Field) -> pub Field {
+fn main(x: Field, y: Field, sqrt_x: Field, y: sqrt_y) -> pub Field {
     assert(x == y, "x is not equal to y");
-    x + y
+
+    assert(get_sqrt(x) == sqrt_x, "sqrt_x is not the square root of x");
+    assert(get_sqrt(y) == sqrt_y, "sqrt_y is not the square root of y"); 
+    sqrt_x*sqrt_y 
 }
 
 #[test]
