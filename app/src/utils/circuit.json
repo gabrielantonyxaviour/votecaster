@@ -1,17 +1,25 @@
 {
   "noir_version": "0.22.0+3fae4a03fded4e3f5065e7461c563f7e39745604",
-  "hash": 17014044627262508599,
+  "hash": 12012479500384965718,
   "abi": {
     "parameters": [
       { "name": "x", "type": { "kind": "field" }, "visibility": "private" },
-      { "name": "y", "type": { "kind": "field" }, "visibility": "private" }
+      { "name": "y", "type": { "kind": "field" }, "visibility": "private" },
+      {
+        "name": "sqrt_x",
+        "type": { "kind": "field" },
+        "visibility": "private"
+      },
+      { "name": "sqrt_y", "type": { "kind": "field" }, "visibility": "private" }
     ],
     "param_witnesses": {
+      "sqrt_x": [{ "start": 3, "end": 4 }],
+      "sqrt_y": [{ "start": 4, "end": 5 }],
       "x": [{ "start": 1, "end": 2 }],
       "y": [{ "start": 2, "end": 3 }]
     },
     "return_type": { "kind": "field" },
-    "return_witnesses": [3]
+    "return_witnesses": [7]
   },
-  "bytecode": "H4sIAAAAAAAA/7WRwQnDMAxF7XiELuARJMuOpVtXiakChdJQmkK7fS8OuPQY51+e0OGjh5wxZjD/2XbnStgXtE0XwRij5qBIOEGQwgliKiMjY+J0CUykHDlLkQyCkRTnJDTXsqHfXXCgc+jp7Do6b57W/P7eVrpmbnOqfPvr09+X1evjNd38uvjPF4yxhIRHAgAA"
+  "bytecode": "H4sIAAAAAAAA/+1TUW6DMAw10MKmSTtDtBMkJCnJH3fYAaaihW0/QwUmtbdfUBPNMLSfuf2qpSjBic179nMBAFs4W+ZXAr8t+uqw8/+ZSOhycYx34vEQzvd+pQseOTrXRP/P6evDMfYUcSsQN1jcP/p1h968ufH50I+4PBnM24nDp5SbxTsMI94VsCKRmoa3gBVgMbfkO6VcVTohxZ6XtjGaK93sjDBCG/1aGimdUaayja24FUo60Wor25A8I8S5pcvFrzVzKVxm5ib932bubLeZm8/chhBnTpeL44ZQ4ctCwxLiGhaEvKOgktDriBmQPwouXfE/hX3wIn85so+BfXYjG98dGw5f+96xvvPfXcuOAD+SnkWd/og6fQOzHt3wjAgAAA=="
 }
