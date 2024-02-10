@@ -15,15 +15,16 @@ export default function Landing() {
     isAuthenticated,
     profile: { username, fid, bio, displayName, pfpUrl },
   } = useProfile();
+  useEffect(() => {
+    console.log("isAuthenticated", isAuthenticated);
+    console.log("username", username);
+  }, []);
   const getNonce = useCallback(async () => {
     const nonce = await getCsrfToken();
     if (!nonce) throw new Error("Unable to generate nonce");
     return nonce;
   }, []);
-  useEffect(() => {
-    console.log("isAuthenticated", isAuthenticated);
-    console.log("username", username);
-  }, []);
+
   const handleSuccess = useCallback(
     (res: StatusAPIResponse) => {
       signIn("credentials", {
@@ -62,7 +63,7 @@ export default function Landing() {
           />
         </div>
       </div>
-      <p className="text-md text-center my-2 font-normal text-[#9508BF] my-10">
+      <p className="text-md text-center my-2 font-normal text-[#9508BF] my-14">
         Built with 💜 by gabrielaxy.eth
       </p>
     </div>
