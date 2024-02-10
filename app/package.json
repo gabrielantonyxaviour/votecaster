@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@farcaster/auth-kit": "^0.2.0",
     "@fortawesome/fontawesome-svg-core": "^6.5.1",
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
@@ -16,10 +17,12 @@
     "@noir-lang/backend_barretenberg": "0.19.4",
     "@noir-lang/noir_js": "0.19.4",
     "next": "14.1.0",
+    "next-auth": "^4.24.5",
     "react": "^18",
     "react-dom": "^18",
     "satori": "^0.10.13",
-    "sharp": "^0.33.2"
+    "sharp": "^0.33.2",
+    "viem": "^2.7.8"
   },
   "devDependencies": {
     "@types/node": "^20",
