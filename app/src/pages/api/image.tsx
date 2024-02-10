@@ -9,17 +9,28 @@ export default async function handler(
 ) {
   const fontFilePath = join(process.cwd(), "public", "Lato-Regular.ttf");
   let fontData = fs.readFileSync(fontFilePath);
-
-  const pollData = {
-    question: "Which programming language do you prefer?",
-    cybil: true,
-    options: [
-      { key: 1, text: "JavaScript", percentOfTotal: 30 },
-      { key: 2, text: "Python", percentOfTotal: 25 },
-      { key: 3, text: "Java", percentOfTotal: 20 },
-      { key: 4, text: "C++", percentOfTotal: 25 },
-    ],
-  };
+  const pollId =
+    req.query["id"] != undefined ? parseInt(req.query["id"] as string) : 0;
+  const polls = [
+    {
+      question: "Which programming language do you prefer?",
+      options: [
+        { key: 1, text: "JavaScript", percentOfTotal: 30 },
+        { key: 2, text: "Python", percentOfTotal: 25 },
+        { key: 3, text: "Java", percentOfTotal: 20 },
+        { key: 4, text: "C++", percentOfTotal: 25 },
+      ],
+    },
+    {
+      question: "Which team is gonna win the LaLiga 2024?",
+      options: [
+        { key: 1, text: "Barcelona", percentOfTotal: 30 },
+        { key: 2, text: "Real Madrid", percentOfTotal: 25 },
+        { key: 3, text: "Atletico Madrid", percentOfTotal: 20 },
+        { key: 4, text: "Girona", percentOfTotal: 25 },
+      ],
+    },
+  ];
   const showResults = false;
   // // Handle the request and send the response
   let imageUrl = "https://picsum.photos/400/200";
@@ -48,7 +59,7 @@ export default async function handler(
             width: "80%",
             backgroundColor: "#FBF6FF",
             margin: "auto",
-            marginTop: 50,
+            marginTop: 70,
             display: "flex",
             flexDirection: "column",
             padding: 20,
@@ -77,11 +88,11 @@ export default async function handler(
               fontSize: 30,
             }}
           >
-            {pollData.question}
+            {polls[pollId].question}
           </p>
           <div
             style={{
-              flex: 2,
+              flex: 1,
               display: "flex",
               justifyContent: "center",
               width: "100%",
@@ -104,6 +115,7 @@ export default async function handler(
           <div
             style={{
               display: "flex",
+              marginBottom: 30,
             }}
           >
             <div style={{ display: "flex", marginTop: 5 }}>
@@ -155,11 +167,6 @@ export default async function handler(
               </p>
             </div>
           </div>
-          <div
-            style={{
-              flex: 1,
-            }}
-          ></div>
         </div>
         {/* <h2 style={{ textAlign: "center", color: "lightgray" }}>
           {pollData.question}
