@@ -7,13 +7,14 @@ import {
 } from "@farcaster/auth-kit";
 import { useCallback, useState } from "react";
 import Navbar from "@/components/Navbar";
-
 const config = {
   relay: "https://relay.farcaster.xyz",
   rpcUrl: "https://mainnet.optimism.io",
-  siweUri: "http://example.com/login",
-  domain: "example.com",
+  siweUri: "http://localhost:3000",
+  domain: "localhost:3000",
 };
+import "@/styles/machina.css";
+import Landing from "@/components/Landing";
 
 export default function Home() {
   return (
@@ -34,6 +35,7 @@ function Content() {
   return (
     <div className="max-w-[1200px] mx-auto h-screen py-8">
       <Navbar />
+      <Landing />
     </div>
   );
 }
