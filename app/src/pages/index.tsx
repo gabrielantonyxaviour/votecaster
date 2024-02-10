@@ -11,7 +11,7 @@ const config = {
   relay: "https://relay.farcaster.xyz",
   rpcUrl: "https://mainnet.optimism.io",
   siweUri: "http://example.com/login",
-  domain: "priv-cast.vercel.app",
+  domain: "example.com",
 };
 import "@/styles/machina.css";
 import Landing from "@/components/Landing";
