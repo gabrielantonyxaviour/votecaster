@@ -1,11 +1,10 @@
-import Home from "@/components/Home";
+import Navbar from "@/components/Navbar";
+import React from "react";
 
-export let metadata = {
-  title: "Priv Cast",
-  description:
-    "Sybil Resistant and Private Voting Application built on Farcaster with Aztec/Noir.",
-};
-
-export default function HomePage() {
-  return <Home />;
+export default function Home() {
+  return (
+    <div>
+      <Navbar />
+    </div>
+  );
 }
