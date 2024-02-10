@@ -54,6 +54,7 @@ export default function PollPage() {
             .map((option, index) => {
               return (
                 <meta
+                  key={index}
                   property={`fc:frame:button:${index + 1}`}
                   content={option}
                 />
