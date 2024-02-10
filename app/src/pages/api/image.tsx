@@ -11,6 +11,7 @@ export default async function handler(
   let fontData = fs.readFileSync(fontFilePath);
   const pollId =
     req.query["id"] != undefined ? parseInt(req.query["id"] as string) : 0;
+  console.log(pollId);
   const polls = [
     {
       question: "Which programming language do you prefer?",
