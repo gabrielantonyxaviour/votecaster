@@ -13,11 +13,11 @@ export default function Document() {
         <meta property="fc:frame" content="vNext" />
         <meta
           property="fc:frame:post_url"
-          content="https://your-host/api/vote?id=2"
+          content="https://priv-cast.vercel.app/api/vote?id=2"
         />
         <meta
           property="fc:frame:image"
-          content="https://your-host/api/image?id=2"
+          content="https://priv-cast.vercel.app/api/image?id=2"
         />
         <meta property="og:image" content="https://your-host/api/image?id=2" />
         <meta property="og:title" content="Your Poll Question" />
