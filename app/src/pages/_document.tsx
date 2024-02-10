@@ -11,7 +11,20 @@ export default function Document() {
     <Html lang="en">
       <Head>
         <meta property="fc:frame" content="vNext" />
-        <meta property="fc:frame:image" content="https://picsum.photos/200" />
+        <meta
+          property="fc:frame:post_url"
+          content="https://your-host/api/vote?id=2"
+        />
+        <meta
+          property="fc:frame:image"
+          content="https://your-host/api/image?id=2"
+        />
+        <meta property="og:image" content="https://your-host/api/image?id=2" />
+        <meta property="og:title" content="Your Poll Question" />
+        <meta property="fc:frame:button:1" content="JavaScript" />
+        <meta property="fc:frame:button:2" content="Python" />
+        <meta property="fc:frame:button:3" content="Java" />
+        <meta property="fc:frame:button:4" content="C++" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" />
         <link

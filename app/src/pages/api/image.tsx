@@ -3,13 +3,11 @@ import satori from "satori";
 import sharp from "sharp";
 import { join } from "path";
 import * as fs from "fs";
-
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   const fontFilePath = join(process.cwd(), "public", "Lato-Regular.ttf");
-  console.log("fontFilePath", fontFilePath);
   let fontData = fs.readFileSync(fontFilePath);
 
   const pollData = {
@@ -28,14 +26,12 @@ export default async function handler(
   const svg = await satori(
     <div
       style={{
-        justifyContent: "flex-start",
-        alignItems: "center",
         display: "flex",
         width: "100%",
         height: "100%",
         backgroundColor: "#450C63",
-        padding: 50,
-        lineHeight: 1.2,
+        paddingLeft: 50,
+        paddingRight: 50,
         fontSize: 24,
       }}
     >
@@ -43,11 +39,136 @@ export default async function handler(
         style={{
           display: "flex",
           flexDirection: "column",
-          padding: 20,
+          flex: 1,
         }}
       >
-        <h1>priv.cast</h1>
-        <h2 style={{ textAlign: "center", color: "lightgray" }}>
+        <p
+          style={{
+            fontSize: 32,
+            fontWeight: "bold",
+            color: "#fff",
+            marginLeft: "auto",
+            marginRight: "auto",
+            lineHeight: 1,
+            marginBottom: 20,
+          }}
+        >
+          priv.cast
+        </p>
+        <div
+          style={{
+            flex: 1,
+            width: "80%",
+            backgroundColor: "#FBF6FF",
+            margin: "auto",
+            display: "flex",
+            flexDirection: "column",
+            padding: 20,
+            borderTopLeftRadius: 10,
+            borderTopRightRadius: 10,
+          }}
+        >
+          <p
+            style={{
+              color: "#9508BF",
+              fontSize: 18,
+              lineHeight: 1,
+              marginTop: 5,
+              marginBottom: 5,
+            }}
+          >
+            @gabrielaxy asks
+          </p>
+          <p
+            style={{
+              color: "#450C63",
+              textTransform: "uppercase",
+              fontWeight: "bold",
+              marginTop: 5,
+              marginBottom: 5,
+              fontSize: 30,
+            }}
+          >
+            {pollData.question}
+          </p>
+          <div
+            style={{
+              flex: 1,
+              display: "flex",
+              justifyContent: "center",
+              width: "100%",
+            }}
+          >
+            <p
+              style={{
+                color: "#9508BF",
+                fontSize: 15,
+                marginTop: "auto",
+                marginBottom: 20,
+                textAlign: "end",
+                marginLeft: "auto",
+              }}
+            >
+              Create anonymous polls on&nbsp;
+              <span style={{ color: "#450C63" }}>priv.cast</span>
+            </p>
+          </div>
+          <div
+            style={{
+              display: "flex",
+            }}
+          >
+            <div style={{ display: "flex", marginTop: 5 }}>
+              <div
+                style={{
+                  display: "flex",
+                  borderRadius: "100%",
+                  height: 12,
+                  width: 12,
+                  backgroundColor: "#450C63",
+                  marginTop: "auto",
+                  marginBottom: "auto",
+                }}
+              ></div>
+              <p
+                style={{
+                  fontSize: 12,
+                  marginTop: 0,
+                  marginBottom: 0,
+                  marginLeft: 5,
+                  color: "#450C63",
+                }}
+              >
+                Anonymous
+              </p>
+            </div>
+            <div style={{ display: "flex", marginTop: 5, marginLeft: 20 }}>
+              <div
+                style={{
+                  display: "flex",
+                  borderRadius: "100%",
+                  height: 12,
+                  width: 12,
+                  backgroundColor: "#450C63",
+                  marginTop: "auto",
+                  marginBottom: "auto",
+                }}
+              ></div>
+              <p
+                style={{
+                  fontSize: 12,
+                  marginTop: 0,
+                  marginBottom: 0,
+                  marginLeft: 5,
+                  color: "#450C63",
+                }}
+              >
+                Cybil Resistant
+              </p>
+            </div>
+          </div>
+        </div>
+        {/* <h2 style={{ textAlign: "center", color: "lightgray" }}>
           {pollData.question}
         </h2>
         {pollData.options.map((opt, index) => {
@@ -68,7 +189,7 @@ export default async function handler(
               {opt.text}
             </div>
           );
-        })}
+        })} */}
         {/*{showResults ? <h3 style={{color: "darkgray"}}>Total votes: {totalVotes}</h3> : ''}*/}
       </div>
     </div>,
