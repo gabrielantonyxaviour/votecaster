@@ -10,8 +10,8 @@ import Navbar from "@/components/Navbar";
 const config = {
   relay: "https://relay.farcaster.xyz",
   rpcUrl: "https://mainnet.optimism.io",
-  siweUri: "http://localhost:3000",
-  domain: "localhost:3000",
+  siweUri: "http://example.com/login",
+  domain: "priv-cast.vercel.app",
 };
 import "@/styles/machina.css";
 import Landing from "@/components/Landing";
