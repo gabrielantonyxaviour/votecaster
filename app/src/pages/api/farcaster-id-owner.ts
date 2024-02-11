@@ -23,15 +23,14 @@ async function handleJsonRpcRequest(requestData: any) {
     return await exampleMethod(requestData.params);
   }
 
-  // Handle other methods as needed
-
   throw new Error("Method not found");
 }
 
 async function exampleMethod(params: any) {
-  console.log(params);
   const values = params[0].Array.map(({ inner }: { inner: string }) => {
     return { inner: `${Math.sqrt(parseInt(inner, 16))}` };
   });
+  console.log({ values: [{ Array: values }] });
+  console.log(values);
   return { values: [{ Array: values }] };
 }
