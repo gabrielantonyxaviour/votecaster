@@ -10,8 +10,15 @@ import { WagmiProvider } from "wagmi";
 import { ConnectKitProvider, getDefaultConfig } from "connectkit";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import MyCustomAvatar from "@/components/MyCustomAvatar";
+import { AuthKitProvider } from "@farcaster/auth-kit";
 
 const projectId = process.env["NEXT_PUBLIC_PROJECT_ID"] ?? "";
+const authKitConfig = {
+  relay: "https://relay.farcaster.xyz",
+  rpcUrl: "https://mainnet.optimism.io",
+  siweUri: "http://example.com/login",
+  domain: "example.com",
+};
 
 const config = createConfig(
   getDefaultConfig({

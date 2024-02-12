@@ -11,16 +11,8 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 
 export default function Landing() {
+  const [error, setError] = useState(false);
   const router = useRouter();
-  const {
-    isAuthenticated,
-    profile: { username, fid, bio, displayName, pfpUrl },
-  } = useProfile();
-  useEffect(() => {
-    console.log("isAuthenticated", isAuthenticated);
-    console.log("username", username);
-  }, []);
-
   const hero = "PRIVACY PRESERVED, SYBIL RESISTANT POLLS NOW IN FARCASTER.";
   const content =
     "Cast polls in farcaster where the users can vote without revealing their identity. The sybil resistant polls ensure that the polls are not manipulated by fake votes.";
@@ -30,7 +22,7 @@ export default function Landing() {
         <div className="flex flex-col space-y-4 justify-between w-[50%] ">
           <p className="w-[90%] text-5xl font-semibold">{hero}</p>
           <p className="text-xl">{content}</p>
-          <div className="flex">
+          <div className="flex ml-2">
             <Button
               text="Get Started"
               click={() => {

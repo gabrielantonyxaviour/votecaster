@@ -5,11 +5,11 @@ import Navbar from "@/components/Navbar";
 import "@/styles/machina.css";
 import Landing from "@/components/Landing";
 
-export default function Home() {
+export default function HomePage() {
   return (
     <>
       <Head>
-        <title>Farcaster AuthKit + NextAuth Demo</title>
+        <title>priv.cast | Home </title>
       </Head>
       <main style={{ fontFamily: "Inter, sans-serif" }}>
         <Content />
