@@ -16,7 +16,7 @@ export default function Button({
           click();
         }}
       >
-        <p className="text-white text-sm font-semibold mx-3 my-1">{text}</p>
+        <p className="text-white text-sm font-semibold mx-4 my-2">{text}</p>
       </div>
     </div>
   );

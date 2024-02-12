@@ -8,9 +8,10 @@ import {
 } from "@farcaster/auth-kit";
 import { useSession, signIn, signOut, getCsrfToken } from "next-auth/react";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 export default function Landing() {
-  const [error, setError] = useState(false);
+  const router = useRouter();
   const {
     isAuthenticated,
     profile: { username, fid, bio, displayName, pfpUrl },
@@ -19,24 +20,7 @@ export default function Landing() {
     console.log("isAuthenticated", isAuthenticated);
     console.log("username", username);
   }, []);
-  const getNonce = useCallback(async () => {
-    const nonce = await getCsrfToken();
-    if (!nonce) throw new Error("Unable to generate nonce");
-    return nonce;
-  }, []);
 
-  const handleSuccess = useCallback(
-    (res: StatusAPIResponse) => {
-      signIn("credentials", {
-        message: res.message,
-        signature: res.signature,
-        name: res.username,
-        pfp: res.pfpUrl,
-        redirect: false,
-      });
-    },
-    [signIn]
-  );
   const hero = "PRIVACY PRESERVED, SYBIL RESISTANT POLLS NOW IN FARCASTER.";
   const content =
     "Cast polls in farcaster where the users can vote without revealing their identity. The sybil resistant polls ensure that the polls are not manipulated by fake votes.";
@@ -46,12 +30,14 @@ export default function Landing() {
         <div className="flex flex-col space-y-4 justify-between w-[50%] ">
           <p className="w-[90%] text-5xl font-semibold">{hero}</p>
           <p className="text-xl">{content}</p>
-          <SignInButton
-            nonce={getNonce}
-            onSuccess={handleSuccess}
-            onError={() => setError(true)}
-            onSignOut={() => signOut()}
-          />
+          <div className="flex">
+            <Button
+              text="Get Started"
+              click={() => {
+                router.push("/polls");
+              }}
+            />
+          </div>
         </div>
         <div className="w-[50%] flex flex-col justify-between">
           <Image
