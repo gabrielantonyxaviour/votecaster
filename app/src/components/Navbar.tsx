@@ -5,6 +5,8 @@ import Link from "next/link";
 import { useProfile } from "@farcaster/auth-kit";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
+import { ConnectKitButton } from "connectkit";
+
 export default function Navbar() {
   const router = useRouter();
   const {
@@ -14,7 +16,7 @@ export default function Navbar() {
 
   useEffect(() => {
     console.log(username, fid, bio, displayName, pfpUrl, isAuthenticated);
-    if (isAuthenticated) router.push("/poll");
+    if (isAuthenticated) router.push("/polls");
   }, [isAuthenticated]);
   return (
     <div className="flex justify-between p-4 bg-[#FBF6FF] text-[#450C63] rounded-xl py-5">
@@ -23,7 +25,7 @@ export default function Navbar() {
       </Link>
       {isAuthenticated ? (
         <div className="flex space-x-4 my-auto">
-          <Link href={"/poll"} className="hover:underline">
+          <Link href={"/polls"} className="hover:underline">
             Polls
           </Link>
           <Link href={"/create"} className="hover:underline">
@@ -33,7 +35,7 @@ export default function Navbar() {
       ) : (
         <div></div>
       )}
-      <Button text="Connect Wallet" click={() => {}}></Button>
+      <ConnectKitButton theme="retro" />
     </div>
   );
 }
