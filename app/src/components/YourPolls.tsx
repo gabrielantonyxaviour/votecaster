@@ -32,6 +32,7 @@ export default function YourPolls() {
 
   const handleSuccess = useCallback(
     (res: StatusAPIResponse) => {
+      console.log("Login Success");
       signIn("credentials", {
         message: res.message,
         signature: res.signature,
