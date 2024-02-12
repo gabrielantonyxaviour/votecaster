@@ -49,8 +49,8 @@ export default function PollPage() {
   return (
     <AuthKitProvider config={config}>
       <div className="max-w-[1200px] mx-auto h-screen py-8">
-        <div className="flex justify-between">
-          <p className="text-3xl font-bold mb-12">PRIV.CAST</p>
+        <div className="flex justify-between pb-12">
+          <p className="text-3xl font-bold ">PRIV.CAST</p>
           <SignInButton
             nonce={getNonce}
             onSuccess={handleSuccess}
@@ -115,6 +115,11 @@ export default function PollPage() {
                 </p>
               </div>
             )}
+          </div>
+          <div className="h-[80%]  bg-[#FBF6FF] w-[35%] my-auto p-12">
+            <p className="text-[#450C63] font-bold text-3xl text-center">
+              LOGS
+            </p>
           </div>
         </div>
       </div>
