@@ -62,7 +62,7 @@ export default function PollPage() {
         </div>
         <div className="flex justify-between h-full">
           <div className="w-[60%] h-full bg-[#FBF6FF]">
-            {!isAuthenticated ? (
+            {isAuthenticated ? (
               <div className="flex flex-col h-full p-12">
                 <p className="text-[#450C63] font-bold text-5xl">
                   {poll.question}
