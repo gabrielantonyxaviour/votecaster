@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useCallback } from "react";
 import InputButton from "../InputButton";
+import { SignInButton, StatusAPIResponse } from "@farcaster/auth-kit";
+import { getCsrfToken, signIn, signOut } from "next-auth/react";
 
 export default function CreateQuestion({
   poll,
@@ -10,6 +12,25 @@ export default function CreateQuestion({
     React.SetStateAction<{ question: string; options: string[] }>
   >;
 }) {
+  const getNonce = useCallback(async () => {
+    const nonce = await getCsrfToken();
+    if (!nonce) throw new Error("Unable to generate nonce");
+    return nonce;
+  }, []);
+
+  const handleSuccess = useCallback(
+    (res: StatusAPIResponse) => {
+      console.log("Login Success");
+      signIn("credentials", {
+        message: res.message,
+        signature: res.signature,
+        name: res.username,
+        pfp: res.pfpUrl,
+        redirect: false,
+      });
+    },
+    [signIn]
+  );
   return (
     <div className="py-3  h-full w-[60%]">
       <div className=" h-full bg-[#FBF6FF] rounded-xl py-12 px-12">
@@ -92,6 +113,19 @@ export default function CreateQuestion({
               }}
             />
           </div>
+        </div>
+        <p className="text-center font-semibold text-[#450C63] text-lg pt-12 pb-2">
+          Sign in with farcaster to post your poll 🚀
+        </p>
+        <div className="flex justify-center ">
+          <SignInButton
+            nonce={getNonce}
+            onSuccess={handleSuccess}
+            onError={() => {
+              console.log("error");
+            }}
+            onSignOut={() => signOut()}
+          />
         </div>
       </div>
     </div>
