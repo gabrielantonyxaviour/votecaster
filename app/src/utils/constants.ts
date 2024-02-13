@@ -12,7 +12,7 @@ import { Hex, zeroAddress } from "viem";
 
 export const PRIVATE_KEY: `0x${string}` = (process.env.PRIVATE_KEY ||
   "0x") as `0x${string}`;
-export const OP_PROVIDER_URL = "<REQUIRED>"; // Alchemy or Infura url
+export const OP_PROVIDER_URL = process.env.OP_PROVIDER_URL || ""; // Alchemy or Infura url
 export const RECOVERY_ADDRESS = zeroAddress; // Optional, using the default value means the account will not be recoverable later if the mnemonic is lost
 export const ACCOUNT_KEY_PRIVATE_KEY: Hex = zeroAddress; // Optional, using the default means a new account key will be created each time
 
