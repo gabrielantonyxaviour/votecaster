@@ -49,7 +49,7 @@ export default function PollPage() {
   return (
     <AuthKitProvider config={config}>
       <div className="max-w-[1200px] mx-auto h-screen py-8">
-        <div className="flex justify-between pb-12">
+        <div className="flex justify-between pb-12 ">
           <p className="text-3xl font-bold ">PRIV.CAST</p>
           <SignInButton
             nonce={getNonce}
@@ -62,37 +62,37 @@ export default function PollPage() {
         </div>
         <div className="flex justify-between h-full">
           <div className="w-[60%] h-full bg-[#FBF6FF]">
-            {isAuthenticated ? (
-              <div className="flex flex-col h-full p-12">
-                <p className="text-[#450C63] font-bold text-5xl">
-                  {poll.question}
-                </p>
-                <div className="flex justify-between space-x-8 pt-12">
-                  <div className="flex-1">
-                    {poll.options.length > 0 && (
-                      <Button text={poll.options[0]} click={() => {}} />
-                    )}
-                  </div>
-
-                  <div className="flex-1">
-                    {poll.options.length > 1 && (
-                      <Button text={poll.options[1]} click={() => {}} />
-                    )}
-                  </div>
+            <div className="flex flex-col h-full p-12">
+              <p className="text-[#450C63] font-bold text-5xl">
+                {poll.question}
+              </p>
+              <div className="flex justify-between space-x-8 pt-12">
+                <div className="flex-1">
+                  {poll.options.length > 0 && (
+                    <Button text={poll.options[0]} click={() => {}} />
+                  )}
                 </div>
-                <div className="flex justify-between space-x-8 mt-4">
-                  <div className="flex-1">
-                    {poll.options.length > 2 && (
-                      <Button text={poll.options[2]} click={() => {}} />
-                    )}
-                  </div>
 
-                  <div className="flex-1">
-                    {poll.options.length > 3 && (
-                      <Button text={poll.options[3]} click={() => {}} />
-                    )}
-                  </div>
+                <div className="flex-1">
+                  {poll.options.length > 1 && (
+                    <Button text={poll.options[1]} click={() => {}} />
+                  )}
                 </div>
+              </div>
+              <div className="flex justify-between space-x-8 mt-4">
+                <div className="flex-1">
+                  {poll.options.length > 2 && (
+                    <Button text={poll.options[2]} click={() => {}} />
+                  )}
+                </div>
+
+                <div className="flex-1">
+                  {poll.options.length > 3 && (
+                    <Button text={poll.options[3]} click={() => {}} />
+                  )}
+                </div>
+              </div>
+              {isAuthenticated ? (
                 <div className="flex-1 h-full flex flex-col space-y-4 justify-center items-center">
                   <p className="text-xl font-semibold text-[#450C63] pt-12">
                     AADHAR VERIFICATION
@@ -107,14 +107,14 @@ export default function PollPage() {
                     click={() => {}}
                   />
                 </div>
-              </div>
-            ) : (
-              <div className="flex justify-center items-center h-full">
-                <p className="text-[#450C63] font-semibold text-xl">
-                  Sign in to farcaster to vote on the poll 🚀
-                </p>
-              </div>
-            )}
+              ) : (
+                <div className="flex justify-center items-center h-full">
+                  <p className="text-[#450C63] font-semibold text-xl">
+                    Sign in to farcaster to vote on the poll 🚀
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
           <div className="h-[80%]  bg-[#FBF6FF] w-[35%] my-auto p-12">
             <p className="text-[#450C63] font-bold text-3xl text-center">
