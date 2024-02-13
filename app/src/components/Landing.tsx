@@ -41,7 +41,7 @@ export default function Landing() {
           />
         </div>
       </div>
-      <p className="text-md text-center my-2 font-normal text-[#9508BF] my-14">
+      <p className="text-md text-center my-2 font-normal text-[#9508BF] pt-14 pb-4">
         Built with 💜 by gabrielaxy.eth
       </p>
     </div>
