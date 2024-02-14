@@ -28,12 +28,13 @@ export default async function handler(
     },
   ];
 
-  const pngBuffer = (
-    await axios.get(process.env["IMG_HOST"] + "/api/image?id=1" || "")
-  ).data;
-  console.log(pngBuffer.data);
+  const pngBuffer = await axios.get(
+    process.env["IMG_HOST"] + "/api/image?id=1" || "",
+    { responseType: "arraybuffer" }
+  );
+  console.log(pngBuffer);
   // // Set the content type to PNG and send the response
   res.setHeader("Content-Type", "image/png");
   res.setHeader("Cache-Control", "max-age=10");
-  res.send(pngBuffer);
+  res.send(pngBuffer.data);
 }
