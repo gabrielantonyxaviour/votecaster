@@ -1,7 +1,5 @@
-import { SessionProvider } from "next-auth/react";
 import type { AppProps } from "next/app";
 import "@/styles/globals.css";
-import "@farcaster/auth-kit/styles.css";
 import { http, createConfig } from "wagmi";
 import { scrollSepolia } from "wagmi/chains";
 import { AnonAadhaarProvider } from "@anon-aadhaar/react";
@@ -10,16 +8,10 @@ import { WagmiProvider } from "wagmi";
 import { ConnectKitProvider, getDefaultConfig } from "connectkit";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import MyCustomAvatar from "@/components/MyCustomAvatar";
-import { init, AirstackProvider } from "@airstack/airstack-react";
+import { AirstackProvider } from "@airstack/airstack-react";
 
 const projectId = process.env["NEXT_PUBLIC_PROJECT_ID"] ?? "";
 const airstackApiKey = process.env["NEXT_PUBLIC_AIRSTACK_API_KEY"] ?? "";
-const authKitConfig = {
-  relay: "https://relay.farcaster.xyz",
-  rpcUrl: "https://mainnet.optimism.io",
-  siweUri: "http://example.com/login",
-  domain: "example.com",
-};
 
 const config = createConfig(
   getDefaultConfig({
@@ -62,13 +54,11 @@ export default function App({
                 }}
               >
                 <AirstackProvider apiKey={airstackApiKey}>
-                  <SessionProvider session={session}>
-                    <Component
-                      {...pageProps}
-                      setUseTestAadhaar={setUseTestAadhaar}
-                      useTestAadhaar={useTestAadhaar}
-                    />
-                  </SessionProvider>
+                  <Component
+                    {...pageProps}
+                    setUseTestAadhaar={setUseTestAadhaar}
+                    useTestAadhaar={useTestAadhaar}
+                  />
                 </AirstackProvider>
               </ConnectKitProvider>
             </QueryClientProvider>
