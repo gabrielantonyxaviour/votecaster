@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect } from "react";
 import circuit from "@/utils/circuit.json";
+import fidCircuit from "@/utils/fidCircuit.json";
 import signCircuit from "@/utils/cryptosign.json";
 import {
   BarretenbergBackend,
@@ -213,7 +214,32 @@ export default function NoirComponent() {
   }
 
   async function testFid() {
-    await foreignCallHandlerFid("getFid", [[address as string]]);
+    try {
+      const backend = new BarretenbergBackend(fidCircuit as CompiledCircuit);
+      const noir = new Noir(fidCircuit as CompiledCircuit, backend);
+      setLogs((prev) => [...prev, "Generating proof... ⏳"]);
+      console.log(parseInt(address as string));
+      const proof = await noir.generateFinalProof(
+        {
+          address: "0x5A6B842891032d702517a4E52ec38eE561063539",
+        },
+        foreignCallHandlerFid
+      );
+      console.log(proof);
+      setProof(proof.proof);
+      setLogs((prev) => [...prev, "Proof Generation Success 😏"]);
+      setLogs((prev) => [...prev, "Verifying proof... ⏳"]);
+      const isValid = await noir.verifyFinalProof(proof);
+
+      if (isValid) {
+        setLogs((prev) => [...prev, "Proof verified ✅"]);
+      } else {
+        setLogs((prev) => [...prev, "Proof verification failed ❌"]);
+      }
+    } catch (err) {
+      console.log(err);
+      setLogs((prev) => [...prev, "Wrong inputs 💔"]);
+    }
   }
   return (
     <div className="w-full flex flex-col items-center justify-center  text-center mt-10">
