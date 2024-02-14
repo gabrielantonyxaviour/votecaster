@@ -42,10 +42,7 @@ export default function App({
   return (
     <>
       {ready ? (
-        <AnonAadhaarProvider
-          _useTestAadhaar={useTestAadhaar}
-          _fetchArtifactsFromServer={false}
-        >
+        <AnonAadhaarProvider _useTestAadhaar={useTestAadhaar}>
           <WagmiProvider config={config}>
             <QueryClientProvider client={queryClient}>
               <ConnectKitProvider

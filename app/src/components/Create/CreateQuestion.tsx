@@ -1,5 +1,6 @@
 import React, { useCallback } from "react";
 import InputButton from "../InputButton";
+import { useAccount } from "wagmi";
 
 export default function CreateQuestion({
   poll,
@@ -10,6 +11,7 @@ export default function CreateQuestion({
     React.SetStateAction<{ question: string; options: string[] }>
   >;
 }) {
+  const { address } = useAccount();
   return (
     <div className="py-3  h-full w-[60%]">
       <div className=" h-full bg-[#FBF6FF] rounded-xl py-12 px-12">
@@ -93,11 +95,12 @@ export default function CreateQuestion({
             />
           </div>
         </div>
-        <p className="text-center font-semibold text-[#450C63] text-lg pt-12 pb-2">
-          Sign in with farcaster to post your poll 🚀
-        </p>
-        <div className="flex justify-center ">
-        </div>
+        {address == undefined && (
+          <p className="text-center font-semibold text-[#450C63] text-lg pt-12 pb-2">
+            Connect wallet to post your poll 🚀
+          </p>
+        )}
+        <div className="flex justify-center "></div>
       </div>
     </div>
   );
