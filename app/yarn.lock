@@ -1431,6 +1431,13 @@
     "@noir-lang/noirc_abi" "0.23.0"
     "@noir-lang/types" "0.23.0"
 
+"@noir-lang/noir_wasm@^0.23.0":
+  version "0.23.0"
+  resolved "https://registry.yarnpkg.com/@noir-lang/noir_wasm/-/noir_wasm-0.23.0.tgz#5fe49f31d7fd67963d166439f7402a09668aec95"
+  integrity sha512-HL78frUo60bKrUaxOAJQtyrmBWUyiQbSp4yQkh9A/vFAnEhxehDwd8peCGKMZKX66JpRccClv52zyb5O/ECE4g==
+  dependencies:
+    pako "^2.1.0"
+
 "@noir-lang/noirc_abi@0.23.0":
   version "0.23.0"
   resolved "https://registry.yarnpkg.com/@noir-lang/noirc_abi/-/noirc_abi-0.23.0.tgz#47dcfd724e205eadc3a6d4ebab9b11355cb0d0cb"

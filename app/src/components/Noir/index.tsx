@@ -22,6 +22,7 @@ import {
 } from "viem";
 import { scrollSepolia } from "viem/chains";
 import { ConnectKitButton } from "connectkit";
+import { useAccount } from "wagmi";
 
 const setup = async () => {
   await Promise.all([
@@ -46,13 +47,10 @@ const setup = async () => {
 
 export default function NoirComponent() {
   const [testData, setTestData] = React.useState<string>("");
-  const [hashedData, setHashedData] = React.useState<string>("");
-  const [signature, setSignature] = React.useState<string>("");
-  const [pubKeyX, setPubKeyX] = React.useState<string>("");
-  const [pubKeyY, setPubKeyY] = React.useState<string>("");
   const [logs, setLogs] = React.useState<string[]>([]);
   const [proof, setProof] = React.useState<Uint8Array>();
   const [walletClient, setWalletClient] = React.useState<any>();
+  const { address } = useAccount();
 
   useEffect(() => {
     if ((window as any).ethereum != undefined) {
@@ -63,7 +61,7 @@ export default function NoirComponent() {
         })
       );
     }
-  });
+  }, []);
 
   const foreignCallHandler: ForeignCallHandler = async (
     name: string,
@@ -99,23 +97,25 @@ export default function NoirComponent() {
         setLogs((prev) => [...prev, "Proof verification failed ❌"]);
       }
     } catch (err) {
-      setLogs((prev) => [...prev, "Wrong guess 💔"]);
+      setLogs((prev) => [...prev, "Wrong inputs 💔"]);
     }
   }
 
   async function testSignature() {
     try {
-      // const backend = new BarretenbergBackend(signCircuit as CompiledCircuit);
-      // const noir = new Noir(signCircuit as CompiledCircuit, backend);
-      const hdata = hashMessage(testData);
-      setHashedData(hdata);
-      console.log(Buffer.from(hdata.slice(2), "hex"));
-      const sig = await walletClient.signMessage({
-        account: "0x5e7A4aDc20A97bE10Fb9E4Efa6aa39e287674A5B",
-        message: testData,
-      });
-      console.log(sig);
-      console.log(Buffer.from(sig.slice(2), "hex"));
+      const backend = new BarretenbergBackend(signCircuit as CompiledCircuit);
+      const noir = new Noir(signCircuit as CompiledCircuit, backend);
+      const hdata = Buffer.from(hashMessage(testData).slice(2), "hex");
+      const sig = Buffer.from(
+        (
+          await walletClient.signMessage({
+            account: address,
+            message: testData,
+          })
+        ).slice(2),
+        "hex"
+      );
+      const trimmedSig = new Uint8Array(sig.subarray(0, sig.length - 1));
       const publicKey = await recoverPublicKey({
         hash: hdata,
         signature: sig,
@@ -125,28 +125,34 @@ export default function NoirComponent() {
       // Extract x and y coordinates
       const xCoordHex = publicKeyBuffer.subarray(1, 33);
       const yCoordHex = publicKeyBuffer.subarray(33);
-      console.log({ xCoordHex, yCoordHex });
-      // setLogs((prev) => [...prev, "Generating proof... ⏳"]);
-      // const proof = await noir.generateFinalProof({
-      //   pub_key_x: "",
-      //   pub_key_y: "",
-      //   signature: "",
-      //   hashed_message: "",
-      // });
-      // console.log(proof);
-      // setProof(proof.proof);
-      // setLogs((prev) => [...prev, "Proof Generation Success 😏"]);
-      // setLogs((prev) => [...prev, "Verifying proof... ⏳"]);
-      // const isValid = await noir.verifyFinalProof(proof);
+      console.log(Array.from(xCoordHex).map((byte) => `${byte}`));
+      setLogs((prev) => [...prev, "Generating proof... ⏳"]);
+      console.log({
+        pub_key_x: Array.from(xCoordHex).map((byte) => `${byte}`),
+        pub_key_y: Array.from(yCoordHex).map((byte) => `${byte}`),
+        signature: Array.from(trimmedSig).map((byte) => `${byte}`),
+        hashed_message: Array.from(hdata).map((byte) => `${byte}`),
+      });
+      const proof = await noir.generateFinalProof({
+        pub_key_x: Array.from(xCoordHex).map((byte) => `${byte}`),
+        pub_key_y: Array.from(yCoordHex).map((byte) => `${byte}`),
+        signature: Array.from(trimmedSig).map((byte) => `${byte}`),
+        hashed_message: Array.from(hdata).map((byte) => `${byte}`),
+      });
+      console.log(proof);
+      setProof(proof.proof);
+      setLogs((prev) => [...prev, "Proof Generation Success 😏"]);
+      setLogs((prev) => [...prev, "Verifying proof... ⏳"]);
+      const isValid = await noir.verifyFinalProof(proof);
 
-      // if (isValid) {
-      //   setLogs((prev) => [...prev, "Proof verified ✅"]);
-      // } else {
-      //   setLogs((prev) => [...prev, "Proof verification failed ❌"]);
-      // }
+      if (isValid) {
+        setLogs((prev) => [...prev, "Proof verified ✅"]);
+      } else {
+        setLogs((prev) => [...prev, "Proof verification failed ❌"]);
+      }
     } catch (err) {
       console.log(err);
-      setLogs((prev) => [...prev, "Wrong guess 💔"]);
+      setLogs((prev) => [...prev, "Wrong inputs 💔"]);
     }
   }
   return (
