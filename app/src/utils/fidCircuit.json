@@ -1,0 +1,24 @@
+{
+  "noir_version": "0.23.0+5be9f9d7e2f39ca228df10e5a530474af0331704",
+  "hash": 4794957972501082384,
+  "abi": {
+    "parameters": [
+      {
+        "name": "address",
+        "type": { "kind": "field" },
+        "visibility": "private"
+      }
+    ],
+    "param_witnesses": { "address": [{ "start": 0, "end": 1 }] },
+    "return_type": { "abi_type": { "kind": "field" }, "visibility": "public" },
+    "return_witnesses": [1]
+  },
+  "bytecode": "H4sIAAAAAAAA/61S0QqAIAycWVoEfYv+gU99SRG99/+0yMExohc3GBuezrtjjogcveGhx5CzUmtqi2w4KznFc679xNkpHQH6YvR/sPcnIXepA2cEbaTwhXMEjcd+reeG7nhwSb9+JvbqHrIQLNLHhhQb2flv9RC7AZunMGGzAgAA",
+  "debug_symbols": "bcuxCoAgFEbhd/lnCbXEuK8SDVIGgmikm9x3r6AlcDtn+Bpi3lwNORVQgwQtDeV06b1S3VVBWhsBn/anjGSBI0QPmkZeBeRge0QZ+xFl5x9hvgE=",
+  "file_map": {
+    "43": {
+      "source": "use dep::std;\n\n#[oracle(getFid)]\nunconstrained fn farcaster_id(address: Field) -> Field {}\n\nunconstrained fn get_farcaster_id(address: Field) -> Field {\n    farcaster_id(address)\n}\n\nfn main(address: Field) -> pub Field {\n    get_farcaster_id(address)\n}\n",
+      "path": "/Users/gabrielantonyxaviour/Developer/projects/ongoing/priv.cast/circuits/src/main.nr"
+    }
+  }
+}

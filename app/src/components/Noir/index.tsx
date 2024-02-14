@@ -76,6 +76,7 @@ export default function NoirComponent() {
       ],
     ];
   };
+
   async function testOracle() {
     try {
       const backend = new BarretenbergBackend(circuit as CompiledCircuit);
@@ -155,6 +156,8 @@ export default function NoirComponent() {
       setLogs((prev) => [...prev, "Wrong inputs 💔"]);
     }
   }
+
+  async function testFid() {}
   return (
     <div className="w-full flex flex-col items-center justify-center  text-center mt-10">
       <p className="font-bold text-4xl mb-2">Noir app</p>
@@ -188,8 +191,17 @@ export default function NoirComponent() {
             Go
           </button>
         </div>
-      </div>
+        <div className="w-[20%] my-6  border-[1px] border-white p-4 rounded-lg">
+          <p className="mb-2 text-xl font-semibold">Test Farcaster id</p>
 
+          <button
+            className="bg-white px-3 py-2 rounded-lg  border-2 border-black text-black hover:border-white mt-4 hover:bg-black hover:text-white transition-all duration-300 ease-in-out"
+            onClick={testFid}
+          >
+            Go
+          </button>
+        </div>
+      </div>
       <div className="w-[40%] my-6  border-[1px] border-white p-4 rounded-lg">
         <p className="mb-2 text-xl font-semibold">Logs</p>
         {logs.map((log, index) => (
