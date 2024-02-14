@@ -1,3 +1,5 @@
+"use client";
+
 import Button from "@/components/Button";
 import SelectableButton from "@/components/SelectableButton";
 import { LogInWithAnonAadhaar } from "@anon-aadhaar/react";
@@ -15,7 +17,7 @@ const config = {
   siweUri: "http://example.com/login",
   domain: "example.com",
 };
-export default function PollPage() {
+export default function PollPageComponent() {
   const [poll, setPoll] = useState<any>({
     question: "WHICH TEAM IS WINNING LA LIGA?",
     options: ["Real Madrid", "Barcelona", "Atletico Madrid", "Sevilla"],
