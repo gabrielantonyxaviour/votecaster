@@ -31,8 +31,6 @@ export async function generateMetadata(
   { params, searchParams }: Props,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  // read route params
-
   const id = params.id;
   const poll = polls[parseInt(id)];
 
@@ -41,6 +39,7 @@ export async function generateMetadata(
     "fc:frame:post_url": `${process.env["HOST"]}/api/vote?id=${id}`,
     "fc:frame:image": `${process.env["HOST"]}/api/image?id=${id}`,
   };
+
   poll.options
     .filter((o) => o.text !== "")
     .map((option, index) => {

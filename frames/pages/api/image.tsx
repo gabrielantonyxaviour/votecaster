@@ -34,7 +34,6 @@ export default async function handler(
   ];
   const showResults = false;
   // // Handle the request and send the response
-  let imageUrl = "https://picsum.photos/400/200";
   const svg = await satori(
     <div
       style={{
@@ -169,29 +168,6 @@ export default async function handler(
             </div>
           </div>
         </div>
-        {/* <h2 style={{ textAlign: "center", color: "lightgray" }}>
-          {pollData.question}
-        </h2>
-        {pollData.options.map((opt, index) => {
-          return (
-            <div
-              key={opt.key}
-              style={{
-                backgroundColor: showResults ? "#007bff" : "",
-                color: "#fff",
-                padding: 10,
-                marginBottom: 10,
-                borderRadius: 4,
-                width: `${showResults ? opt.percentOfTotal : 100}%`,
-                whiteSpace: "nowrap",
-                overflow: "visible",
-              }}
-            >
-              {opt.text}
-            </div>
-          );
-        })} */}
-        {/*{showResults ? <h3 style={{color: "darkgray"}}>Total votes: {totalVotes}</h3> : ''}*/}
       </div>
     </div>,
     {
