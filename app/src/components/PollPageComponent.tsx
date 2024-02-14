@@ -1,6 +1,5 @@
 "use client";
-
-import Button from "@/components/Button";
+import "@farcaster/auth-kit/styles.css";
 import SelectableButton from "@/components/SelectableButton";
 import { LogInWithAnonAadhaar } from "@anon-aadhaar/react";
 import {
