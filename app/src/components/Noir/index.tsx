@@ -122,7 +122,11 @@ export default function NoirComponent() {
     inputs: ForeignCallInput[]
   ): Promise<ForeignCallOutput[]> => {
     if (fidData != null) {
-      return [(fidData as any).Socials.Social[0].userId];
+      const fid = (fidData as any).Socials.Social[0].userId;
+      console.log(parseInt(fid));
+      console.log(parseInt(fid).toString(16));
+      console.log(["0x" + parseInt(fid).toString(16).padStart(64, "0")]);
+      return ["0x" + parseInt(fid).toString(16).padStart(64, "0")];
     } else {
       return [];
     }
