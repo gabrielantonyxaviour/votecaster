@@ -72,5 +72,5 @@ function getMeta(poll: any) {
 export default function PollPage({ params }: { params: { id: string } }) {
   const poll = polls[parseInt(params.id)];
 
-  return process.env["HOST"] && <PollPageComponent />;
+  return process.env["HOST"] && <div></div>;
 }

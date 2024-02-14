@@ -47,7 +47,6 @@ export default function YourPolls() {
   useEffect(() => {
     console.log("isAuthenticated", isAuthenticated);
     console.log("username", username);
-    // if (!isAuthenticated) router.push("/");
   }, []);
   return (
     <AuthKitProvider config={config}>
