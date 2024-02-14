@@ -16,13 +16,12 @@ import {
   createWalletClient,
   custom,
   hashMessage,
-  keccak256,
   recoverPublicKey,
-  toHex,
 } from "viem";
 import { scrollSepolia } from "viem/chains";
 import { ConnectKitButton } from "connectkit";
 import { useAccount } from "wagmi";
+import { useQuery } from "@airstack/airstack-react";
 
 const setup = async () => {
   await Promise.all([
@@ -45,12 +44,53 @@ const setup = async () => {
   ]);
 };
 
+interface QueryResponse {
+  data: Data | null;
+  loading: boolean;
+  error: Error | null;
+}
+
+interface Data {
+  Wallet: Wallet;
+}
+
+interface Error {
+  message: string;
+}
+
+interface Wallet {
+  socials: Social[];
+  addresses: string[];
+}
+
+interface Social {
+  dappName: "lens" | "farcaster";
+  profileName: string;
+}
+
 export default function NoirComponent() {
   const [testData, setTestData] = React.useState<string>("");
   const [logs, setLogs] = React.useState<string[]>([]);
   const [proof, setProof] = React.useState<Uint8Array>();
   const [walletClient, setWalletClient] = React.useState<any>();
   const { address } = useAccount();
+  const {
+    data: fidData,
+    loading,
+    error,
+  }: QueryResponse = useQuery<Data>(
+    `  query MyQuery {
+  Socials(
+    input: {blockchain: ethereum, filter: {dappName: {_eq: farcaster}, identity: {_eq: "${address}"}}}
+  ) {
+    Social {
+      userId
+    }
+  }
+}`,
+    {},
+    { cache: false }
+  );
 
   useEffect(() => {
     if ((window as any).ethereum != undefined) {
@@ -75,6 +115,17 @@ export default function NoirComponent() {
           Math.sqrt(parseInt(inputs[0][1], 16)).toString(16).padStart(64, "0"),
       ],
     ];
+  };
+
+  const foreignCallHandlerFid: ForeignCallHandler = async (
+    name: string,
+    inputs: ForeignCallInput[]
+  ): Promise<ForeignCallOutput[]> => {
+    if (fidData != null) {
+      return [(fidData as any).Socials.Social[0].userId];
+    } else {
+      return [];
+    }
   };
 
   async function testOracle() {
@@ -157,7 +208,9 @@ export default function NoirComponent() {
     }
   }
 
-  async function testFid() {}
+  async function testFid() {
+    await foreignCallHandlerFid("getFid", [[address as string]]);
+  }
   return (
     <div className="w-full flex flex-col items-center justify-center  text-center mt-10">
       <p className="font-bold text-4xl mb-2">Noir app</p>
@@ -193,6 +246,16 @@ export default function NoirComponent() {
         </div>
         <div className="w-[20%] my-6  border-[1px] border-white p-4 rounded-lg">
           <p className="mb-2 text-xl font-semibold">Test Farcaster id</p>
+
+          <button
+            className="bg-white px-3 py-2 rounded-lg  border-2 border-black text-black hover:border-white mt-4 hover:bg-black hover:text-white transition-all duration-300 ease-in-out"
+            onClick={testFid}
+          >
+            Go
+          </button>
+        </div>
+        <div className="w-[20%] my-6  border-[1px] border-white p-4 rounded-lg">
+          <p className="mb-2 text-xl font-semibold">Test Farcaster Signature</p>
 
           <button
             className="bg-white px-3 py-2 rounded-lg  border-2 border-black text-black hover:border-white mt-4 hover:bg-black hover:text-white transition-all duration-300 ease-in-out"

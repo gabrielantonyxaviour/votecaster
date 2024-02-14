@@ -10,9 +10,10 @@ import { WagmiProvider } from "wagmi";
 import { ConnectKitProvider, getDefaultConfig } from "connectkit";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import MyCustomAvatar from "@/components/MyCustomAvatar";
-import { AuthKitProvider } from "@farcaster/auth-kit";
+import { init, AirstackProvider } from "@airstack/airstack-react";
 
 const projectId = process.env["NEXT_PUBLIC_PROJECT_ID"] ?? "";
+const airstackApiKey = process.env["NEXT_PUBLIC_AIRSTACK_API_KEY"] ?? "";
 const authKitConfig = {
   relay: "https://relay.farcaster.xyz",
   rpcUrl: "https://mainnet.optimism.io",
@@ -60,13 +61,15 @@ export default function App({
                   customAvatar: MyCustomAvatar,
                 }}
               >
-                <SessionProvider session={session}>
-                  <Component
-                    {...pageProps}
-                    setUseTestAadhaar={setUseTestAadhaar}
-                    useTestAadhaar={useTestAadhaar}
-                  />
-                </SessionProvider>
+                <AirstackProvider apiKey={airstackApiKey}>
+                  <SessionProvider session={session}>
+                    <Component
+                      {...pageProps}
+                      setUseTestAadhaar={setUseTestAadhaar}
+                      useTestAadhaar={useTestAadhaar}
+                    />
+                  </SessionProvider>
+                </AirstackProvider>
               </ConnectKitProvider>
             </QueryClientProvider>
           </WagmiProvider>
