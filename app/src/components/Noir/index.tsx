@@ -5,7 +5,13 @@ import {
   BarretenbergBackend,
   CompiledCircuit,
 } from "@noir-lang/backend_barretenberg";
-import { Noir } from "@noir-lang/noir_js";
+import {
+  ForeignCallHandler,
+  ForeignCallInput,
+  ForeignCallOutput,
+  InputMap,
+  Noir,
+} from "@noir-lang/noir_js";
 
 const setup = async () => {
   await Promise.all([
@@ -32,13 +38,21 @@ export default function NoirComponent() {
   const [guess, setGuess] = React.useState(0);
   const [logs, setLogs] = React.useState<string[]>([]);
   const [proof, setProof] = React.useState<Uint8Array>();
-
+  const foreignCallHandler: ForeignCallHandler = async (
+    name: string,
+    inputs: ForeignCallInput[]
+  ): Promise<ForeignCallOutput[]> => {
+    return [""];
+  };
   async function guessValue() {
     try {
       const backend = new BarretenbergBackend(circuit as CompiledCircuit);
       const noir = new Noir(circuit as CompiledCircuit, backend);
       setLogs((prev) => [...prev, "Generating proof... ⏳"]);
-      const proof = await noir.generateFinalProof({ x: guess, y: 5 });
+      const proof = await noir.generateFinalProof(
+        { x: guess, y: 5 },
+        foreignCallHandler
+      );
       console.log(proof);
       setProof(proof.proof);
       setLogs((prev) => [...prev, "Guessed it right 😏"]);
