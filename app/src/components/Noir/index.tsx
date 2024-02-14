@@ -42,7 +42,14 @@ export default function NoirComponent() {
     name: string,
     inputs: ForeignCallInput[]
   ): Promise<ForeignCallOutput[]> => {
-    return [""];
+    return [
+      [
+        "0x" +
+          Math.sqrt(parseInt(inputs[0][0], 16)).toString(16).padStart(64, "0"),
+        "0x" +
+          Math.sqrt(parseInt(inputs[0][1], 16)).toString(16).padStart(64, "0"),
+      ],
+    ];
   };
   async function guessValue() {
     try {
@@ -50,14 +57,15 @@ export default function NoirComponent() {
       const noir = new Noir(circuit as CompiledCircuit, backend);
       setLogs((prev) => [...prev, "Generating proof... ⏳"]);
       const proof = await noir.generateFinalProof(
-        { x: guess, y: 5 },
+        { input: [4, 36] },
         foreignCallHandler
       );
       console.log(proof);
       setProof(proof.proof);
-      setLogs((prev) => [...prev, "Guessed it right 😏"]);
+      setLogs((prev) => [...prev, "Proof Generation Success 😏"]);
       setLogs((prev) => [...prev, "Verifying proof... ⏳"]);
       const isValid = await noir.verifyFinalProof(proof);
+
       if (isValid) {
         setLogs((prev) => [...prev, "Proof verified ✅"]);
       } else {
