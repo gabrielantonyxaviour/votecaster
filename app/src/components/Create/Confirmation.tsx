@@ -20,12 +20,12 @@ export default function Confirmation({
         CONFIRMATION
       </p>
       <div className="w-[60%] mx-auto py-4">
-        <SelectableButton
+        {/* <SelectableButton
           text="✍️ Sign Approval"
           isSelected={isSigned}
           disabled={!isEnabled}
           click={sign}
-        />
+        /> */}
       </div>
       <div className="w-[60%] mx-auto">
         <SelectableButton
