@@ -29,7 +29,7 @@ export default function Navbar() {
         </Link>
       </div>
       <div className="flex space-x-4">
-        <FarcasterButton />
+        <FarcasterButton isInverted={false} />
         <ConnectKitButton theme="retro" />
       </div>
     </div>

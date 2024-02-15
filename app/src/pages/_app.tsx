@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import { WagmiProvider } from "wagmi";
 import { ConnectKitProvider, getDefaultConfig } from "connectkit";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
-import MyCustomAvatar from "@/components/MyCustomAvatar";
 import { AirstackProvider } from "@airstack/airstack-react";
 
 const projectId = process.env["NEXT_PUBLIC_PROJECT_ID"] ?? "";
@@ -43,11 +42,7 @@ export default function App({
       {ready ? (
         <WagmiProvider config={config}>
           <QueryClientProvider client={queryClient}>
-            <ConnectKitProvider
-              options={{
-                customAvatar: MyCustomAvatar,
-              }}
-            >
+            <ConnectKitProvider>
               <AirstackProvider apiKey={airstackApiKey}>
                 <Component
                   {...pageProps}

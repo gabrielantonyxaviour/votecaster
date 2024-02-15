@@ -46,9 +46,10 @@ export default function DurationDropdown({
             aria-labelledby="options-menu"
           >
             <div className="py-1" role="none">
-              {options.map((option: string) => (
+              {options.map((option: string, index: number) => (
                 <a
                   href="#"
+                  key={index}
                   onClick={() => {
                     setIsOpen(false);
                     setOption(option);
