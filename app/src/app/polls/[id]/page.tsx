@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { Metadata, ResolvingMetadata } from "next";
-import PollPageComponent from "@/components/PollPageComponent";
+import PollPageWrapper from "@/components/PollPage/PollPageWrapper";
 
 async function getPoll(id: string): Promise<any> {}
 
@@ -71,5 +71,5 @@ function getMeta(poll: any) {
 
 export default function PollPage({ params }: { params: { id: string } }) {
   const poll = polls[parseInt(params.id)];
-  return process.env["HOST"] && <PollPageComponent />;
+  return process.env["HOST"] && <PollPageWrapper />;
 }

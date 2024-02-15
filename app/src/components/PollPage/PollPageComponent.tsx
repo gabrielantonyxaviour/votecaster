@@ -1,8 +1,11 @@
 "use client";
+import React, { useEffect, useState } from "react";
+import FarcasterButton from "../FarcasterButton";
+import { Data, QueryResponse } from "@/utils/airstackInterface";
 import SelectableButton from "@/components/SelectableButton";
-
-import React, { useCallback, useEffect, useState } from "react";
-
+import { useAccount } from "wagmi";
+import { useQuery } from "@airstack/airstack-react";
+import { ConnectKitButton } from "connectkit";
 export default function PollPageComponent() {
   const [poll, setPoll] = useState<any>({
     question: "WHICH TEAM IS WINNING LA LIGA?",
@@ -10,12 +13,45 @@ export default function PollPageComponent() {
     selectedOption: 0,
   });
   const [selectedOption, setSelectedOption] = useState(0);
-
+  const { address } = useAccount();
+  const [hasProfile, setHasProfile] = useState(false);
+  const {
+    data,
+    loading,
+    error: queryError,
+  }: QueryResponse = useQuery<Data>(
+    `  query MyQuery {
+      Socials(
+        input: {blockchain: ethereum, filter: {dappName: {_eq: farcaster}, identity: {_eq: "${address}"}}}
+      ) {
+        Social {
+          userId
+        }
+      }
+    }`,
+    {},
+    { cache: false }
+  );
+  useEffect(() => {
+    if (
+      data != null &&
+      (data as any).Socials != null &&
+      (data as any).Socials.Social != null &&
+      (data as any).Socials.Social.length > 0
+    ) {
+      setHasProfile(true);
+    } else {
+      setHasProfile(false);
+    }
+  }, [data, loading, queryError]);
   return (
     <div className="max-w-[1200px] mx-auto h-screen py-8">
       <div className="flex justify-between pb-12 ">
         <p className="text-3xl font-bold ">PRIV.CAST</p>
-        <div className="bg-[#FBF6FF] rounded-xl"></div>
+        <div className="flex space-x-4 ">
+          <FarcasterButton isInverted={true} />
+          <ConnectKitButton theme="retro" />
+        </div>
       </div>
       <div className="flex justify-between h-full">
         <div className="w-[60%] h-full bg-[#FBF6FF]">
@@ -79,18 +115,26 @@ export default function PollPageComponent() {
                 )}
               </div>
             </div>
-            <div className="flex-1 h-full flex flex-col space-y-4 justify-center items-center">
-              <p className="text-xl font-semibold text-[#450C63] pt-12">
-                AADHAR VERIFICATION
-              </p>
-              <div className="pb-12"></div>
-              <SelectableButton
-                text="🗳️ Cast Vote"
-                isSelected={false}
-                disabled={false}
-                click={() => {}}
-              />
-            </div>
+            {hasProfile ? (
+              <div className="flex-1 h-full flex flex-col space-y-4 justify-center items-center">
+                <p className="text-xl font-semibold text-[#450C63] pt-12">
+                  AADHAR VERIFICATION
+                </p>
+                <div className="pb-12"></div>
+                <SelectableButton
+                  text="🗳️ Cast Vote"
+                  isSelected={false}
+                  disabled={false}
+                  click={() => {}}
+                />
+              </div>
+            ) : (
+              <div className="flex-1 h-full flex flex-col space-y-4 justify-center items-center">
+                <p className="text-lg font-semibold text-[#450C63] pt-12">
+                  Connected Wallet does not have a Farcaster Account
+                </p>
+              </div>
+            )}
           </div>
         </div>
         <div className="h-[80%]  bg-[#FBF6FF] w-[35%] my-auto p-12">
