@@ -23,6 +23,7 @@ import { scrollSepolia } from "viem/chains";
 import { ConnectKitButton } from "connectkit";
 import { useAccount } from "wagmi";
 import { useQuery } from "@airstack/airstack-react";
+import { Data, QueryResponse } from "@/utils/airstackInterface";
 
 const setup = async () => {
   await Promise.all([
@@ -44,30 +45,6 @@ const setup = async () => {
     ),
   ]);
 };
-
-interface QueryResponse {
-  data: Data | null;
-  loading: boolean;
-  error: Error | null;
-}
-
-interface Data {
-  Wallet: Wallet;
-}
-
-interface Error {
-  message: string;
-}
-
-interface Wallet {
-  socials: Social[];
-  addresses: string[];
-}
-
-interface Social {
-  dappName: "lens" | "farcaster";
-  profileName: string;
-}
 
 export default function NoirComponent() {
   const [testData, setTestData] = React.useState<string>("");

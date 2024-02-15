@@ -1,6 +1,7 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import InputButton from "../InputButton";
 import { useAccount } from "wagmi";
+import DurationDropdown from "../DurationDropdown";
 
 export default function CreateQuestion({
   poll,
@@ -12,6 +13,10 @@ export default function CreateQuestion({
   >;
 }) {
   const { address } = useAccount();
+  const options = ["minutes", "hours", "days", "months"];
+  const [selectedOption, setSelectedOption] = useState(options[0]);
+  const [durationInput, setDurationInput] = useState("");
+  const [calculatedDuration, setCalculatedDuration] = useState(0);
   return (
     <div className="py-3  h-full w-[60%]">
       <div className=" h-full bg-[#FBF6FF] rounded-xl py-12 px-12">
@@ -95,11 +100,29 @@ export default function CreateQuestion({
             />
           </div>
         </div>
-        {address == undefined && (
-          <p className="text-center font-semibold text-[#450C63] text-lg pt-12 pb-2">
-            Connect wallet to post your poll 🚀
-          </p>
-        )}
+        <p className="pt-8 pb-4 font-bold text-[#450C63] text-2xl">Duration</p>
+        <div className="flex w-full space-x-4">
+          <div className="bg-[#4A0C63] rounded-sm">
+            <div className="bg-white -translate-y-1 -translate-x-1 rounded-sm border-2 border-[#4A0C63]">
+              <input
+                value={durationInput}
+                onChange={(e) => {
+                  if (parseInt(e.target.value) > 0 || e.target.value === "")
+                    setDurationInput(e.target.value);
+                }}
+                className="text-[#8A08BF] text-md font-semibold mx-4 my-2 bg-transparent border-none focus:outline-none w-full"
+              />
+            </div>
+          </div>
+          <DurationDropdown
+            selectedOption={selectedOption}
+            options={options}
+            setOption={(option: string) => {
+              setSelectedOption(option);
+            }}
+          />
+        </div>
+
         <div className="flex justify-center "></div>
       </div>
     </div>
