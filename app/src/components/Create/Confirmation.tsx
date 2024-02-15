@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import SelectableButton from "../SelectableButton";
 
 export default function Confirmation({
@@ -7,31 +7,31 @@ export default function Confirmation({
   isEnabled,
   isSigned,
   isPosted,
+  hasProfile,
 }: {
   sign: () => void;
   post: () => void;
   isEnabled: boolean;
   isSigned: boolean;
   isPosted: boolean;
+  hasProfile: boolean;
 }) {
   return (
     <div className="h-[33%] w-full bg-[#FBF6FF] rounded-xl px-20 py-8">
       <p className="text-center font-bold text-[#450C63] text-2xl">
         CONFIRMATION
       </p>
-      <div className="w-[60%] mx-auto py-4">
-        {/* <SelectableButton
-          text="✍️ Sign Approval"
-          isSelected={isSigned}
-          disabled={!isEnabled}
-          click={sign}
-        /> */}
-      </div>
-      <div className="w-[60%] mx-auto">
+      {!hasProfile && (
+        <p className="font-semibold text-[#450C63] text-md text-center px-4 pt-4">
+          Connected Wallet does not have a farcaster account
+        </p>
+      )}
+
+      <div className="w-[60%] mx-auto pt-6">
         <SelectableButton
           text="📝 Post your poll"
-          isSelected={isPosted}
-          disabled={!isSigned}
+          isSelected={false}
+          disabled={!isEnabled}
           click={sign}
         />
       </div>

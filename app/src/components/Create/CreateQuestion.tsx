@@ -7,16 +7,19 @@ export default function CreateQuestion({
   poll,
   setPoll,
 }: {
-  poll: { question: string; options: string[] };
+  poll: { question: string; options: string[]; duration: number };
   setPoll: React.Dispatch<
-    React.SetStateAction<{ question: string; options: string[] }>
+    React.SetStateAction<{
+      question: string;
+      options: string[];
+      duration: number;
+    }>
   >;
 }) {
-  const { address } = useAccount();
-  const options = ["minutes", "hours", "days", "months"];
-  const [selectedOption, setSelectedOption] = useState(options[0]);
+  const timeframe = ["minutes", "hours", "days", "months"];
+  const values = [60, 3600, 86400, 2592000];
+  const [selectedIndex, setSelectedIndex] = useState<number>(0);
   const [durationInput, setDurationInput] = useState("");
-  const [calculatedDuration, setCalculatedDuration] = useState(0);
   return (
     <div className="py-3  h-full w-[60%]">
       <div className=" h-full bg-[#FBF6FF] rounded-xl py-12 px-12">
@@ -107,18 +110,26 @@ export default function CreateQuestion({
               <input
                 value={durationInput}
                 onChange={(e) => {
-                  if (parseInt(e.target.value) > 0 || e.target.value === "")
-                    setDurationInput(e.target.value);
+                  const textInput = e.target.value;
+                  const filteredValue = textInput.replace(/[^0-9]/g, "");
+                  setDurationInput(filteredValue);
+                  setPoll({
+                    ...poll,
+                    duration: parseInt(filteredValue) * values[selectedIndex],
+                  });
                 }}
                 className="text-[#8A08BF] text-md font-semibold mx-4 my-2 bg-transparent border-none focus:outline-none w-full"
               />
             </div>
           </div>
           <DurationDropdown
-            selectedOption={selectedOption}
-            options={options}
+            selectedOption={timeframe[selectedIndex]}
+            options={timeframe}
             setOption={(option: string) => {
-              setSelectedOption(option);
+              if (option === "minutes") setSelectedIndex(0);
+              if (option === "hours") setSelectedIndex(1);
+              if (option === "days") setSelectedIndex(2);
+              if (option === "months") setSelectedIndex(3);
             }}
           />
         </div>

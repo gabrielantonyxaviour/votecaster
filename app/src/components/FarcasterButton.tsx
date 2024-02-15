@@ -25,8 +25,8 @@ export default function FarcasterButton() {
     console.log(data);
   }, [data]);
   return (
-    data != undefined &&
     data != null &&
+    (data as any).Socials != null &&
     (data as any).Socials.Social != null && (
       <div className="bg-[#4A0C63] rounded-lg mt-1" onClick={() => {}}>
         <div
