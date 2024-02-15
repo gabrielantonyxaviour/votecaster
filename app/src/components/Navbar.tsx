@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { ConnectKitButton } from "connectkit";
+import FarcasterButton from "./FarcasterButton";
 
 export default function Navbar() {
   const router = useRouter();
@@ -27,8 +28,10 @@ export default function Navbar() {
           Create
         </Link>
       </div>
-
-      <ConnectKitButton theme="retro" />
+      <div className="flex space-x-4">
+        <FarcasterButton />
+        <ConnectKitButton theme="retro" />
+      </div>
     </div>
   );
 }
