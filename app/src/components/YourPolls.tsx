@@ -4,12 +4,44 @@ import Button from "./Button";
 
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
+import { Data, QueryResponse } from "@/utils/airstackInterface";
+import { useQuery } from "@airstack/airstack-react";
 
 export default function YourPolls() {
-  const [error, setError] = useState(false);
-  const { address } = useAccount();
   const polls = [];
   const router = useRouter();
+  const [hasProfile, setHasProfile] = useState(false);
+  const { address } = useAccount();
+  const {
+    data,
+    loading,
+    error: queryError,
+  }: QueryResponse = useQuery<Data>(
+    `  query MyQuery {
+  Socials(
+    input: {blockchain: ethereum, filter: {dappName: {_eq: farcaster}, identity: {_eq: "${address}"}}}
+  ) {
+    Social {
+      userId
+    }
+  }
+}`,
+    {},
+    { cache: false }
+  );
+
+  useEffect(() => {
+    if (
+      data != null &&
+      (data as any).Socials != null &&
+      (data as any).Socials.Social != null &&
+      (data as any).Socials.Social.length > 0
+    ) {
+      setHasProfile(true);
+    } else {
+      setHasProfile(false);
+    }
+  }, [data, loading, queryError]);
 
   useEffect(() => {
     console.log(address);
@@ -25,6 +57,12 @@ export default function YourPolls() {
             <p className="font-semibold text-lg mb-2">
               Connect wallet to view your polls
             </p>
+          ) : !hasProfile ? (
+            <>
+              <p className="font-semibold text-lg mb-2">
+                Connected Wallet does not have a Farcaster Profile 🙁
+              </p>
+            </>
           ) : (
             <>
               <p className="font-semibold text-lg mb-2">
