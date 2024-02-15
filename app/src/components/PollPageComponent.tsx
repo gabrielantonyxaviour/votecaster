@@ -1,6 +1,5 @@
 "use client";
 import SelectableButton from "@/components/SelectableButton";
-import { LogInWithAnonAadhaar } from "@anon-aadhaar/react";
 
 import React, { useCallback, useEffect, useState } from "react";
 
@@ -84,9 +83,7 @@ export default function PollPageComponent() {
               <p className="text-xl font-semibold text-[#450C63] pt-12">
                 AADHAR VERIFICATION
               </p>
-              <div className="pb-12">
-                <LogInWithAnonAadhaar />
-              </div>
+              <div className="pb-12"></div>
               <SelectableButton
                 text="🗳️ Cast Vote"
                 isSelected={false}

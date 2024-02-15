@@ -2,7 +2,6 @@ import type { AppProps } from "next/app";
 import "@/styles/globals.css";
 import { http, createConfig } from "wagmi";
 import { scrollSepolia } from "wagmi/chains";
-import { AnonAadhaarProvider } from "@anon-aadhaar/react";
 import { useEffect, useState } from "react";
 import { WagmiProvider } from "wagmi";
 import { ConnectKitProvider, getDefaultConfig } from "connectkit";
@@ -42,25 +41,23 @@ export default function App({
   return (
     <>
       {ready ? (
-        <AnonAadhaarProvider _useTestAadhaar={useTestAadhaar}>
-          <WagmiProvider config={config}>
-            <QueryClientProvider client={queryClient}>
-              <ConnectKitProvider
-                options={{
-                  customAvatar: MyCustomAvatar,
-                }}
-              >
-                <AirstackProvider apiKey={airstackApiKey}>
-                  <Component
-                    {...pageProps}
-                    setUseTestAadhaar={setUseTestAadhaar}
-                    useTestAadhaar={useTestAadhaar}
-                  />
-                </AirstackProvider>
-              </ConnectKitProvider>
-            </QueryClientProvider>
-          </WagmiProvider>
-        </AnonAadhaarProvider>
+        <WagmiProvider config={config}>
+          <QueryClientProvider client={queryClient}>
+            <ConnectKitProvider
+              options={{
+                customAvatar: MyCustomAvatar,
+              }}
+            >
+              <AirstackProvider apiKey={airstackApiKey}>
+                <Component
+                  {...pageProps}
+                  setUseTestAadhaar={setUseTestAadhaar}
+                  useTestAadhaar={useTestAadhaar}
+                />
+              </AirstackProvider>
+            </ConnectKitProvider>
+          </QueryClientProvider>
+        </WagmiProvider>
       ) : null}
     </>
   );
