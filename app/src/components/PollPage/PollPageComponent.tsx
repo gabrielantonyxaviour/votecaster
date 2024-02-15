@@ -6,6 +6,7 @@ import SelectableButton from "@/components/SelectableButton";
 import { useAccount } from "wagmi";
 import { useQuery } from "@airstack/airstack-react";
 import { ConnectKitButton } from "connectkit";
+import { LogInWithAnonAadhaar } from "@anon-aadhaar/react";
 export default function PollPageComponent() {
   const [poll, setPoll] = useState<any>({
     question: "WHICH TEAM IS WINNING LA LIGA?",
@@ -120,7 +121,9 @@ export default function PollPageComponent() {
                 <p className="text-xl font-semibold text-[#450C63] pt-12">
                   AADHAR VERIFICATION
                 </p>
-                <div className="pb-12"></div>
+                <div className="pb-12">
+                  <LogInWithAnonAadhaar />
+                </div>
                 <SelectableButton
                   text="🗳️ Cast Vote"
                   isSelected={false}
