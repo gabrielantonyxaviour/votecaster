@@ -2,13 +2,14 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ConnectKitProvider, getDefaultConfig } from "connectkit";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { scrollSepolia } from "viem/chains";
 import { WagmiProvider, createConfig, http } from "wagmi";
 
 import PollPageComponent from "./PollPageComponent";
 import { AirstackProvider } from "@airstack/airstack-react";
+import { AnonAadhaarProvider } from "@anon-aadhaar/react";
 
 const projectId = process.env["NEXT_PUBLIC_PROJECT_ID"] ?? "";
 const airstackApiKey = process.env["NEXT_PUBLIC_AIRSTACK_API_KEY"] ?? "";
@@ -28,16 +29,36 @@ const config = createConfig(
   })
 );
 const queryClient = new QueryClient();
+
+type HomeProps = {
+  setUseTestAadhaar: (state: boolean) => void;
+  useTestAadhaar: boolean;
+};
 export default function PollPageWrapper() {
+  const [ready, setReady] = useState<boolean>(false);
+  const [useTestAadhaar, setUseTestAadhaar] = useState<boolean>(false);
+
+  useEffect(() => {
+    setReady(true);
+  }, []);
   return (
-    <WagmiProvider config={config}>
-      <QueryClientProvider client={queryClient}>
-        <ConnectKitProvider>
-          <AirstackProvider apiKey={airstackApiKey}>
-            <PollPageComponent />
-          </AirstackProvider>
-        </ConnectKitProvider>
-      </QueryClientProvider>
-    </WagmiProvider>
+    <>
+      {ready ? (
+        <AnonAadhaarProvider _useTestAadhaar={useTestAadhaar}>
+          <WagmiProvider config={config}>
+            <QueryClientProvider client={queryClient}>
+              <ConnectKitProvider>
+                <AirstackProvider apiKey={airstackApiKey}>
+                  <PollPageComponent
+                    setUseTestAadhaar={setUseTestAadhaar}
+                    useTestAadhaar={useTestAadhaar}
+                  />
+                </AirstackProvider>
+              </ConnectKitProvider>
+            </QueryClientProvider>
+          </WagmiProvider>
+        </AnonAadhaarProvider>
+      ) : null}
+    </>
   );
 }

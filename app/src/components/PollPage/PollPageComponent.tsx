@@ -6,8 +6,20 @@ import SelectableButton from "@/components/SelectableButton";
 import { useAccount } from "wagmi";
 import { useQuery } from "@airstack/airstack-react";
 import { ConnectKitButton } from "connectkit";
-import { LogInWithAnonAadhaar } from "@anon-aadhaar/react";
-export default function PollPageComponent() {
+import {
+  AnonAadhaarProof,
+  LogInWithAnonAadhaar,
+  useAnonAadhaar,
+} from "@anon-aadhaar/react";
+
+type HomeProps = {
+  setUseTestAadhaar: (state: boolean) => void;
+  useTestAadhaar: boolean;
+};
+export default function PollPageComponent({
+  setUseTestAadhaar,
+  useTestAadhaar,
+}: HomeProps) {
   const [poll, setPoll] = useState<any>({
     question: "WHICH TEAM IS WINNING LA LIGA?",
     options: ["Real Madrid", "Barcelona", "Atletico Madrid", "Sevilla"],
@@ -16,6 +28,7 @@ export default function PollPageComponent() {
   const [selectedOption, setSelectedOption] = useState(0);
   const { address } = useAccount();
   const [hasProfile, setHasProfile] = useState(false);
+  const [logs, setLogs] = useState<string[]>([]);
   const {
     data,
     loading,
@@ -33,6 +46,16 @@ export default function PollPageComponent() {
     {},
     { cache: false }
   );
+  const [anonAadhaar] = useAnonAadhaar();
+
+  useEffect(() => {
+    console.log("Anon Aadhaar: ", anonAadhaar.status);
+    console.log(anonAadhaar);
+    if (anonAadhaar.status === "logged-in") {
+      setLogs(["Anon Aadhar logged-in. Proof verified ✅"]);
+    }
+  }, [anonAadhaar]);
+
   useEffect(() => {
     if (
       data != null &&
@@ -140,8 +163,24 @@ export default function PollPageComponent() {
             )}
           </div>
         </div>
-        <div className="h-[80%]  bg-[#FBF6FF] w-[35%] my-auto p-12">
+        <div className="h-[80%] text-[#450C63] bg-[#FBF6FF] w-[35%] my-auto p-12">
           <p className="text-[#450C63] font-bold text-3xl text-center">LOGS</p>
+          <p className="text-sm pt-4 pb-2">
+            [1] Anon Aadhar logged-in. Proof verified ✅
+          </p>
+          {anonAadhaar.status === "logged-in" && (
+            <div className="flex justify-center">
+              <div className="whitespace-normal overflow-y-auto h-[100px] mx-auto ">
+                <AnonAadhaarProof
+                  code={JSON.stringify(
+                    (anonAadhaar as any).anonAadhaarProof,
+                    null,
+                    2
+                  )}
+                />
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
