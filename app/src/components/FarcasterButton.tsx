@@ -25,6 +25,7 @@ export default function FarcasterButton({
     Social {
       profileImage
       fnames
+      userId
     }
   }
 }`,
@@ -41,6 +42,7 @@ export default function FarcasterButton({
       setHasProfile(true);
       setProfileImage((data as any).Socials.Social[0].profileImage);
       setUserId((data as any).Socials.Social[0].fnames[0]);
+      console.log(data);
     } else {
       setHasProfile(false);
     }
