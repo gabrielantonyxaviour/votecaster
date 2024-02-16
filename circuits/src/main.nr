@@ -1,11 +1,5 @@
 use dep::std;
 use dep::ecrecover;
-#[oracle(getFid)]
-unconstrained fn farcaster_id(address: Field) -> Field {}
-
-unconstrained fn get_farcaster_id(address: Field) -> Field {
-    farcaster_id(address)
-}
 
 fn main(
     signer_pub_x_key: [u8; 32],
@@ -18,15 +12,16 @@ fn main(
     vote: pub u8
 ) -> pub [u8; 32] {
     // Compute hashed data
-    let hashed_message: [u8; 32]= hash_nullifier(poll_id, farcaster_id.to_be_bytes(32));
+    let hash_data: [u8; 32] = hash_nullifier(poll_id, farcaster_id.to_be_bytes(32));
     // Ecreover signature and verify
-    let recoveredAddress: Field = ecrecover::ecrecover(signer_pub_x_key, signer_pub_y_key, signature, hashed_message);
-    // recover address 
-    let address: Field= address_from_pub_key(signer_pub_x_key, signer_pub_y_key);
+    let recoveredAddress: Field = ecrecover::ecrecover(signer_pub_x_key, signer_pub_y_key, signature, hash_data);
+    // Compute address from public key 
+    let address: Field = address_from_pub_key(signer_pub_x_key, signer_pub_y_key);
+    // Check recovered address is computed address
     assert(recoveredAddress == address);
 
     // generate nullifier
-    let gen_nullifier= std::hash::keccak256(signature, 64);
+    let gen_nullifier = std::hash::keccak256(signature, 64);
     // Check if nullifier hash is valid
     assert(gen_nullifier == nullifier);
 
@@ -37,6 +32,8 @@ fn main(
 
     // Check if the vote is right
     assert(vote == vote_priv);
+
+    // Return nullifier
     nullifier
 }
 
@@ -77,4 +74,11 @@ fn u8_to_u160(array: [u8]) -> Field {
         addr = (addr * 256) + (array[i] as Field);
     }
     addr
+}
+
+#[oracle(getFid)]
+unconstrained fn farcaster_id(address: Field) -> Field {}
+
+unconstrained fn get_farcaster_id(address: Field) -> Field {
+    farcaster_id(address)
 }
