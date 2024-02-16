@@ -1,8 +1,8 @@
 require("@nomicfoundation/hardhat-toolbox");
+require("hardhat-dependency-compiler");
 require("hardhat-contract-sizer");
 require("./tasks");
 const { networks } = require("./networks");
-
 const REPORT_GAS =
   process.env.REPORT_GAS?.toLowerCase() === "true" ? true : false;
 
@@ -36,6 +36,9 @@ module.exports = {
         settings: SOLC_SETTINGS,
       },
     ],
+  },
+  dependencyCompiler: {
+    paths: ["@anon-aadhaar/contracts"],
   },
   networks: {
     ...networks,

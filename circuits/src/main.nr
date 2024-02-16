@@ -8,8 +8,8 @@ fn main(
     farcaster_id: Field,
     vote_priv: u8,
     poll_id: pub [u8; 32],
-    nullifier: pub [u8; 32],
-    vote: pub u8
+    vote: pub u8,
+    nullifier: pub [u8; 32]
 ) -> pub [u8; 32] {
     // Compute hashed data
     let hash_data: [u8; 32] = hash_nullifier(poll_id, farcaster_id.to_be_bytes(32));
