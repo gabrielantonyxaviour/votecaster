@@ -2,10 +2,10 @@
 
 pragma solidity ^0.8.0;
 
-
 import "@anon-aadhaar/contracts/interfaces/IAnonAadhaar.sol";
 import "@anon-aadhaar/contracts/interfaces/IAnonAadhaarVote.sol";
 import {UltraVerifier} from "./plonk_vk.sol";
+
 contract PrivCast{
 
     struct Poll{
