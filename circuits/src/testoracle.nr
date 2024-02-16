@@ -24,3 +24,4 @@ fn test_fail() {
     let input = [4, 15];
     main(input)
 }
+
