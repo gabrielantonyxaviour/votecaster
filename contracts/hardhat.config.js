@@ -3,6 +3,7 @@ require("hardhat-dependency-compiler");
 require("hardhat-contract-sizer");
 require("./tasks");
 const { networks } = require("./networks");
+
 const REPORT_GAS =
   process.env.REPORT_GAS?.toLowerCase() === "true" ? true : false;
 
@@ -46,8 +47,18 @@ module.exports = {
   etherscan: {
     apiKey: {
       sepolia: networks.ethereumSepolia.verifyApiKey,
-      optimisticSepolia: networks.optimismSepolia.verifyApiKey,
+      scrollSepolia: networks.scrollSepolia.verifyApiKey,
     },
+    customChains: [
+      {
+        network: "scrollSepolia",
+        chainId: networks.scrollSepolia.chainId,
+        urls: {
+          apiURL: "https://api-sepolia.scrollscan.com/api/",
+          browserURL: "https://scrollscan.com/",
+        },
+      },
+    ],
   },
   gasReporter: {
     enabled: REPORT_GAS,

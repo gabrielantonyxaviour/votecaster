@@ -15,13 +15,13 @@ if (SECOND_PRIVATE_KEY) {
 }
 
 const networks = {
-  optimismSepolia: {
-    url: process.env.OPTIMISM_SEPOLIA_RPC_URL || "UNSET",
+  scrollSepolia: {
+    url: "https://sepolia-rpc.scroll.io",
     gasPrice: undefined,
     nonce: undefined,
     accounts,
-    verifyApiKey: process.env.ETHERSCAN_API_KEY || "UNSET",
-    chainId: 111155420,
+    verifyApiKey: process.env.SCROLL_API_KEY || "UNSET",
+    chainId: 534351,
     confirmations: DEFAULT_VERIFICATION_BLOCK_CONFIRMATIONS,
     nativeCurrencySymbol: "ETH",
   },

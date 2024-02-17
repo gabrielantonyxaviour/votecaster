@@ -33,9 +33,9 @@ contract PrivCast{
     address public anonAadhaarVerifierAddr;
     UltraVerifier public farcasterVerifier;
 
-    constructor(address _verifierAddr) {
+    constructor(address _anonAaadharVerifier) {
         pollIdCounter=0;
-        anonAadhaarVerifierAddr = _verifierAddr;
+        anonAadhaarVerifierAddr = _anonAaadharVerifier;
         farcasterVerifier = new UltraVerifier();
     }
 
