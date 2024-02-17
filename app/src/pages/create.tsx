@@ -5,8 +5,12 @@ import Navbar from "@/components/Navbar";
 import React, { useEffect, useState } from "react";
 import { Data, QueryResponse } from "@/utils/airstackInterface";
 import { useQuery } from "@airstack/airstack-react";
-import { useAccount } from "wagmi";
+import { useAccount, useWriteContract } from "wagmi";
 import axios from "axios";
+import { abi, deployment } from "@/utils/constants";
+import { scrollSepolia } from "viem/chains";
+import { createPublicClient, http } from "viem";
+import CreatedModal from "@/components/CreatedModal";
 
 export default function CreatePage() {
   const [poll, setPoll] = useState<{
@@ -19,10 +23,15 @@ export default function CreatePage() {
     duration: 0,
   });
   const [isSybil, setIsSybil] = useState(false);
+  const [pollId, setPollId] = useState<string>("1");
   const [hasProfile, setHasProfile] = useState(false);
   const { address } = useAccount();
   const [ipfsHash, setIpfsHash] = useState<string>("");
-  const [uploadState, setUploadState] = useState(0);
+  const [txHash, setTxHash] = useState<string>("");
+  const [isDisabled, setIsDisabled] = useState(false);
+  const [status, setStatus] = useState("");
+  const { writeContractAsync: createPoll } = useWriteContract();
+
   const { data, loading, error }: QueryResponse = useQuery<Data>(
     `  query MyQuery {
   Socials(
@@ -37,7 +46,7 @@ export default function CreatePage() {
     { cache: false }
   );
   useEffect(() => {
-    console.log(data);
+    // console.log(data);
   }, [data]);
   useEffect(() => {
     if (
@@ -57,12 +66,16 @@ export default function CreatePage() {
       <Navbar />
       <div className="flex justify-between h-full w-full">
         <CreateQuestion poll={poll} setPoll={setPoll} />
+        {pollId != "" && (
+          <CreatedModal pollId={pollId} close={() => setPollId("")} />
+        )}
         <div className="flex flex-col justify-between w-[39%] h-full py-3">
           <ChooseFeatures isSybil={isSybil} setIsSybil={setIsSybil} />
           <Confirmation
             post={async () => {
+              setIsDisabled(true);
+              setStatus("Uploading to IPFS...");
               console.log("Uploading to IPFS...");
-              setUploadState(1);
 
               const res = await axios.post("/api/pinata", poll, {
                 headers: {
@@ -70,13 +83,48 @@ export default function CreatePage() {
                 },
               });
               setIpfsHash(res.data.IpfsHash);
-              setUploadState(2);
+              setStatus("Initiating transaction...");
+              console.log("Initiating transaction...");
+
+              const publicClient = createPublicClient({
+                chain: scrollSepolia,
+                transport: http("https://rpc.ankr.com/scroll_sepolia_testnet"),
+              });
+              const unwatch = publicClient.watchContractEvent({
+                address: deployment,
+                abi,
+                onLogs: (logs) => {
+                  console.log((logs[0] as any).args.creatorAddress);
+                  if ((logs[0] as any).args.creatorAddress == address) {
+                    setStatus("Transaction Confirmed!");
+                    setPollId((logs[0] as any).args.pollId);
+                  }
+                  unwatch();
+                },
+              });
+
+              const tx = await createPoll({
+                abi,
+                address: deployment,
+                functionName: "createPoll",
+                args: [res.data.IpfsHash, poll.duration, isSybil],
+              });
+              setTxHash("https://sepolia.scrollscan.dev/tx/" + tx);
+              setStatus("Waiting for Confirmation...");
               // contract call
             }}
-            isEnabled={poll.question != "" && hasProfile && poll.duration != 0}
+            isEnabled={
+              !isDisabled &&
+              poll.question != "" &&
+              hasProfile &&
+              poll.duration != 0
+            }
+            status={status}
             isSigned={false}
             hasProfile={hasProfile}
             isPosted={false}
+            txHash={txHash}
+            ipfsHash={ipfsHash}
           />
         </div>
       </div>

@@ -5,12 +5,18 @@ export default function Confirmation({
   post,
   isEnabled,
   hasProfile,
+  txHash,
+  ipfsHash,
+  status,
 }: {
   post: () => void;
   isEnabled: boolean;
   isSigned: boolean;
   isPosted: boolean;
   hasProfile: boolean;
+  status: string;
+  txHash: string;
+  ipfsHash: string;
 }) {
   return (
     <div className="h-[33%] w-full bg-[#FBF6FF] rounded-xl px-20 py-8">
@@ -22,14 +28,43 @@ export default function Confirmation({
           Connected Wallet does not have a farcaster account
         </p>
       )}
-
-      <div className="w-[60%] mx-auto pt-6">
-        <SelectableButton
-          text="📝 Post your poll"
-          isSelected={false}
-          disabled={!isEnabled}
-          click={post}
-        />
+      {(status == "Uploading to IPFS..." ||
+        status == "Initiating transaction...") && (
+        <p className="font-semibold text-[#450C63] text-md text-center px-4 pt-4">
+          {status}
+        </p>
+      )}
+      {ipfsHash == "" && (
+        <div className="w-[60%] mx-auto pt-6">
+          <SelectableButton
+            text="📝 Post your poll"
+            isSelected={false}
+            disabled={!isEnabled}
+            click={post}
+          />
+        </div>
+      )}
+      <div className="text-[#450C63] text-sm font-normal text-center mt-4">
+        {ipfsHash != "" && (
+          <>
+            <p className="font-semibold text-md">Uploaded to IPFS</p>
+            <a href={ipfsHash} target="_blank">
+              {ipfsHash.substring(0, 20) +
+                "..." +
+                ipfsHash.substring(ipfsHash.length - 20, ipfsHash.length)}
+            </a>
+          </>
+        )}
+        {txHash != "" && (
+          <>
+            <p className="font-semibold text-md mt-2">{status}</p>
+            <a href={txHash} target="_blank">
+              {txHash.substring(0, 20) +
+                "..." +
+                txHash.substring(txHash.length - 20, txHash.length)}
+            </a>
+          </>
+        )}
       </div>
     </div>
   );
