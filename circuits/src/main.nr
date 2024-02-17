@@ -28,6 +28,7 @@ fn main(
     // Call oracle to get farcaster id
     let fid: Field = get_farcaster_id(address);
     // Check if farcaster id is valid
+    assert(fid as u8 != 0);
     assert(fid == farcaster_id);
 
     // Check if the vote is right
