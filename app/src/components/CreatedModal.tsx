@@ -1,6 +1,8 @@
+import useWindowSize from "@/hooks/useWindowSize";
 import { faCopy, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
+import Confetti from "react-confetti";
 
 export default function CreatedModal({
   pollId,
@@ -9,11 +11,14 @@ export default function CreatedModal({
   pollId: string;
   close: () => void;
 }) {
+  const { width, height } = useWindowSize();
   return (
     <div
       className="fixed top-0 left-0 w-full h-full bg-black opacity-85 z-40"
       //   onClick={close}
     >
+      <Confetti width={width} height={height} />
+
       <div className="fixed top-[50%] left-[50%] -translate-y-1/2 -translate-x-1/2 bg-[#4A0C63] p-4 z-50  w-[28%] rounded-lg">
         <div className="flex justify-between mt-2">
           <p className="text-white font-bold text-2xl text-center my-auto">

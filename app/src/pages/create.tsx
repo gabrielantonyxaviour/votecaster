@@ -7,7 +7,6 @@ import { Data, QueryResponse } from "@/utils/airstackInterface";
 import { useQuery } from "@airstack/airstack-react";
 import { useAccount, useWriteContract } from "wagmi";
 import axios from "axios";
-import Confetti from "react-confetti";
 import { abi, deployment } from "@/utils/constants";
 import { scrollSepolia } from "viem/chains";
 import { createPublicClient, http } from "viem";
@@ -26,7 +25,7 @@ export default function CreatePage() {
   });
   const { height, width } = useWindowSize();
   const [isSybil, setIsSybil] = useState(false);
-  const [pollId, setPollId] = useState<string>("");
+  const [pollId, setPollId] = useState<string>("1");
   const [hasProfile, setHasProfile] = useState(false);
   const { address } = useAccount();
   const [ipfsHash, setIpfsHash] = useState<string>("");
@@ -67,7 +66,6 @@ export default function CreatePage() {
   return (
     <div className="max-w-[1200px] mx-auto h-screen py-8">
       <Navbar />
-      {pollId != "" && <Confetti width={width} height={height} />}
       <div className="flex justify-between h-full w-full">
         <CreateQuestion poll={poll} setPoll={setPoll} />
         {pollId != "" && (
