@@ -21,7 +21,7 @@ export default function CreatePage() {
   const [isSybil, setIsSybil] = useState(false);
   const [hasProfile, setHasProfile] = useState(false);
   const { address } = useAccount();
-  const [cid, setCid] = useState<string>("");
+  const [ipfsHash, setIpfsHash] = useState<string>("");
   const [uploadState, setUploadState] = useState(0);
   const { data, loading, error }: QueryResponse = useQuery<Data>(
     `  query MyQuery {
@@ -69,11 +69,9 @@ export default function CreatePage() {
                   "Content-Type": "application/json",
                 },
               });
-              console.log(res);
-              // const resData = await res.json();
-              // console.log(resData);
-              // setCid(resData.IpfsHash);
+              setIpfsHash(res.data.IpfsHash);
               setUploadState(2);
+              // contract call
             }}
             isEnabled={poll.question != "" && hasProfile && poll.duration != 0}
             isSigned={false}
