@@ -1,12 +1,42 @@
 import Head from "next/head";
 import { Metadata, ResolvingMetadata } from "next";
+import { createClient } from "@supabase/supabase-js";
 
-async function getPoll(id: string): Promise<any> {}
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
+const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_KEY ?? "";
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+async function getPoll(pollId: string): Promise<any> {
+  try {
+    const { data: fetchedPoll, error: fetchError } = await supabase
+      .from("polls")
+      .select("*")
+      .eq("id", pollId);
+
+    console.log(fetchedPoll);
+
+    if (fetchError || fetchedPoll == null || fetchedPoll.length === 0) {
+      return {
+        message: "Poll does not exist",
+        response: null,
+      };
+    } else {
+      return {
+        message: "Success",
+        response: fetchedPoll[0],
+      };
+    }
+  } catch (error) {
+    console.error("Error getting poll:", error);
+    return { message: "Internal Server Error", response: null };
+  }
+}
 
 type Props = {
   params: { id: string };
   searchParams: { [key: string]: string | string[] | undefined };
 };
+
 const polls = [
   {
     question: "Which programming language do you prefer?",
@@ -69,8 +99,8 @@ function getMeta(poll: any) {
 }
 
 export default function PollPage({ params }: { params: { id: string } }) {
-  const poll = polls[parseInt(params.id)];
-
+  const poll = getPoll(params.id);
+  console.log(poll);
   return (
     process.env["HOST"] && (
       <div>
