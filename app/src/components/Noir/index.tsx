@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import circuit from "@/utils/circuit.json";
 import fidCircuit from "@/utils/fidCircuit.json";
 import signCircuit from "@/utils/cryptosign.json";
+import privCastCircuit from "@/utils/privCastCircuit.json";
 import {
   BarretenbergBackend,
   CompiledCircuit,
@@ -16,8 +17,11 @@ import {
 import {
   createWalletClient,
   custom,
+  encodePacked,
   hashMessage,
+  keccak256,
   recoverPublicKey,
+  toBytes,
 } from "viem";
 import { scrollSepolia } from "viem/chains";
 import { ConnectKitButton } from "connectkit";
@@ -218,6 +222,98 @@ export default function NoirComponent() {
       setLogs((prev) => [...prev, "Wrong inputs 💔"]);
     }
   }
+
+  async function testPrivCast() {
+    try {
+      const pollId = 1;
+      const fid = (fidData as any).Socials.Social[0].userId;
+      console.log(parseInt(fid));
+
+      const pollIdArray = new Uint8Array(32);
+      let pollIdTemp = pollId;
+      for (let i = 31; i >= 0; i--) {
+        pollIdArray[i] = pollIdTemp & 0xff; // Extract the least significant byte
+        pollIdTemp = pollIdTemp >> 8; // Shift the number to the right by 8 bits
+      }
+      const farcasterIdArray = new Uint8Array(32);
+      let fidTemp = parseInt(fid);
+      for (let i = 31; i >= 0; i--) {
+        farcasterIdArray[i] = fidTemp & 0xff; // Extract the least significant byte
+        fidTemp = fidTemp >> 8; // Shift the number to the right by 8 bits
+      }
+
+      const backend = new BarretenbergBackend(
+        privCastCircuit as CompiledCircuit
+      );
+      const noir = new Noir(privCastCircuit as CompiledCircuit, backend);
+      const nullifier = toBytes(
+        keccak256(
+          encodePacked(["uint256", "uint256"], [BigInt(pollId), BigInt(fid)])
+        )
+      );
+      const sig = Buffer.from(
+        (
+          await walletClient.signMessage({
+            account: address,
+            message: {
+              raw: nullifier,
+            },
+          })
+        ).slice(2),
+        "hex"
+      );
+      const publicKey = await recoverPublicKey({
+        hash: nullifier,
+        signature: sig,
+      });
+      const publicKeyBuffer = Buffer.from(publicKey.slice(2), "hex");
+
+      // Extract x and y coordinates
+      const xCoordHex = Array.from(publicKeyBuffer.subarray(1, 33)).map(
+        (byte) => `${byte}`
+      );
+      const yCoordHex = Array.from(publicKeyBuffer.subarray(33)).map(
+        (byte) => `${byte}`
+      );
+      const trimmedSig = new Uint8Array(sig.subarray(0, sig.length - 1));
+
+      setLogs((prev) => [...prev, "Generating proof... ⏳"]);
+      console.log({
+        signer_pub_x_key: Array.from(xCoordHex).map((byte) => `${byte}`),
+        signer_pub_y_key: Array.from(yCoordHex).map((byte) => `${byte}`),
+        signature: Array.from(trimmedSig).map((byte) => `${byte}`),
+        farcaster_id: parseInt(fid),
+        vote_priv: 1,
+        poll_id: Array.from(pollIdArray).map((byte) => `${byte}`),
+        vote: 1,
+        nullifier: Array.from(nullifier).map((byte) => `${byte}`),
+      });
+      const proof = await noir.generateFinalProof({
+        signer_pub_x_key: Array.from(xCoordHex).map((byte) => `${byte}`),
+        signer_pub_y_key: Array.from(yCoordHex).map((byte) => `${byte}`),
+        signature: Array.from(trimmedSig).map((byte) => `${byte}`),
+        farcaster_id: parseInt(fid),
+        vote_priv: 1,
+        poll_id: Array.from(pollIdArray).map((byte) => `${byte}`),
+        vote: 1,
+        nullifier: Array.from(nullifier).map((byte) => `${byte}`),
+      });
+      console.log(proof);
+      setProof(proof.proof);
+      setLogs((prev) => [...prev, "Proof Generation Success 😏"]);
+      setLogs((prev) => [...prev, "Verifying proof... ⏳"]);
+      const isValid = await noir.verifyFinalProof(proof);
+
+      if (isValid) {
+        setLogs((prev) => [...prev, "Proof verified ✅"]);
+      } else {
+        setLogs((prev) => [...prev, "Proof verification failed ❌"]);
+      }
+    } catch (err) {
+      console.log(err);
+      setLogs((prev) => [...prev, "Wrong inputs 💔"]);
+    }
+  }
   return (
     <div className="w-full flex flex-col items-center justify-center  text-center mt-10">
       <p className="font-bold text-4xl mb-2">Noir app</p>
@@ -262,11 +358,11 @@ export default function NoirComponent() {
           </button>
         </div>
         <div className="w-[20%] my-6  border-[1px] border-white p-4 rounded-lg">
-          <p className="mb-2 text-xl font-semibold">Test Farcaster Signature</p>
+          <p className="mb-2 text-xl font-semibold">Test Priv Cast</p>
 
           <button
             className="bg-white px-3 py-2 rounded-lg  border-2 border-black text-black hover:border-white mt-4 hover:bg-black hover:text-white transition-all duration-300 ease-in-out"
-            onClick={testFid}
+            onClick={testPrivCast}
           >
             Go
           </button>
