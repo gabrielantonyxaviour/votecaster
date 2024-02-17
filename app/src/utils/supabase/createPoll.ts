@@ -39,14 +39,14 @@ export default async function createPoll(req: {
             .from("polls")
             .insert([
               {
-                id: pollId,
+                id: parseInt(pollId),
                 question,
                 creator,
                 option_a: optionA,
                 option_b: optionB,
                 option_c: optionC,
                 option_d: optionD,
-                id_anon: isAnon,
+                is_anon: isAnon,
                 validity,
               },
             ])

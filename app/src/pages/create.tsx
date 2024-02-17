@@ -11,7 +11,7 @@ import { abi, deployment } from "@/utils/constants";
 import { scrollSepolia } from "viem/chains";
 import { createPublicClient, http } from "viem";
 import CreatedModal from "@/components/CreatedModal";
-import useWindowSize from "@/hooks/useWindowSize";
+import createPoll from "@/utils/supabase/createPoll";
 
 export default function CreatePage() {
   const [poll, setPoll] = useState<{
@@ -23,16 +23,15 @@ export default function CreatePage() {
     options: ["Option 1", "Option 2", "Option 3", "Option 4 "],
     duration: 0,
   });
-  const { height, width } = useWindowSize();
   const [isSybil, setIsSybil] = useState(false);
-  const [pollId, setPollId] = useState<string>("1");
+  const [pollId, setPollId] = useState<string>("");
   const [hasProfile, setHasProfile] = useState(false);
   const { address } = useAccount();
   const [ipfsHash, setIpfsHash] = useState<string>("");
   const [txHash, setTxHash] = useState<string>("");
   const [isDisabled, setIsDisabled] = useState(false);
   const [status, setStatus] = useState("");
-  const { writeContractAsync: createPoll } = useWriteContract();
+  const { writeContractAsync: createPollContractCall } = useWriteContract();
 
   const { data, loading, error }: QueryResponse = useQuery<Data>(
     `  query MyQuery {
@@ -96,16 +95,29 @@ export default function CreatePage() {
                 address: deployment,
                 abi,
                 onLogs: (logs) => {
-                  console.log((logs[0] as any).args.createrAddress);
-                  if ((logs[0] as any).args.createrAddress == address) {
-                    setStatus("Transaction Confirmed!");
-                    setPollId((logs[0] as any).args.pollId);
+                  console.log((logs[0] as any).args.creatorAddress);
+                  if ((logs[0] as any).args.creatorAddress == address) {
+                    createPoll({
+                      pollId: (logs[0] as any).args.pollId,
+                      question: poll.question,
+                      creator: address as string,
+                      optionA: poll.options.length > 0 ? poll.options[0] : "",
+                      optionB: poll.options.length > 1 ? poll.options[1] : "",
+                      optionC: poll.options.length > 2 ? poll.options[2] : "",
+                      optionD: poll.options.length > 3 ? poll.options[3] : "",
+                      isAnon: isSybil,
+                      validity: poll.duration,
+                    }).then((res) => {
+                      console.log(res);
+                      setStatus("Transaction Confirmed!");
+                      setPollId((logs[0] as any).args.pollId);
+                      unwatch();
+                    });
                   }
-                  unwatch();
                 },
               });
 
-              const tx = await createPoll({
+              const tx = await createPollContractCall({
                 abi,
                 address: deployment,
                 functionName: "createPoll",
@@ -113,7 +125,6 @@ export default function CreatePage() {
               });
               setTxHash("https://sepolia.scrollscan.dev/tx/" + tx);
               setStatus("Waiting for Confirmation...");
-              // contract call
             }}
             isEnabled={
               !isDisabled &&

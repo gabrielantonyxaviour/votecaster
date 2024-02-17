@@ -39,7 +39,7 @@ contract PrivCast{
         farcasterVerifier = new UltraVerifier();
     }
 
-    event PollCreated(uint256 pollId, address createrAddress, string pollUri,uint256 createdTimestamp, uint256 validityDuration, bool isAnonAadharEnabled);
+    event PollCreated(uint256 pollId, address creatorAddress, string pollUri,uint256 createdTimestamp, uint256 validityDuration, bool isAnonAadharEnabled);
     event VoteCast(uint256 pollId, uint256 nullifierHash,uint256 optionId);
 
     function createPoll(string memory pollUri, uint256 validityDuration,bool isAnonAadharEnabled) public  {
