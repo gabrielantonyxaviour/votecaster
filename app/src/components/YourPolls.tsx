@@ -88,8 +88,9 @@ export default function YourPolls() {
         <div className="flex  flex-wrap space-x-4 mt-12">
           {polls != undefined &&
             polls != null &&
-            polls.map((poll: any) => (
+            polls.map((poll: any, index: any) => (
               <div
+                key={index}
                 className=" bg-[#450C63] border border-[#450C63] rounded-xl cursor-pointer"
                 onClick={() => {
                   router.push("/polls/" + poll.id + "?result=true");
