@@ -16,7 +16,6 @@ export default function SelectableButton({
       className={`${
         disabled ? "bg-[#828282]" : "bg-[#4A0C63]"
       } rounded-sm text-center`}
-      onClick={click}
     >
       <div
         className={`${

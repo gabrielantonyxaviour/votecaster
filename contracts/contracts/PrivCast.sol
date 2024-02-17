@@ -10,7 +10,6 @@ contract PrivCast{
 
     struct Poll{
         uint256 id;
-        uint256 creatorFarcasterId;
         string pollUri;
         uint256[4] votes;
         uint256 createdTimestamp;
@@ -40,12 +39,12 @@ contract PrivCast{
         farcasterVerifier = new UltraVerifier();
     }
 
-    event PollCreated(uint256 pollId, uint256 creatorFarcasterId, address createrAddress, string pollUri,uint256 createdTimestamp, uint256 validityDuration, bool isAnonAadharEnabled);
+    event PollCreated(uint256 pollId, address createrAddress, string pollUri,uint256 createdTimestamp, uint256 validityDuration, bool isAnonAadharEnabled);
     event VoteCast(uint256 pollId, uint256 nullifierHash,uint256 optionId);
 
-    function createPoll(string memory pollUri, uint256 farcasterId,uint256 validityDuration,bool isAnonAadharEnabled,bytes memory proof) public returns (uint256) {
-        polls[pollIdCounter]=Poll(pollIdCounter,farcasterId,pollUri, [uint256(0),uint256(0),uint256(0),uint256(0)],block.timestamp,validityDuration,isAnonAadharEnabled,true);
-        emit PollCreated(pollIdCounter, farcasterId, msg.sender, pollUri, block.timestamp, validityDuration, isAnonAadharEnabled);
+    function createPoll(string memory pollUri, uint256 validityDuration,bool isAnonAadharEnabled) public  {
+        polls[pollIdCounter]=Poll(pollIdCounter,pollUri, [uint256(0),uint256(0),uint256(0),uint256(0)],block.timestamp,validityDuration,isAnonAadharEnabled,true);
+        emit PollCreated(pollIdCounter, msg.sender, pollUri, block.timestamp, validityDuration, isAnonAadharEnabled);
         pollIdCounter++;    
     }
 

@@ -2,14 +2,10 @@ import React, { useEffect } from "react";
 import SelectableButton from "../SelectableButton";
 
 export default function Confirmation({
-  sign,
   post,
   isEnabled,
-  isSigned,
-  isPosted,
   hasProfile,
 }: {
-  sign: () => void;
   post: () => void;
   isEnabled: boolean;
   isSigned: boolean;
@@ -32,7 +28,7 @@ export default function Confirmation({
           text="📝 Post your poll"
           isSelected={false}
           disabled={!isEnabled}
-          click={sign}
+          click={post}
         />
       </div>
     </div>

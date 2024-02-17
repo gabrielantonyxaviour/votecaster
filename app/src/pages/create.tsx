@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import { Data, QueryResponse } from "@/utils/airstackInterface";
 import { useQuery } from "@airstack/airstack-react";
 import { useAccount } from "wagmi";
+import axios from "axios";
 
 export default function CreatePage() {
   const [poll, setPoll] = useState<{
@@ -20,6 +21,8 @@ export default function CreatePage() {
   const [isSybil, setIsSybil] = useState(false);
   const [hasProfile, setHasProfile] = useState(false);
   const { address } = useAccount();
+  const [cid, setCid] = useState<string>("");
+  const [uploadState, setUploadState] = useState(0);
   const { data, loading, error }: QueryResponse = useQuery<Data>(
     `  query MyQuery {
   Socials(
@@ -57,8 +60,21 @@ export default function CreatePage() {
         <div className="flex flex-col justify-between w-[39%] h-full py-3">
           <ChooseFeatures isSybil={isSybil} setIsSybil={setIsSybil} />
           <Confirmation
-            sign={() => {}}
-            post={() => {}}
+            post={async () => {
+              console.log("Uploading to IPFS...");
+              setUploadState(1);
+
+              const res = await axios.post("/api/pinata", poll, {
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              });
+              console.log(res);
+              // const resData = await res.json();
+              // console.log(resData);
+              // setCid(resData.IpfsHash);
+              setUploadState(2);
+            }}
             isEnabled={poll.question != "" && hasProfile && poll.duration != 0}
             isSigned={false}
             hasProfile={hasProfile}
