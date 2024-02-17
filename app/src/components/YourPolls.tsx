@@ -7,6 +7,7 @@ import { useAccount } from "wagmi";
 import { Data, QueryResponse } from "@/utils/airstackInterface";
 import { useQuery } from "@airstack/airstack-react";
 import getPollsByCreator from "@/utils/supabase/getPollsByCreator";
+import Image from "next/image";
 
 export default function YourPolls() {
   const [polls, setPolls] = useState<any>([]);
@@ -42,7 +43,7 @@ export default function YourPolls() {
         setHasProfile(true);
         const polls = await getPollsByCreator({ creator: address as string });
         console.log(polls);
-        setPolls(polls);
+        setPolls(polls.response);
       } else {
         setHasProfile(false);
       }
@@ -84,7 +85,26 @@ export default function YourPolls() {
           )}
         </div>
       ) : (
-        <div>View Polls</div>
+        <div className="flex  flex-wrap space-x-4 mt-12">
+          {polls != undefined &&
+            polls != null &&
+            polls.map((poll: any) => (
+              <div
+                className=" bg-[#450C63] border border-[#450C63] rounded-xl cursor-pointer"
+                onClick={() => {
+                  router.push("/polls/" + poll.id + "?result=true");
+                }}
+              >
+                <Image
+                  src="https://priv-cast-frames.vercel.app/api/image?id=1"
+                  width={300}
+                  height={300}
+                  alt="poll"
+                  className="border border-[#450C63] rounded-xl"
+                />
+              </div>
+            ))}
+        </div>
       )}
     </div>
   );
