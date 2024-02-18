@@ -109,8 +109,8 @@ export default function CreatePage() {
                       validity: poll.duration,
                     }).then((res) => {
                       console.log(res);
+                      setPollId(res.response.id);
                       setStatus("Transaction Confirmed!");
-                      setPollId((logs[0] as any).args.pollId);
                       unwatch();
                     });
                   }

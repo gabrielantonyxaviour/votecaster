@@ -189,7 +189,7 @@ export default function VoteComponent({ poll }: HomeProps) {
       );
       setLogs((prev) => [
         ...prev,
-        "[" + prev.length + 1 + "] " + "Generating proof... ⏳",
+        "[" + Number(prev.length + 1) + "] " + "Generating proof... ⏳",
       ]);
       console.log({
         signer_pub_x_key: Array.from(xCoordHex).map((byte) => `${byte}`),
@@ -227,27 +227,27 @@ export default function VoteComponent({ poll }: HomeProps) {
       setProof(bytesToHex(proof.proof));
       setLogs((prev) => [
         ...prev,
-        "[" + prev.length + 1 + "] " + "Proof: " + proof.proof,
+        "[" + Number(prev.length + 1) + "] " + "Proof: " + proof.proof,
       ]);
       setLogs((prev) => [
         ...prev,
-        "[" + prev.length + 1 + "] " + "Proof Generation Success 😏",
+        "[" + Number(prev.length + 1) + "] " + "Proof Generation Success 😏",
       ]);
       setLogs((prev) => [
         ...prev,
-        "[" + prev.length + 1 + "] " + "Verifying proof... ⏳",
+        "[" + Number(prev.length + 1) + "] " + "Verifying proof... ⏳",
       ]);
       const isValid = await noir.verifyFinalProof(proof);
 
       if (isValid) {
         setLogs((prev) => [
           ...prev,
-          "[" + prev.length + 1 + "] " + "Proof verified ✅",
+          "[" + Number(prev.length + 1) + "] " + "Proof verified ✅",
         ]);
         try {
           setLogs((prev) => [
             ...prev,
-            "[" + prev.length + 1 + "] " + "Transaction Initialized 🚀",
+            "[" + Number(prev.length + 1) + "] " + "Transaction Initialized 🚀",
           ]);
           const { request } = await publicClient.simulateContract({
             account: relayerAccount,
@@ -265,30 +265,30 @@ export default function VoteComponent({ poll }: HomeProps) {
           const tx = await relayerWalletClient.writeContract(request);
           setLogs((prev) => [
             ...prev,
-            "[" + prev.length + 1 + "] " + "Transaction Sent ⏳",
+            "[" + Number(prev.length + 1) + "] " + "Transaction Sent ⏳",
           ]);
           setLogs((prev) => [
             ...prev,
-            "[" + prev.length + 1 + "] " + "Transaction Hash: " + tx,
+            "[" + Number(prev.length + 1) + "] " + "Transaction Hash: " + tx,
           ]);
         } catch (e) {
           console.log(e);
           setLogs((prev) => [
             ...prev,
-            "[" + prev.length + 1 + "] " + "Transaction Failed ❌",
+            "[" + Number(prev.length + 1) + "] " + "Transaction Failed ❌",
           ]);
         }
       } else {
         setLogs((prev) => [
           ...prev,
-          "[" + prev.length + 1 + "] " + "Proof verification failed ❌",
+          "[" + Number(prev.length + 1) + "] " + "Proof verification failed ❌",
         ]);
       }
     } catch (err) {
       console.log(err);
       setLogs((prev) => [
         ...prev,
-        "[" + prev.length + 1 + "] " + "Wrong inputs 💔",
+        "[" + Number(prev.length + 1) + "] " + "Wrong inputs 💔",
       ]);
     }
   }

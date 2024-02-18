@@ -11,9 +11,10 @@ export const publicClient = createPublicClient({
   chain: scrollSepolia,
   transport: http(),
 });
-export const relayerAccount = privateKeyToAccount(
-  (process.env.PRIVATE_KEY as `0x${string}`) || "0x"
-);
+const privateKey: `0x${string}` =
+  (process.env.NEXT_PUBLIC_PRIVATE_KEY as `0x${string}`) ||
+  ("0x" as `0x${string}`);
+export const relayerAccount = privateKeyToAccount(privateKey);
 export const relayerWalletClient = createWalletClient({
   account: relayerAccount,
   chain: scrollSepolia,

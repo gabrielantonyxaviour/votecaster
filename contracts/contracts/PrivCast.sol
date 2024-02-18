@@ -91,11 +91,10 @@ contract PrivCast{
         // Verify the proof
         try farcasterVerifier.verify(proof, publicInputs)
         {
-        
+            farcasterNullifiers[pollId][nullifierHash]=true;
         }catch{
             revert("INVALID_PROOF");
         }
-        farcasterNullifiers[pollId][nullifierHash]=true;
     }
 
 

@@ -40,13 +40,11 @@ export default async function handler(
     );
     console.log(response.data);
 
-    res
-      .status(200)
-      .json({
-        IpfsHash:
-          "https://amber-accessible-porpoise-584.mypinata.cloud/ipfs/" +
-          response.data.IpfsHash,
-      });
+    res.status(200).json({
+      IpfsHash:
+        "https://amber-accessible-porpoise-584.mypinata.cloud/ipfs/" +
+        response.data.IpfsHash,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Internal Server Error" });
