@@ -19,8 +19,6 @@ fn main(
     vote: pub Field,
     nullifier: pub [u8; 32]
 ) -> pub [u8; 32] {
-    // TODO: eth-signed hash
-    // // let hash_data: [u8; 32] = get_hash_data(poll_id, farcaster_id.to_be_bytes(32));
     let computedAddress: Field = ecrecover::secp256k1::PubKey::from_xy(signer_pub_x_key, signer_pub_y_key).to_eth_address(); // Compute address from public key
     let recoveredAddress = ecrecover::ecrecover(signer_pub_x_key, signer_pub_y_key, signature, hashed_message); // Ecrecover signature and verify
     assert(recoveredAddress == computedAddress); // Check recovered address is computed address

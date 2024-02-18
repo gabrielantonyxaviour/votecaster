@@ -1,11 +1,24 @@
 import { getDefaultConfig } from "connectkit";
+import { createPublicClient, createWalletClient } from "viem";
+import { privateKeyToAccount } from "viem/accounts";
 import { scrollSepolia } from "viem/chains";
 import { createConfig, http } from "wagmi";
 
 export const deployment = "0x50751BD8d7b0a84c422DE96A56426a370F31a42D";
 export const chainId = 534351;
 const projectId = process.env["NEXT_PUBLIC_PROJECT_ID"] ?? "";
-
+export const publicClient = createPublicClient({
+  chain: scrollSepolia,
+  transport: http(),
+});
+export const relayerAccount = privateKeyToAccount(
+  (process.env.PRIVATE_KEY as `0x${string}`) || "0x"
+);
+export const relayerWalletClient = createWalletClient({
+  account: relayerAccount,
+  chain: scrollSepolia,
+  transport: http("https://sepolia-rpc.scroll.io"),
+});
 export const config = createConfig(
   getDefaultConfig({
     appName: "Priv Cast",

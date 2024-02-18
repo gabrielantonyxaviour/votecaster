@@ -23,6 +23,7 @@ import {
   Noir,
 } from "@noir-lang/noir_js";
 import {
+  bytesToHex,
   createWalletClient,
   custom,
   encodePacked,
@@ -32,6 +33,14 @@ import {
   toBytes,
 } from "viem";
 import { scrollSepolia } from "viem/chains";
+import { packGroth16Proof } from "@anon-aadhaar/core";
+import {
+  abi,
+  deployment,
+  publicClient,
+  relayerAccount,
+  relayerWalletClient,
+} from "@/utils/constants";
 
 type HomeProps = {
   poll: any;
@@ -42,8 +51,9 @@ export default function VoteComponent({ poll }: HomeProps) {
   const [hasProfile, setHasProfile] = useState(false);
   const [logs, setLogs] = useState<string[]>([]);
   const [anonAadhaar] = useAnonAadhaar();
-  const [walletClient, setWalletClient] = React.useState<any>();
-
+  const [walletClient, setWalletClient] = useState<any>();
+  const [proof, setProof] = useState("");
+  const [anonParams, setAnonParams] = useState<any>();
   const {
     data,
     loading,
@@ -76,6 +86,28 @@ export default function VoteComponent({ poll }: HomeProps) {
     console.log("Anon Aadhaar: ", anonAadhaar.status);
     console.log(anonAadhaar);
     if (anonAadhaar.status === "logged-in") {
+      const identityNullifer =
+        anonAadhaar.anonAadhaarProof.proof.identityNullifier;
+      const userNullifier = anonAadhaar.anonAadhaarProof.proof.userNullifier;
+      const timestamp = anonAadhaar.anonAadhaarProof.proof.timestamp;
+      const signal = address;
+      const groth16Proof = packGroth16Proof(
+        anonAadhaar.anonAadhaarProof.proof.groth16Proof
+      );
+      console.log([
+        identityNullifer,
+        userNullifier,
+        timestamp,
+        signal,
+        groth16Proof,
+      ]);
+      setAnonParams([
+        identityNullifer,
+        userNullifier,
+        timestamp,
+        signal,
+        groth16Proof,
+      ]);
       setLogs(["[1] Anon Aadhar logged-in. Proof verified ✅"]);
     }
   }, [anonAadhaar]);
@@ -192,7 +224,7 @@ export default function VoteComponent({ poll }: HomeProps) {
         },
         foreignCallHandler
       );
-      console.log(proof);
+      setProof(bytesToHex(proof.proof));
       setLogs((prev) => [
         ...prev,
         "[" + prev.length + 1 + "] " + "Proof: " + proof.proof,
@@ -212,6 +244,40 @@ export default function VoteComponent({ poll }: HomeProps) {
           ...prev,
           "[" + prev.length + 1 + "] " + "Proof verified ✅",
         ]);
+        try {
+          setLogs((prev) => [
+            ...prev,
+            "[" + prev.length + 1 + "] " + "Transaction Initialized 🚀",
+          ]);
+          const { request } = await publicClient.simulateContract({
+            account: relayerAccount,
+            address: deployment,
+            abi: abi,
+            functionName: "castVote",
+            args: [
+              bytesToHex(proof.proof),
+              pollId,
+              selectedOption,
+              keccak256(trimmedSig),
+              anonParams,
+            ],
+          });
+          const tx = await relayerWalletClient.writeContract(request);
+          setLogs((prev) => [
+            ...prev,
+            "[" + prev.length + 1 + "] " + "Transaction Sent ⏳",
+          ]);
+          setLogs((prev) => [
+            ...prev,
+            "[" + prev.length + 1 + "] " + "Transaction Hash: " + tx,
+          ]);
+        } catch (e) {
+          console.log(e);
+          setLogs((prev) => [
+            ...prev,
+            "[" + prev.length + 1 + "] " + "Transaction Failed ❌",
+          ]);
+        }
       } else {
         setLogs((prev) => [
           ...prev,
@@ -300,11 +366,7 @@ export default function VoteComponent({ poll }: HomeProps) {
                   {anonAadhaar.status == "logged-in" && (
                     <div className="whitespace-normal overflow-y-auto h-[100px] mx-auto ">
                       <AnonAadhaarProof
-                        code={JSON.stringify(
-                          (anonAadhaar as any).anonAadhaarProof,
-                          null,
-                          2
-                        )}
+                        code={JSON.stringify(anonAadhaar, null, 2)}
                       />
                     </div>
                   )}
@@ -328,12 +390,14 @@ export default function VoteComponent({ poll }: HomeProps) {
           </div>
         </div>
         <div className="h-[80%] text-[#450C63] bg-[#FBF6FF] w-[35%] my-auto p-12">
-          <p className="text-[#450C63] font-bold text-3xl text-center">LOGS</p>
+          <p className="text-[#450C63] font-bold text-3xl text-center pb-4">
+            LOGS
+          </p>
 
           {logs.map((log, index) => (
             <p
               key={index}
-              className="text-sm pt-4 pb-2 whitespace-normal text-nowrap overflow-x-auto "
+              className="text-sm py-1 whitespace-normal text-nowrap overflow-x-auto "
             >
               {log}
             </p>
