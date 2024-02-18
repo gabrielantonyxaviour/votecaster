@@ -4,6 +4,8 @@ import React, { useEffect } from "react";
 import FarcasterButton from "../FarcasterButton";
 import { ConnectKitButton } from "connectkit";
 import getVotes from "@/utils/supabase/getVotes";
+import LoaderButton from "../LoaderButton";
+import SelectableButton from "../SelectableButton";
 export default function ResultComponent({ poll }: { poll: any }) {
   const [votes, setVotes] = React.useState<any[]>([]);
 
@@ -26,7 +28,42 @@ export default function ResultComponent({ poll }: { poll: any }) {
       <div className="flex justify-between h-full">
         <div className="w-[60%] h-full bg-[#FBF6FF]">
           <div className="flex flex-col h-full p-12">
-            <p className="text-[#450C63] font-bold text-5xl">{poll.question}</p>
+            <p className="text-[#450C63] font-bold text-5xl pb-8">
+              {poll.question}
+            </p>
+            <div className="flex flex-col space-y-4">
+              <LoaderButton
+                name={poll.option_a}
+                percentage={50}
+                remaining={50}
+              />
+              <LoaderButton
+                name={poll.option_b}
+                percentage={21}
+                remaining={79}
+              />
+              <LoaderButton
+                name={poll.option_c}
+                percentage={9}
+                remaining={91}
+              />
+              <LoaderButton
+                name={poll.option_d}
+                percentage={20}
+                remaining={80}
+              />
+            </div>
+            <div className="flex justify-center pt-20">
+              <SelectableButton
+                isSelected={true}
+                disabled={false}
+                text={"Vote on Poll 🗳️"}
+                click={() => {
+                  window.location.href = "/polls/" + poll.id;
+                }}
+              />
+            </div>
+
             {/* <div className="flex justify-between space-x-8 pt-12">
               <div className="flex-1">
                 <SelectableButton

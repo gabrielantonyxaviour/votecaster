@@ -71,16 +71,21 @@ function getMeta(poll: any) {
 
 export default function PollPage({
   params,
-  query,
+  searchParams,
 }: {
   params: { id: string };
-  query: {
+  searchParams: {
     result: string;
   };
 }) {
   return (
     process.env["HOST"] && (
-      <PollPageWrapper id={params.id} result={JSON.parse("true")} />
+      <PollPageWrapper
+        id={params.id}
+        result={JSON.parse(
+          searchParams.result == "true" ? searchParams.result : "false"
+        )}
+      />
     )
   );
 }

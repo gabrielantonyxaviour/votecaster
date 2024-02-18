@@ -1,0 +1,29 @@
+"use client";
+
+import React from "react";
+
+export default function LoaderButton({
+  name,
+  percentage,
+  remaining,
+}: {
+  name: string;
+  percentage: number;
+  remaining: number;
+}) {
+  console.log("Name", name);
+  console.log("Percentage", percentage);
+  console.log("Remaining", remaining);
+
+  return (
+    <div className="bg-[#4A0C63] relative rounded-sm  ">
+      <div
+        className={`bg-[#8A08BF] -translate-y-1 -translate-x-1 rounded-l-sm border-2 border-[#4A0C63]  w-full`}
+      >
+        <p className="text-white text-sm font-semibold mx-4 my-2">
+          {name + " (" + percentage + "%)"}
+        </p>
+      </div>
+    </div>
+  );
+}

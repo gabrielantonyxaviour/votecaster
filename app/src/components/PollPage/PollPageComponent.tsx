@@ -22,6 +22,8 @@ export default function PollPageComponent({
   });
 
   useEffect(() => {
+    console.log("RESULTSTSTSS");
+    console.log(result);
     (async function () {
       const { response } = await getPoll({ pollId: id });
       console.log(response);
