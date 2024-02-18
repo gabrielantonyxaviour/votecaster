@@ -48,22 +48,49 @@ contract PrivCast{
         pollIdCounter++;    
     }
 
-    function castVote(bytes memory proof, uint256 pollId, uint256 vote, uint256 nullifierHash) public {
+    function castVoteWithoutAnonAadhar(bytes memory proof, uint256 pollId, uint256 vote, uint256 nullifierHash) public {
         require(polls[pollId].isExists,"Poll does not exist");
-        require(polls[pollId].isAnonAadharEnabled==false,"Invalid call");
-        _castVoteWithFarcasterProof(proof, pollId, vote, nullifierHash);
+        require(polls[pollId].isAnonAadharEnabled==false,"Anon Aadhar disabled");
+        
+        require(!farcasterNullifiers[pollId][nullifierHash],"Vote already casted");
+        require(verifyFarcasterProof(proof, pollId, vote, nullifierHash),"Invalid proof");
+        
         polls[pollId].votes[vote]++;
         emit VoteCast(pollId, nullifierHash, vote);
     }
 
-    function castVote(bytes memory proof, uint256 pollId, uint256 vote, uint256 nullifierHash, AnonAadhaarInput memory anonParams) public {
+    function castVoteWithAnonAadhar(bytes memory proof, uint256 pollId, uint256 vote, uint256 nullifierHash, AnonAadhaarInput memory anonParams) public {
         require(polls[pollId].isExists,"Poll does not exist");
         require(polls[pollId].isAnonAadharEnabled==true,"Invalid call");
         
-        _castVoteWithFarcasterProof(proof, pollId, vote, nullifierHash);
-        _castVoteWithAnonAadhaarProof(pollId, anonParams);
+        require(!farcasterNullifiers[pollId][nullifierHash],"Noir: Vote already casted");
+        require(verifyFarcasterProof(proof, pollId, vote, nullifierHash),"Noir: Invalid proof");
+
+        require(!anonAadhaarNullifier[pollId][anonParams.userNullifier],"Anon: Vote already casted");
+        require(verifyAnonAadharProof(anonParams),"Anon: Invalid proof");
+
         polls[pollId].votes[vote]++;
         emit VoteCast(pollId, nullifierHash, vote);
+    }
+
+    function verifyFarcasterProof(bytes memory proof,uint256 pollId, uint256 _vote, uint256 _nullifierHash) public view returns(bool){
+        bytes32[] memory publicInputs = new bytes32[](3);
+        publicInputs[0] = bytes32(pollId);
+        publicInputs[1] = bytes32(_vote);
+        publicInputs[2] = bytes32(_nullifierHash);
+        
+        try farcasterVerifier.verify(proof, publicInputs)
+        {
+            return true;
+        }catch{
+            return false;
+        }
+    }
+
+    function verifyAnonAadharProof(AnonAadhaarInput memory anonParams) public view returns(bool){
+        require(addressToUint256(msg.sender) == anonParams.signal, "[AnonAadhaarVote]: wrong user signal sent.");
+        require(isLessThan3HoursAgo(anonParams.timestamp) == true, "[AnonAadhaarVote]: Proof must be generated with Aadhaar data generated less than 3 hours ago.");
+        return IAnonAadhaar(anonAadhaarVerifierAddr).verifyAnonAadhaarProof(anonParams.identityNullifier, anonParams.userNullifier, anonParams.timestamp, anonParams.signal, anonParams.groth16Proof);
     }
 
     function isLessThan3HoursAgo(uint timestamp) public view returns (bool) {
@@ -72,29 +99,6 @@ contract PrivCast{
 
     function addressToUint256(address _addr) private pure returns (uint256) {
         return uint256(uint160(_addr));
-    }
-
-    function _castVoteWithAnonAadhaarProof(uint256 pollId, AnonAadhaarInput memory anonParams) internal{
-        require(anonAadhaarNullifier[pollId][anonParams.userNullifier]==false,"Vote already casted");
-        require(addressToUint256(msg.sender) == anonParams.signal, "[AnonAadhaarVote]: wrong user signal sent.");
-        require(isLessThan3HoursAgo(anonParams.timestamp) == true, "[AnonAadhaarVote]: Proof must be generated with Aadhaar data generated less than 3 hours ago.");
-        require(IAnonAadhaar(anonAadhaarVerifierAddr).verifyAnonAadhaarProof(anonParams.identityNullifier, anonParams.userNullifier, anonParams.timestamp, anonParams.signal, anonParams.groth16Proof) == true, "[AnonAadhaarVote]: proof sent is not valid.");
-        anonAadhaarNullifier[pollId][anonParams.userNullifier]=true;
-    }
-
-    function _castVoteWithFarcasterProof(bytes memory proof, uint256 pollId, uint256 vote, uint256 nullifierHash) internal {
-        require(!farcasterNullifiers[pollId][nullifierHash],"Vote already casted");
-        bytes32[] memory publicInputs = new bytes32[](3);
-        publicInputs[0] = bytes32(pollId);
-        publicInputs[1] = bytes32(vote);
-        publicInputs[2] = bytes32(nullifierHash);
-        // Verify the proof
-        try farcasterVerifier.verify(proof, publicInputs)
-        {
-            farcasterNullifiers[pollId][nullifierHash]=true;
-        }catch{
-            revert("INVALID_PROOF");
-        }
     }
 
 

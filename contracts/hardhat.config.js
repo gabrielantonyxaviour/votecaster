@@ -55,7 +55,7 @@ module.exports = {
         chainId: networks.scrollSepolia.chainId,
         urls: {
           apiURL: "https://api-sepolia.scrollscan.com/api/",
-          browserURL: "https://scrollscan.com/",
+          browserURL: "https://sepolia.scrollscan.dev",
         },
       },
     ],

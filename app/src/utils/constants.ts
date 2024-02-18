@@ -4,7 +4,7 @@ import { privateKeyToAccount } from "viem/accounts";
 import { scrollSepolia } from "viem/chains";
 import { createConfig, http } from "wagmi";
 
-export const deployment = "0x50751BD8d7b0a84c422DE96A56426a370F31a42D";
+export const deployment = "0x08AC2b69feB202b34aD7c65E5Ac876E901CA6216";
 export const chainId = 534351;
 const projectId = process.env["NEXT_PUBLIC_PROJECT_ID"] ?? "";
 export const publicClient = createPublicClient({
@@ -207,7 +207,7 @@ export const abi = [
         type: "tuple",
       },
     ],
-    name: "castVote",
+    name: "castVoteWithAnonAadhar",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -235,7 +235,7 @@ export const abi = [
         type: "uint256",
       },
     ],
-    name: "castVote",
+    name: "castVoteWithoutAnonAadhar",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -370,6 +370,86 @@ export const abi = [
       {
         internalType: "bool",
         name: "isExists",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "identityNullifier",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "userNullifier",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "timestamp",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "signal",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256[8]",
+            name: "groth16Proof",
+            type: "uint256[8]",
+          },
+        ],
+        internalType: "struct PrivCast.AnonAadhaarInput",
+        name: "anonParams",
+        type: "tuple",
+      },
+    ],
+    name: "verifyAnonAadharProof",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes",
+        name: "proof",
+        type: "bytes",
+      },
+      {
+        internalType: "uint256",
+        name: "pollId",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_vote",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_nullifierHash",
+        type: "uint256",
+      },
+    ],
+    name: "verifyFarcasterProof",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
         type: "bool",
       },
     ],
