@@ -1,9 +1,6 @@
 "use client";
 import React, { useEffect } from "react";
-import circuit from "@/utils/circuit.json";
-import fidCircuit from "@/utils/fidCircuit.json";
-import signCircuit from "@/utils/cryptosign.json";
-import privCastCircuit from "@/utils/privCastCircuit.json";
+import circuit from "@/utils/privCastCircuit.json";
 import {
   BarretenbergBackend,
   CompiledCircuit,
@@ -20,7 +17,6 @@ import {
   encodePacked,
   hashMessage,
   keccak256,
-  recoverAddress,
   recoverPublicKey,
   toBytes,
 } from "viem";
@@ -215,7 +211,7 @@ export default function NoirComponent() {
   //   }
   // }
 
-  const foreignCallHandlerFid: ForeignCallHandler = async (
+  const foreignCallHandler: ForeignCallHandler = async (
     name: string,
     inputs: ForeignCallInput[]
   ): Promise<ForeignCallOutput[]> => {
@@ -227,12 +223,12 @@ export default function NoirComponent() {
       return ["0x" + parseInt(fid).toString(16).padStart(64, "0")];
     } else {
       return [
-        "0x000000000000000000000000000000000000000000000000000000000003cee9",
+        "0x0000000000000000000000000000000000000000000000000000000000000000",
       ];
     }
   };
 
-  async function testPrivCast() {
+  async function generateProof() {
     try {
       const pollId = 1;
       const fid = (fidData as any).Socials.Social[0].userId;
@@ -243,11 +239,9 @@ export default function NoirComponent() {
         pollIdArray[i] = pollIdTemp & 0xff; // Extract the least significant byte
         pollIdTemp = pollIdTemp >> 8; // Shift the number to the right by 8 bits
       }
-      const backend = new BarretenbergBackend(
-        privCastCircuit as CompiledCircuit
-      );
-      const noir = new Noir(privCastCircuit as CompiledCircuit, backend);
-      const nullifier = toBytes(
+      const backend = new BarretenbergBackend(circuit as CompiledCircuit);
+      const noir = new Noir(circuit as CompiledCircuit, backend);
+      const hashData = toBytes(
         keccak256(
           encodePacked(["uint256", "uint256"], [BigInt(pollId), BigInt(fid)])
         )
@@ -258,7 +252,7 @@ export default function NoirComponent() {
           await walletClient.signMessage({
             account: address,
             message: {
-              raw: nullifier,
+              raw: hashData,
             },
           })
         ).slice(2),
@@ -266,7 +260,7 @@ export default function NoirComponent() {
       );
 
       const publicKey = await recoverPublicKey({
-        hash: Buffer.from(hashMessage({ raw: nullifier }).slice(2), "hex"),
+        hash: Buffer.from(hashMessage({ raw: hashData }).slice(2), "hex"),
         signature: sig,
       });
       const publicKeyBuffer = Buffer.from(publicKey.slice(2), "hex");
@@ -286,7 +280,7 @@ export default function NoirComponent() {
         signer_pub_y_key: Array.from(yCoordHex).map((byte) => `${byte}`),
         signature: Array.from(trimmedSig).map((byte) => `${byte}`),
         hashed_message: Array.from(
-          Buffer.from(hashMessage({ raw: nullifier }).slice(2), "hex")
+          Buffer.from(hashMessage({ raw: hashData }).slice(2), "hex")
         ).map((byte) => `${byte}`),
         farcaster_id: parseInt(fid),
         vote_priv: 1,
@@ -302,7 +296,7 @@ export default function NoirComponent() {
           signer_pub_y_key: Array.from(yCoordHex).map((byte) => `${byte}`),
           signature: Array.from(trimmedSig).map((byte) => `${byte}`),
           hashed_message: Array.from(
-            Buffer.from(hashMessage({ raw: nullifier }).slice(2), "hex")
+            Buffer.from(hashMessage({ raw: hashData }).slice(2), "hex")
           ).map((byte) => `${byte}`),
           farcaster_id: parseInt(fid),
           vote_priv: 1,
@@ -312,7 +306,7 @@ export default function NoirComponent() {
             Buffer.from(keccak256(trimmedSig).slice(2), "hex")
           ).map((byte) => `${byte}`),
         },
-        foreignCallHandlerFid
+        foreignCallHandler
       );
       console.log(proof);
       setProof(proof.proof);
@@ -378,7 +372,7 @@ export default function NoirComponent() {
 
           <button
             className="bg-white px-3 py-2 rounded-lg  border-2 border-black text-black hover:border-white mt-4 hover:bg-black hover:text-white transition-all duration-300 ease-in-out"
-            onClick={testPrivCast}
+            onClick={generateProof}
           >
             Go
           </button>

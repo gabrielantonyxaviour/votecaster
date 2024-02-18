@@ -38,11 +38,6 @@ export default function PollPageComponent({
   return result ? (
     <ResultComponent poll={poll} />
   ) : (
-    <VoteComponent
-      id={id}
-      poll={poll}
-      setUseTestAadhaar={setUseTestAadhaar}
-      useTestAadhaar={useTestAadhaar}
-    />
+    <VoteComponent poll={poll} />
   );
 }
