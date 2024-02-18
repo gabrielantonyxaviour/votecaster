@@ -255,10 +255,6 @@ export default function VoteComponent({ poll }: HomeProps) {
           "[" + Number(prev.length + 1) + "] " + "Proof verified ✅",
         ]);
         try {
-          setLogs((prev) => [
-            ...prev,
-            "[" + Number(prev.length + 1) + "] " + "Transaction Initialized 🚀",
-          ]);
           // const { request } = await publicClient.simulateContract({
           //   account: relayerAccount,
           //   address: deployment,
@@ -273,20 +269,20 @@ export default function VoteComponent({ poll }: HomeProps) {
           //   ],
           // });
           // const tx = await relayerWalletClient.writeContract(request);
-          setLogs((prev) => [
-            ...prev,
-            "[" + Number(prev.length + 1) + "] " + "Transaction Sent ⏳",
-          ]);
+          // setLogs((prev) => [
+          //   ...prev,
+          //   "[" + Number(prev.length + 1) + "] " + "Transaction Sent ⏳",
+          // ]);
           // setLogs((prev) => [
           //   ...prev,
           //   "[" + Number(prev.length + 1) + "] " + "Transaction Hash: " + tx,
           // ]);
         } catch (e) {
-          console.log(e);
-          setLogs((prev) => [
-            ...prev,
-            "[" + Number(prev.length + 1) + "] " + "Transaction Failed ❌",
-          ]);
+          // console.log(e);
+          // setLogs((prev) => [
+          //   ...prev,
+          //   "[" + Number(prev.length + 1) + "] " + "Transaction Failed ❌",
+          // ]);
         }
       } else {
         setLogs((prev) => [

@@ -6,7 +6,7 @@ export default async function handler(
 ) {
   const pollId =
     req.query["id"] != undefined ? parseInt(req.query["id"] as string) : 0;
-
+  console.log(process.env["IMG_HOST"] + "/api/image?id=" + pollId);
   const pngBuffer = await axios.get(
     process.env["IMG_HOST"] + "/api/image?id=" + pollId || "",
     { responseType: "arraybuffer" }
