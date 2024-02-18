@@ -30,7 +30,13 @@ const config = createConfig(
 );
 const queryClient = new QueryClient();
 
-export default function PollPageWrapper({ id }: { id: string }) {
+export default function PollPageWrapper({
+  id,
+  result,
+}: {
+  id: string;
+  result: boolean;
+}) {
   const [ready, setReady] = useState<boolean>(false);
   const [useTestAadhaar, setUseTestAadhaar] = useState<boolean>(false);
 
@@ -47,6 +53,7 @@ export default function PollPageWrapper({ id }: { id: string }) {
                 <AirstackProvider apiKey={airstackApiKey}>
                   <PollPageComponent
                     id={id}
+                    result={result}
                     setUseTestAadhaar={setUseTestAadhaar}
                     useTestAadhaar={useTestAadhaar}
                   />

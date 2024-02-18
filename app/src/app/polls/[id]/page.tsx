@@ -69,6 +69,18 @@ function getMeta(poll: any) {
   );
 }
 
-export default function PollPage({ params }: { params: { id: string } }) {
-  return process.env["HOST"] && <PollPageWrapper id={params.id} />;
+export default function PollPage({
+  params,
+  query,
+}: {
+  params: { id: string };
+  query: {
+    result: string;
+  };
+}) {
+  return (
+    process.env["HOST"] && (
+      <PollPageWrapper id={params.id} result={JSON.parse("true")} />
+    )
+  );
 }
