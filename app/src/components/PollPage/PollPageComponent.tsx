@@ -11,12 +11,18 @@ import {
   LogInWithAnonAadhaar,
   useAnonAadhaar,
 } from "@anon-aadhaar/react";
+import { createClient } from "@supabase/supabase-js";
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
+const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_KEY ?? "";
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 type HomeProps = {
   setUseTestAadhaar: (state: boolean) => void;
   useTestAadhaar: boolean;
+  id: string;
 };
 export default function PollPageComponent({
+  id,
   setUseTestAadhaar,
   useTestAadhaar,
 }: HomeProps) {
@@ -57,6 +63,28 @@ export default function PollPageComponent({
   }, [anonAadhaar]);
 
   useEffect(() => {
+    (async function () {
+      let renamedPoll = [];
+      try {
+        const { data: fetchedPoll, error: fetchError } = await supabase
+          .from("polls")
+          .select("*")
+          .eq("id", id);
+
+        console.log(fetchedPoll);
+
+        if (fetchError || fetchedPoll == null || fetchedPoll.length == 0) {
+        } else {
+          renamedPoll = fetchedPoll[0];
+        }
+      } catch (error) {
+        console.error("Error getting poll:", error);
+      }
+      setPoll(renamedPoll);
+    })();
+  }, []);
+
+  useEffect(() => {
     if (
       data != null &&
       (data as any).Socials != null &&
@@ -83,60 +111,52 @@ export default function PollPageComponent({
             <p className="text-[#450C63] font-bold text-5xl">{poll.question}</p>
             <div className="flex justify-between space-x-8 pt-12">
               <div className="flex-1">
-                {poll.options.length > 0 && (
-                  <SelectableButton
-                    isSelected={selectedOption === 1}
-                    disabled={false}
-                    text={poll.options[0]}
-                    click={() => {
-                      if (selectedOption !== 1) setSelectedOption(1);
-                      else setSelectedOption(0);
-                    }}
-                  />
-                )}
+                <SelectableButton
+                  isSelected={selectedOption === 1}
+                  disabled={false}
+                  text={poll.option_a}
+                  click={() => {
+                    if (selectedOption !== 1) setSelectedOption(1);
+                    else setSelectedOption(0);
+                  }}
+                />
               </div>
 
               <div className="flex-1">
-                {poll.options.length > 1 && (
-                  <SelectableButton
-                    isSelected={selectedOption === 2}
-                    disabled={false}
-                    text={poll.options[1]}
-                    click={() => {
-                      if (selectedOption !== 2) setSelectedOption(2);
-                      else setSelectedOption(0);
-                    }}
-                  />
-                )}
+                <SelectableButton
+                  isSelected={selectedOption === 2}
+                  disabled={false}
+                  text={poll.option_b}
+                  click={() => {
+                    if (selectedOption !== 2) setSelectedOption(2);
+                    else setSelectedOption(0);
+                  }}
+                />
               </div>
             </div>
             <div className="flex justify-between space-x-8 mt-4">
               <div className="flex-1">
-                {poll.options.length > 2 && (
-                  <SelectableButton
-                    isSelected={selectedOption === 3}
-                    disabled={false}
-                    text={poll.options[2]}
-                    click={() => {
-                      if (selectedOption !== 3) setSelectedOption(3);
-                      else setSelectedOption(0);
-                    }}
-                  />
-                )}
+                <SelectableButton
+                  isSelected={selectedOption === 3}
+                  disabled={false}
+                  text={poll.option_c}
+                  click={() => {
+                    if (selectedOption !== 3) setSelectedOption(3);
+                    else setSelectedOption(0);
+                  }}
+                />
               </div>
 
               <div className="flex-1">
-                {poll.options.length > 3 && (
-                  <SelectableButton
-                    isSelected={selectedOption === 4}
-                    disabled={false}
-                    text={poll.options[3]}
-                    click={() => {
-                      if (selectedOption !== 4) setSelectedOption(4);
-                      else setSelectedOption(0);
-                    }}
-                  />
-                )}
+                <SelectableButton
+                  isSelected={selectedOption === 4}
+                  disabled={false}
+                  text={poll.option_d}
+                  click={() => {
+                    if (selectedOption !== 4) setSelectedOption(4);
+                    else setSelectedOption(0);
+                  }}
+                />
               </div>
             </div>
             {hasProfile ? (

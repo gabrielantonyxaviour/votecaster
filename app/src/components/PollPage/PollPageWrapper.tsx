@@ -30,11 +30,7 @@ const config = createConfig(
 );
 const queryClient = new QueryClient();
 
-type HomeProps = {
-  setUseTestAadhaar: (state: boolean) => void;
-  useTestAadhaar: boolean;
-};
-export default function PollPageWrapper() {
+export default function PollPageWrapper({ id }: { id: string }) {
   const [ready, setReady] = useState<boolean>(false);
   const [useTestAadhaar, setUseTestAadhaar] = useState<boolean>(false);
 
@@ -50,6 +46,7 @@ export default function PollPageWrapper() {
               <ConnectKitProvider>
                 <AirstackProvider apiKey={airstackApiKey}>
                   <PollPageComponent
+                    id={id}
                     setUseTestAadhaar={setUseTestAadhaar}
                     useTestAadhaar={useTestAadhaar}
                   />
