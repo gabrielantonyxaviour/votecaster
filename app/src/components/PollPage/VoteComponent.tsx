@@ -42,6 +42,7 @@ import {
   relayerAccount,
   relayerWalletClient,
 } from "@/utils/constants";
+import vote from "@/utils/supabase/vote";
 
 type HomeProps = {
   poll: any;
@@ -255,6 +256,12 @@ export default function VoteComponent({ poll }: HomeProps) {
           "[" + Number(prev.length + 1) + "] " + "Proof verified ✅",
         ]);
         try {
+          await vote({
+            pollId: pollId,
+            vote: selectedOption,
+            nullifier: hexToBigInt(keccak256(trimmedSig)).toString(),
+            voter_address: address as string,
+          });
           // const { request } = await publicClient.simulateContract({
           //   account: relayerAccount,
           //   address: deployment,
