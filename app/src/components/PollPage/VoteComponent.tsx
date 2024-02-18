@@ -28,6 +28,7 @@ import {
   custom,
   encodePacked,
   hashMessage,
+  hexToBigInt,
   keccak256,
   recoverPublicKey,
   toBytes,
@@ -238,7 +239,16 @@ export default function VoteComponent({ poll }: HomeProps) {
         "[" + Number(prev.length + 1) + "] " + "Verifying proof... ⏳",
       ]);
       const isValid = await noir.verifyFinalProof(proof);
-
+      console.log("Proof: ");
+      console.log(bytesToHex(proof.proof));
+      console.log("Poll id: ");
+      console.log(pollId);
+      console.log("Vote:");
+      console.log(selectedOption);
+      console.log("Nullifier:");
+      console.log(hexToBigInt(keccak256(trimmedSig)).toString());
+      console.log("Anon Params:");
+      console.log(anonParams);
       if (isValid) {
         setLogs((prev) => [
           ...prev,
@@ -249,28 +259,28 @@ export default function VoteComponent({ poll }: HomeProps) {
             ...prev,
             "[" + Number(prev.length + 1) + "] " + "Transaction Initialized 🚀",
           ]);
-          const { request } = await publicClient.simulateContract({
-            account: relayerAccount,
-            address: deployment,
-            abi: abi,
-            functionName: "castVote",
-            args: [
-              bytesToHex(proof.proof),
-              pollId,
-              selectedOption,
-              keccak256(trimmedSig),
-              anonParams,
-            ],
-          });
-          const tx = await relayerWalletClient.writeContract(request);
+          // const { request } = await publicClient.simulateContract({
+          //   account: relayerAccount,
+          //   address: deployment,
+          //   abi: abi,
+          //   functionName: "castVoteWithAnonAadhaar",
+          //   args: [
+          //     bytesToHex(proof.proof),
+          //     pollId,
+          //     selectedOption,
+          //     hexToBigInt(keccak256(trimmedSig)),
+          //     anonParams,
+          //   ],
+          // });
+          // const tx = await relayerWalletClient.writeContract(request);
           setLogs((prev) => [
             ...prev,
             "[" + Number(prev.length + 1) + "] " + "Transaction Sent ⏳",
           ]);
-          setLogs((prev) => [
-            ...prev,
-            "[" + Number(prev.length + 1) + "] " + "Transaction Hash: " + tx,
-          ]);
+          // setLogs((prev) => [
+          //   ...prev,
+          //   "[" + Number(prev.length + 1) + "] " + "Transaction Hash: " + tx,
+          // ]);
         } catch (e) {
           console.log(e);
           setLogs((prev) => [

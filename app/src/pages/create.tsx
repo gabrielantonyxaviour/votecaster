@@ -101,6 +101,8 @@ export default function CreatePage() {
                       pollId: (logs[0] as any).args.pollId,
                       question: poll.question,
                       creator: address as string,
+                      farcaster_username: (data as any).Socials.Social[0]
+                        .fnames[0],
                       optionA: poll.options.length > 0 ? poll.options[0] : "",
                       optionB: poll.options.length > 1 ? poll.options[1] : "",
                       optionC: poll.options.length > 2 ? poll.options[2] : "",

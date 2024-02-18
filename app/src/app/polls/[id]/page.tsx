@@ -1,8 +1,7 @@
 import Head from "next/head";
 import { Metadata, ResolvingMetadata } from "next";
 import PollPageWrapper from "@/components/PollPage/PollPageWrapper";
-
-async function getPoll(id: string): Promise<any> {}
+import getPoll from "@/utils/supabase/getPoll";
 
 type Props = {
   params: { id: string };
@@ -33,24 +32,22 @@ export async function generateMetadata(
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const id = params.id;
-  const poll = polls[parseInt(id)];
-
+  const { response } = await getPoll({ pollId: id });
+  if (response.length == 0 || response == null || response == undefined) {
+    console.log("No poll found");
+  }
   const fcMetadata: Record<string, string> = {
     "fc:frame": "vNext",
     "fc:frame:post_url": `${process.env["HOST"]}/api/vote?id=${id}`,
     "fc:frame:image": `${process.env["HOST"]}/api/image?id=${id}`,
+    "fc:frame:button:1": "Vote",
+    "fc:frame:button:2": "View Results",
   };
 
-  poll.options
-    .filter((o) => o.text !== "")
-    .map((option, index) => {
-      fcMetadata[`fc:frame:button:${index + 1}`] = option.text;
-    });
-
   return {
-    title: poll.question,
+    title: response.question,
     openGraph: {
-      title: poll.question,
+      title: response.question,
       images: [`/api/image?id=${id}`],
     },
     other: {

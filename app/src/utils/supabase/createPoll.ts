@@ -7,6 +7,7 @@ export default async function createPoll(req: {
   pollId: string;
   question: string;
   creator: string;
+  farcaster_username: string;
   optionA: string;
   optionB: string;
   optionC: string;
@@ -18,6 +19,7 @@ export default async function createPoll(req: {
     pollId,
     question,
     creator,
+    farcaster_username,
     optionA,
     optionB,
     optionC,
@@ -47,6 +49,7 @@ export default async function createPoll(req: {
                 option_c: optionC,
                 option_d: optionD,
                 is_anon: isAnon,
+                farcaster_username,
                 validity,
               },
             ])
