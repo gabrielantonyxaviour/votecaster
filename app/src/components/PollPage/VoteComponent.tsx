@@ -11,25 +11,19 @@ import {
   LogInWithAnonAadhaar,
   useAnonAadhaar,
 } from "@anon-aadhaar/react";
-import { createClient } from "@supabase/supabase-js";
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
-const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_KEY ?? "";
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 type HomeProps = {
   setUseTestAadhaar: (state: boolean) => void;
   useTestAadhaar: boolean;
   id: string;
+  poll: any;
 };
 export default function VoteComponent({
   id,
+  poll,
   setUseTestAadhaar,
   useTestAadhaar,
 }: HomeProps) {
-  const [poll, setPoll] = useState<any>({
-    question: "",
-    options: ["", "", "", ""],
-  });
   const [selectedOption, setSelectedOption] = useState(0);
   const { address } = useAccount();
   const [hasProfile, setHasProfile] = useState(false);
@@ -60,28 +54,6 @@ export default function VoteComponent({
       setLogs(["Anon Aadhar logged-in. Proof verified ✅"]);
     }
   }, [anonAadhaar]);
-
-  useEffect(() => {
-    (async function () {
-      let renamedPoll = [];
-      try {
-        const { data: fetchedPoll, error: fetchError } = await supabase
-          .from("polls")
-          .select("*")
-          .eq("id", id);
-
-        console.log(fetchedPoll);
-
-        if (fetchError || fetchedPoll == null || fetchedPoll.length == 0) {
-        } else {
-          renamedPoll = fetchedPoll[0];
-        }
-      } catch (error) {
-        console.error("Error getting poll:", error);
-      }
-      setPoll(renamedPoll);
-    })();
-  }, []);
 
   useEffect(() => {
     if (

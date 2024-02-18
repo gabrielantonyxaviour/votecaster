@@ -1,5 +1,7 @@
+import { useEffect, useState } from "react";
 import ResultComponent from "./ResultComponent";
 import VoteComponent from "./VoteComponent";
+import getPoll from "@/utils/supabase/getPoll";
 
 type PollProps = {
   setUseTestAadhaar: (state: boolean) => void;
@@ -14,11 +16,29 @@ export default function PollPageComponent({
   setUseTestAadhaar,
   useTestAadhaar,
 }: PollProps) {
+  const [poll, setPoll] = useState<any>({
+    question: "",
+    options: ["", "", "", ""],
+  });
+
+  useEffect(() => {
+    (async function () {
+      const { response } = await getPoll({ pollId: id });
+      console.log(response);
+      if (response.length == 0 || response == null || response == undefined) {
+        console.log("No poll found");
+      } else {
+        setPoll(response);
+      }
+    })();
+  }, []);
+
   return result ? (
-    <ResultComponent pollId={id} />
+    <ResultComponent poll={poll} />
   ) : (
     <VoteComponent
       id={id}
+      poll={poll}
       setUseTestAadhaar={setUseTestAadhaar}
       useTestAadhaar={useTestAadhaar}
     />

@@ -17,7 +17,7 @@ export default async function getVotes(req: {
 
     if (fetchError || fetchedVotes == null || fetchedVotes.length === 0) {
       return {
-        message: "Poll does not exist",
+        message: "Votes does not exist",
         response: null,
       };
     } else {
