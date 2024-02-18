@@ -9,7 +9,7 @@ export default async function getVotes(req: {
   const { pollId } = req;
   try {
     const { data: fetchedVotes, error: fetchError } = await supabase
-      .from("polls")
+      .from("votes")
       .select("*")
       .eq("poll_id", pollId);
 
@@ -21,21 +21,16 @@ export default async function getVotes(req: {
         response: null,
       };
     } else {
-      const votes = {
-        a: 0,
-        b: 0,
-        c: 0,
-        d: 0,
-      };
+      const votes = [0, 0, 0, 0];
       fetchedVotes.forEach((vote: any) => {
         if (vote.vote === 0) {
-          votes.a++;
+          votes[0] = votes[0] + 1;
         } else if (vote.vote === 1) {
-          votes.b++;
+          votes[1] = votes[1] + 1;
         } else if (vote.vote === 2) {
-          votes.c++;
+          votes[2] = votes[2] + 1;
         } else if (vote.vote === 3) {
-          votes.d++;
+          votes[3] = votes[3] + 1;
         }
       });
       return {

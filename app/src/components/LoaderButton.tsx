@@ -6,10 +6,14 @@ export default function LoaderButton({
   name,
   percentage,
   remaining,
+  voteCount,
+  biggest,
 }: {
   name: string;
   percentage: number;
   remaining: number;
+  voteCount: number;
+  biggest: boolean;
 }) {
   console.log("Name", name);
   console.log("Percentage", percentage);
@@ -18,10 +22,18 @@ export default function LoaderButton({
   return (
     <div className="bg-[#4A0C63] relative rounded-sm  ">
       <div
-        className={`bg-[#8A08BF] -translate-y-1 -translate-x-1 rounded-l-sm border-2 border-[#4A0C63]  w-full`}
+        className={`${
+          biggest ? "bg-white" : "bg-[#8A08BF]"
+        } -translate-y-1 -translate-x-1 rounded-l-sm border-2 border-[#4A0C63]  w-full`}
       >
-        <p className="text-white text-sm font-semibold mx-4 my-2">
-          {name + " (" + percentage + "%)"}
+        <p
+          className={
+            biggest
+              ? "text-black text-sm font-semibold mx-4 my-2"
+              : "text-white text-sm font-semibold mx-4 my-2"
+          }
+        >
+          {name + " (" + percentage + "%)"} {voteCount} Vote(s)
         </p>
       </div>
     </div>
