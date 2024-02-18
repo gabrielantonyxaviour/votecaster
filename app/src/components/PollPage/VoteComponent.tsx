@@ -91,7 +91,7 @@ export default function VoteComponent({ poll }: HomeProps) {
         anonAadhaar.anonAadhaarProof.proof.identityNullifier;
       const userNullifier = anonAadhaar.anonAadhaarProof.proof.userNullifier;
       const timestamp = anonAadhaar.anonAadhaarProof.proof.timestamp;
-      const signal = address;
+      const signal = anonAadhaar.anonAadhaarProof.proof.signalHash;
       const groth16Proof = packGroth16Proof(
         anonAadhaar.anonAadhaarProof.proof.groth16Proof
       );
@@ -99,7 +99,7 @@ export default function VoteComponent({ poll }: HomeProps) {
         identityNullifer,
         userNullifier,
         timestamp,
-        signal,
+        hexToBigInt(address as `0x${string}`).toString(),
         groth16Proof,
       ]);
       setAnonParams([
