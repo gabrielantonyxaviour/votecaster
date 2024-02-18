@@ -4,7 +4,7 @@ import { privateKeyToAccount } from "viem/accounts";
 import { scrollSepolia } from "viem/chains";
 import { createConfig, http } from "wagmi";
 
-export const deployment = "0x50751BD8d7b0a84c422DE96A56426a370F31a42D";
+export const deployment = "0x4ab8f50796b059aE5C8b8534afC6bb4c84912ff6"; //"0x50751BD8d7b0a84c422DE96A56426a370F31a42D";
 export const chainId = 534351;
 const projectId = process.env["NEXT_PUBLIC_PROJECT_ID"] ?? "";
 export const publicClient = createPublicClient({
