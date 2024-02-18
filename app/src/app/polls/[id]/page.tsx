@@ -12,10 +12,10 @@ const polls = [
   {
     question: "Which programming language do you prefer?",
     options: [
-      { key: 1, text: "JavaScript", percentOfTotal: 30 },
-      { key: 2, text: "Python", percentOfTotal: 25 },
-      { key: 3, text: "Java", percentOfTotal: 20 },
-      { key: 4, text: "C++", percentOfTotal: 25 },
+      { key: 1, text: "Barcelona", percentOfTotal: 30 },
+      { key: 2, text: "Real Madrid", percentOfTotal: 25 },
+      { key: 3, text: "Atletico Madrid", percentOfTotal: 20 },
+      { key: 4, text: "Girona", percentOfTotal: 25 },
     ],
   },
   {

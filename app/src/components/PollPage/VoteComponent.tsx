@@ -141,7 +141,7 @@ export default function VoteComponent({
                 <SelectableButton
                   text="🗳️ Cast Vote"
                   isSelected={false}
-                  disabled={false}
+                  disabled={selectedOption == 0}
                   click={() => {}}
                 />
               </div>
