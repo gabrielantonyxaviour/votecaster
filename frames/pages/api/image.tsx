@@ -348,10 +348,11 @@ export default async function handler(
         }
       );
     } else {
-      let { response: votes } = await getVotes({ pollId: pollId.toString() });
+      let { response: voteData } = await getVotes({
+        pollId: pollId.toString(),
+      });
+      console.log(voteData);
 
-      let maxVotes = Math.max(...votes);
-      let voteCount = votes[0] + votes[1] + votes[2] + votes[3];
       pollSvg = await satori(
         <div
           style={{
@@ -416,16 +417,26 @@ export default async function handler(
                   width: "85%",
                   height: 30,
                   marginTop: 5,
-                  background: votes[0] == maxVotes ? "#ffffff" : "#450C63",
+                  border: "2px solid black",
+                  background:
+                    voteData.votes[0] == voteData.maxVotes
+                      ? "#ffffff"
+                      : "#450C63",
                   borderRadius: 5,
                   textAlign: "center",
-                  color: votes[0] == maxVotes ? "#000000" : "#ffffff",
+                  color:
+                    voteData.votes[0] == voteData.maxVotes
+                      ? "#000000"
+                      : "#ffffff",
                   fontSize: 12,
                 }}
               >
                 <p>
-                  {poll.option_d + " (" + (votes[0] * 100) / voteCount + "%) "}
-                  {votes[0]} Vote(s)
+                  {poll.option_d +
+                    " (" +
+                    Math.floor(voteData.votes[0] * 100) / voteData.total +
+                    "%) "}
+                  {voteData.votes[0]} Vote(s)
                 </p>
               </div>
               <div
@@ -436,16 +447,29 @@ export default async function handler(
                   width: "85%",
                   height: 30,
                   marginTop: 5,
-                  background: votes[1] == maxVotes ? "#ffffff" : "#450C63",
+                  border: "2px solid black",
+                  background:
+                    voteData.votes[1] == voteData.maxVotes
+                      ? "#ffffff"
+                      : "#450C63",
                   borderRadius: 5,
+
                   textAlign: "center",
-                  color: votes[1] == maxVotes ? "#000000" : "#ffffff",
+                  color:
+                    voteData.votes[1] == voteData.maxVotes
+                      ? "#000000"
+                      : "#ffffff",
                   fontSize: 12,
                 }}
               >
                 <p>
-                  {poll.option_d + " (" + (votes[1] * 100) / voteCount + "%) "}
-                  {votes[1]} Vote(s)
+                  {poll.option_d +
+                    " (" +
+                    Math.floor(
+                      (voteData.votes[1] * 100) / voteData.total
+                    ).toString() +
+                    "%) "}
+                  {voteData.votes[1].toString()} Vote(s)
                 </p>
               </div>
 
@@ -457,16 +481,28 @@ export default async function handler(
                   width: "85%",
                   height: 30,
                   marginTop: 5,
-                  background: votes[2] == maxVotes ? "#ffffff" : "#450C63",
+                  border: "2px solid black",
+                  background:
+                    voteData.votes[2] == voteData.maxVotes
+                      ? "#ffffff"
+                      : "#450C63",
                   borderRadius: 5,
                   textAlign: "center",
-                  color: votes[2] == maxVotes ? "#000000" : "#ffffff",
+                  color:
+                    voteData.votes[2] == voteData.maxVotes
+                      ? "#000000"
+                      : "#ffffff",
                   fontSize: 12,
                 }}
               >
                 <p>
-                  {poll.option_d + " (" + (votes[2] * 100) / voteCount + "%) "}
-                  {votes[2]} Vote(s)
+                  {poll.option_d +
+                    " (" +
+                    Math.floor(
+                      (voteData.votes[2] * 100) / voteData.total
+                    ).toString() +
+                    "%) "}
+                  {voteData.votes[2].toString()} Vote(s)
                 </p>
               </div>
               <div
@@ -477,17 +513,29 @@ export default async function handler(
                   width: "85%",
                   height: 30,
                   marginTop: 5,
-                  background: votes[3] == maxVotes ? "#ffffff" : "#450C63",
+                  border: "2px solid black",
+                  background:
+                    voteData.votes[3] == voteData.maxVotes
+                      ? "#ffffff"
+                      : "#450C63",
                   borderRadius: 5,
                   textAlign: "center",
-                  color: votes[3] == maxVotes ? "#000000" : "#ffffff",
+                  color:
+                    voteData.votes[3] == voteData.maxVotes
+                      ? "#000000"
+                      : "#ffffff",
 
                   fontSize: 12,
                 }}
               >
                 <p>
-                  {poll.option_d + " (" + (votes[3] * 100) / voteCount + "%) "}
-                  {votes[3]} Vote(s)
+                  {poll.option_d +
+                    " (" +
+                    Math.floor(
+                      (voteData.votes[3] * 100) / voteData.total
+                    ).toString() +
+                    "%) "}
+                  {voteData.votes[3].toString()} Vote(s)
                 </p>
               </div>
               <div

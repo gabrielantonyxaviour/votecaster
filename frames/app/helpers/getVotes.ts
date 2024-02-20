@@ -22,20 +22,29 @@ export default async function getVotes(req: {
       };
     } else {
       const votes = [0, 0, 0, 0];
+      let max = 0;
       fetchedVotes.forEach((vote: any) => {
         if (vote.vote === 0) {
           votes[0] = votes[0] + 1;
+          if (max < votes[0]) max = votes[0];
         } else if (vote.vote === 1) {
           votes[1] = votes[1] + 1;
+          if (max < votes[1]) max = votes[1];
         } else if (vote.vote === 2) {
           votes[2] = votes[2] + 1;
+          if (max < votes[2]) max = votes[2];
         } else if (vote.vote === 3) {
           votes[3] = votes[3] + 1;
+          if (max < votes[3]) max = votes[3];
         }
       });
       return {
         message: "Success",
-        response: votes,
+        response: {
+          votes,
+          total: fetchedVotes.length,
+          maxVotes: max,
+        },
       };
     }
   } catch (error) {
