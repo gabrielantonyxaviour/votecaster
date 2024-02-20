@@ -56,6 +56,7 @@ export default function VoteComponent({ poll }: HomeProps) {
   const [walletClient, setWalletClient] = useState<any>();
   const [proof, setProof] = useState("");
   const [anonParams, setAnonParams] = useState<any>();
+  const [ready, setReady] = useState(false);
   const {
     data,
     loading,
@@ -73,6 +74,9 @@ export default function VoteComponent({ poll }: HomeProps) {
     {},
     { cache: false }
   );
+  useEffect(() => {
+    if (poll != null) setReady(true);
+  }, [poll]);
   useEffect(() => {
     if ((window as any).ethereum != undefined) {
       setWalletClient(
@@ -240,16 +244,7 @@ export default function VoteComponent({ poll }: HomeProps) {
         "[" + Number(prev.length + 1) + "] " + "Verifying proof... ⏳",
       ]);
       const isValid = await noir.verifyFinalProof(proof);
-      console.log("Proof: ");
-      console.log(bytesToHex(proof.proof));
-      console.log("Poll id: ");
-      console.log(pollId);
-      console.log("Vote:");
-      console.log(selectedOption);
-      console.log("Nullifier:");
-      console.log(hexToBigInt(keccak256(trimmedSig)).toString());
-      console.log("Anon Params:");
-      console.log(anonParams);
+
       if (isValid) {
         setLogs((prev) => [
           ...prev,
@@ -316,92 +311,98 @@ export default function VoteComponent({ poll }: HomeProps) {
         </div>
       </div>
       <div className="flex justify-between h-full">
-        <div className="w-[60%] h-full bg-[#FBF6FF]">
-          <div className="flex flex-col h-full p-12">
-            <p className="text-[#450C63] font-bold text-5xl">{poll.question}</p>
-            <div className="flex justify-between space-x-8 pt-12">
-              <div className="flex-1">
-                <SelectableButton
-                  isSelected={selectedOption === 1}
-                  disabled={false}
-                  text={poll.option_a}
-                  click={() => {
-                    if (selectedOption !== 1) setSelectedOption(1);
-                    else setSelectedOption(0);
-                  }}
-                />
-              </div>
-
-              <div className="flex-1">
-                <SelectableButton
-                  isSelected={selectedOption === 2}
-                  disabled={false}
-                  text={poll.option_b}
-                  click={() => {
-                    if (selectedOption !== 2) setSelectedOption(2);
-                    else setSelectedOption(0);
-                  }}
-                />
-              </div>
-            </div>
-            <div className="flex justify-between space-x-8 mt-4">
-              <div className="flex-1">
-                <SelectableButton
-                  isSelected={selectedOption === 3}
-                  disabled={false}
-                  text={poll.option_c}
-                  click={() => {
-                    if (selectedOption !== 3) setSelectedOption(3);
-                    else setSelectedOption(0);
-                  }}
-                />
-              </div>
-
-              <div className="flex-1">
-                <SelectableButton
-                  isSelected={selectedOption === 4}
-                  disabled={false}
-                  text={poll.option_d}
-                  click={() => {
-                    if (selectedOption !== 4) setSelectedOption(4);
-                    else setSelectedOption(0);
-                  }}
-                />
-              </div>
-            </div>
-            {hasProfile ? (
-              <div className="flex-1 h-full flex flex-col space-y-4 justify-center items-center">
-                <p className="text-xl font-semibold text-[#450C63] pt-12">
-                  AADHAR VERIFICATION
-                </p>
-                <div className="pb-12 flex space-x-12">
-                  <LogInWithAnonAadhaar />
-                  {anonAadhaar.status == "logged-in" && (
-                    <div className="whitespace-normal overflow-y-auto h-[100px] mx-auto ">
-                      <AnonAadhaarProof
-                        code={JSON.stringify(anonAadhaar, null, 2)}
-                      />
-                    </div>
-                  )}
+        {ready && (
+          <div className="w-[60%] h-full bg-[#FBF6FF]">
+            <div className="flex flex-col h-full p-12">
+              <p className="text-[#450C63] font-bold text-5xl">
+                {poll.question}
+              </p>
+              <div className="flex justify-between space-x-8 pt-12">
+                <div className="flex-1">
+                  <SelectableButton
+                    isSelected={selectedOption === 1}
+                    disabled={false}
+                    text={poll.option_a}
+                    click={() => {
+                      if (selectedOption !== 1) setSelectedOption(1);
+                      else setSelectedOption(0);
+                    }}
+                  />
                 </div>
-                <SelectableButton
-                  text="🗳️ Cast Vote"
-                  isSelected={false}
-                  disabled={selectedOption == 0}
-                  click={async () => {
-                    await generateProof();
-                  }}
-                />
+
+                <div className="flex-1">
+                  <SelectableButton
+                    isSelected={selectedOption === 2}
+                    disabled={false}
+                    text={poll.option_b}
+                    click={() => {
+                      if (selectedOption !== 2) setSelectedOption(2);
+                      else setSelectedOption(0);
+                    }}
+                  />
+                </div>
               </div>
-            ) : (
-              <div className="flex-1 h-full flex flex-col space-y-4 justify-center items-center">
-                <p className="text-lg font-semibold text-[#450C63] pt-12">
-                  Connected Wallet does not have a Farcaster Account
-                </p>
+              <div className="flex justify-between space-x-8 mt-4">
+                <div className="flex-1">
+                  <SelectableButton
+                    isSelected={selectedOption === 3}
+                    disabled={false}
+                    text={poll.option_c}
+                    click={() => {
+                      if (selectedOption !== 3) setSelectedOption(3);
+                      else setSelectedOption(0);
+                    }}
+                  />
+                </div>
+
+                <div className="flex-1">
+                  <SelectableButton
+                    isSelected={selectedOption === 4}
+                    disabled={false}
+                    text={poll.option_d}
+                    click={() => {
+                      if (selectedOption !== 4) setSelectedOption(4);
+                      else setSelectedOption(0);
+                    }}
+                  />
+                </div>
               </div>
-            )}
+              {hasProfile ? (
+                <div className="flex-1 h-full flex flex-col space-y-4 justify-center items-center">
+                  <p className="text-xl font-semibold text-[#450C63] pt-12">
+                    AADHAR VERIFICATION
+                  </p>
+                  <div className="pb-2 space-y-4 ">
+                    <div className="flex justify-center">
+                      <LogInWithAnonAadhaar />
+                    </div>
+                    {anonAadhaar.status == "logged-in" && (
+                      <div className="whitespace-normal overflow-y-auto h-[200px] mx-auto ">
+                        <AnonAadhaarProof
+                          code={JSON.stringify(anonAadhaar, null, 2)}
+                        />
+                      </div>
+                    )}
+                  </div>
+                  <SelectableButton
+                    text="🗳️ Cast Vote"
+                    isSelected={false}
+                    disabled={selectedOption == 0}
+                    click={async () => {
+                      await generateProof();
+                    }}
+                  />
+                </div>
+              ) : (
+                <div className="flex-1 h-full flex flex-col space-y-4 justify-center items-center">
+                  <p className="text-lg font-semibold text-[#450C63] pt-12">
+                    Connected Wallet does not have a Farcaster Account
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
+        )}
         <div className="h-[80%] text-[#450C63] bg-[#FBF6FF] w-[35%] my-auto p-12">
           <p className="text-[#450C63] font-bold text-3xl text-center pb-4">
             LOGS

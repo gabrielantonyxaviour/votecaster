@@ -73,7 +73,7 @@ export default function PollPage({
 }: {
   params: { id: string };
   searchParams: {
-    result: string;
+    results: string;
   };
 }) {
   return (
@@ -81,7 +81,7 @@ export default function PollPage({
       <PollPageWrapper
         id={params.id}
         result={JSON.parse(
-          searchParams.result == "true" ? searchParams.result : "false"
+          searchParams.results == "true" ? searchParams.results : "false"
         )}
       />
     )
