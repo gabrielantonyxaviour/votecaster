@@ -162,7 +162,13 @@ export default function VoteComponent({ poll }: HomeProps) {
       const noir = new Noir(circuit as CompiledCircuit, backend);
       const hashData = toBytes(
         keccak256(
-          encodePacked(["uint256", "uint256"], [BigInt(pollId), BigInt(fid)])
+          encodePacked(
+            ["uint256", "uint256"],
+            [
+              BigInt(pollId != undefined ? pollId : 0),
+              BigInt(fid != undefined ? fid : 0),
+            ]
+          )
         )
       );
 
