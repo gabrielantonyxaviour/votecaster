@@ -351,6 +351,7 @@ export default async function handler(
       let { response: votes } = await getVotes({ pollId: pollId.toString() });
 
       let maxVotes = Math.max(...votes);
+      let voteCount = votes[0] + votes[1] + votes[2] + votes[3];
       pollSvg = await satori(
         <div
           style={{
@@ -415,14 +416,17 @@ export default async function handler(
                   width: "85%",
                   height: 30,
                   marginTop: 5,
-                  background: "#450C63",
+                  background: votes[0] == maxVotes ? "#ffffff" : "#450C63",
                   borderRadius: 5,
                   textAlign: "center",
-                  color: "#ffffff",
+                  color: votes[0] == maxVotes ? "#000000" : "#ffffff",
                   fontSize: 12,
                 }}
               >
-                <p>{poll.option_a}</p>
+                <p>
+                  {poll.option_d + " (" + (votes[0] * 100) / voteCount + "%) "}
+                  {votes[0]} Vote(s)
+                </p>
               </div>
               <div
                 style={{
@@ -432,14 +436,17 @@ export default async function handler(
                   width: "85%",
                   height: 30,
                   marginTop: 5,
-                  background: "#450C63",
+                  background: votes[1] == maxVotes ? "#ffffff" : "#450C63",
                   borderRadius: 5,
                   textAlign: "center",
-                  color: "#ffffff",
+                  color: votes[1] == maxVotes ? "#000000" : "#ffffff",
                   fontSize: 12,
                 }}
               >
-                <p>{poll.option_b}</p>
+                <p>
+                  {poll.option_d + " (" + (votes[1] * 100) / voteCount + "%) "}
+                  {votes[1]} Vote(s)
+                </p>
               </div>
 
               <div
@@ -450,31 +457,38 @@ export default async function handler(
                   width: "85%",
                   height: 30,
                   marginTop: 5,
-                  background: "#450C63",
+                  background: votes[2] == maxVotes ? "#ffffff" : "#450C63",
                   borderRadius: 5,
                   textAlign: "center",
-                  color: "#ffffff",
+                  color: votes[2] == maxVotes ? "#000000" : "#ffffff",
                   fontSize: 12,
                 }}
               >
-                <p>{poll.option_c}</p>
+                <p>
+                  {poll.option_d + " (" + (votes[2] * 100) / voteCount + "%) "}
+                  {votes[2]} Vote(s)
+                </p>
               </div>
               <div
                 style={{
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
-                  width: "35%",
+                  width: "85%",
                   height: 30,
                   marginTop: 5,
-                  background: "#450C63",
+                  background: votes[3] == maxVotes ? "#ffffff" : "#450C63",
                   borderRadius: 5,
                   textAlign: "center",
-                  color: "#ffffff",
+                  color: votes[3] == maxVotes ? "#000000" : "#ffffff",
+
                   fontSize: 12,
                 }}
               >
-                <p>{poll.option_d}</p>
+                <p>
+                  {poll.option_d + " (" + (votes[3] * 100) / voteCount + "%) "}
+                  {votes[3]} Vote(s)
+                </p>
               </div>
               <div
                 style={{

@@ -46,7 +46,7 @@ export default async function handler(
           <meta name="fc:frame:image" content="${imageUrl}">
           <meta name="fc:frame:post_url" content="${
             process.env["HOST"]
-          }/polls/${pollId}?results=${results ? "false" : "true"}">
+          }/api/vote?id=${pollId}?results=${results ? "false" : "true"}">
           <meta name="fc:frame:button:1" content="Vote">
           <meta name="fc:frame:button:1:action" content="post_redirect">
           <meta name="fc:frame:button:2" content="${button2Text}">
