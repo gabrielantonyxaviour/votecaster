@@ -1,10 +1,10 @@
 {
-  "question": "KJANDKJVCNA",
+  "question": "WHAT IS YOUR FAVOURITE MUSIC GENRE?",
   "options": [
-    "Option 1",
-    "Option 2",
-    "Option 3",
-    "Option 4 "
+    "Hip hop",
+    "Pop",
+    "R&B",
+    "Jazz"
   ],
-  "duration": 180
+  "duration": 300
 }

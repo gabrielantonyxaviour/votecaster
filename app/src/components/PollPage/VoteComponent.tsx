@@ -383,7 +383,7 @@ export default function VoteComponent({ poll }: HomeProps) {
                       <LogInWithAnonAadhaar />
                     </div>
                     {anonAadhaar.status == "logged-in" && (
-                      <div className="whitespace-normal overflow-y-auto h-[200px] mx-auto ">
+                      <div className="whitespace-normal overflow-y-auto h-[100px] mx-auto ">
                         <AnonAadhaarProof
                           code={JSON.stringify(anonAadhaar, null, 2)}
                         />
