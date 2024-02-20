@@ -42,7 +42,7 @@ export default async function getVotes(req: {
         message: "Success",
         response: {
           votes,
-          total: fetchedVotes.length,
+          total: fetchedVotes.length == 0 ? 1 : fetchedVotes.length,
           maxVotes: max,
         },
       };

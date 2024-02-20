@@ -351,7 +351,6 @@ export default async function handler(
       let { response: voteData } = await getVotes({
         pollId: pollId.toString(),
       });
-      console.log(voteData);
 
       pollSvg = await satori(
         <div
@@ -419,13 +418,15 @@ export default async function handler(
                   marginTop: 5,
                   border: "2px solid black",
                   background:
-                    voteData.votes[0] == voteData.maxVotes
+                    voteData.votes[0] == voteData.maxVotes &&
+                    voteData.maxVotes != 0
                       ? "#ffffff"
                       : "#450C63",
                   borderRadius: 5,
                   textAlign: "center",
                   color:
-                    voteData.votes[0] == voteData.maxVotes
+                    voteData.votes[0] == voteData.maxVotes &&
+                    voteData.maxVotes != 0
                       ? "#000000"
                       : "#ffffff",
                   fontSize: 12,
@@ -449,14 +450,16 @@ export default async function handler(
                   marginTop: 5,
                   border: "2px solid black",
                   background:
-                    voteData.votes[1] == voteData.maxVotes
+                    voteData.votes[1] == voteData.maxVotes &&
+                    voteData.maxVotes != 0
                       ? "#ffffff"
                       : "#450C63",
                   borderRadius: 5,
 
                   textAlign: "center",
                   color:
-                    voteData.votes[1] == voteData.maxVotes
+                    voteData.votes[1] == voteData.maxVotes &&
+                    voteData.maxVotes != 0
                       ? "#000000"
                       : "#ffffff",
                   fontSize: 12,
@@ -483,13 +486,15 @@ export default async function handler(
                   marginTop: 5,
                   border: "2px solid black",
                   background:
-                    voteData.votes[2] == voteData.maxVotes
+                    voteData.votes[2] == voteData.maxVotes &&
+                    voteData.maxVotes != 0
                       ? "#ffffff"
                       : "#450C63",
                   borderRadius: 5,
                   textAlign: "center",
                   color:
-                    voteData.votes[2] == voteData.maxVotes
+                    voteData.votes[2] == voteData.maxVotes &&
+                    voteData.maxVotes != 0
                       ? "#000000"
                       : "#ffffff",
                   fontSize: 12,
@@ -515,13 +520,15 @@ export default async function handler(
                   marginTop: 5,
                   border: "2px solid black",
                   background:
-                    voteData.votes[3] == voteData.maxVotes
+                    voteData.votes[3] == voteData.maxVotes &&
+                    voteData.maxVotes != 0
                       ? "#ffffff"
                       : "#450C63",
                   borderRadius: 5,
                   textAlign: "center",
                   color:
-                    voteData.votes[3] == voteData.maxVotes
+                    voteData.votes[3] == voteData.maxVotes &&
+                    voteData.maxVotes != 0
                       ? "#000000"
                       : "#ffffff",
 
