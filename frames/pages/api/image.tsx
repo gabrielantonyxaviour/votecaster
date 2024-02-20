@@ -161,7 +161,7 @@ export default async function handler(
                   fontWeight: "bold",
                   marginTop: 5,
                   marginBottom: 5,
-                  fontSize: 30,
+                  fontSize: 24,
                 }}
               >
                 {poll.question}

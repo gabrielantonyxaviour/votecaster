@@ -2,8 +2,8 @@
   "question": "WHAT IS YOUR FAVOURITE MUSIC GENRE?",
   "options": [
     "Hip hop",
-    "Pop",
     "R&B",
+    "Pop",
     "Jazz"
   ],
   "duration": 300
