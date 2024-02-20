@@ -40,6 +40,7 @@ export default function CreatePage() {
   ) {
     Social {
       userId
+      fnames
     }
   }
 }`,
@@ -89,15 +90,19 @@ export default function CreatePage() {
 
               const publicClient = createPublicClient({
                 chain: scrollSepolia,
-                transport: http("https://rpc.ankr.com/scroll_sepolia_testnet"),
+                transport: http(),
               });
+              console.log("Worked till now");
               const unwatch = publicClient.watchContractEvent({
                 address: deployment,
                 abi,
-                onLogs: (logs) => {
+                onLogs: async (logs) => {
+                  console.log("Logged!");
                   console.log((logs[0] as any).args.creatorAddress);
                   if ((logs[0] as any).args.creatorAddress == address) {
-                    createPoll({
+                    console.log("Got the right log!");
+
+                    const { response: createPollResponse } = await createPoll({
                       pollId: (logs[0] as any).args.pollId,
                       question: poll.question,
                       creator: address as string,
@@ -109,12 +114,11 @@ export default function CreatePage() {
                       optionD: poll.options.length > 3 ? poll.options[3] : "",
                       isAnon: isSybil,
                       validity: poll.duration,
-                    }).then((res) => {
-                      console.log(res);
-                      setPollId(res.response.id);
-                      setStatus("Transaction Confirmed!");
-                      unwatch();
                     });
+                    console.log(createPollResponse);
+                    setPollId(createPollResponse.id);
+                    setStatus("Transaction Confirmed!");
+                    unwatch();
                   }
                 },
               });

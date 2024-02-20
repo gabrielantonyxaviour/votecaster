@@ -41,6 +41,7 @@ export async function generateMetadata(
     "fc:frame:post_url": `${process.env["HOST"]}/api/vote?id=${id}`,
     "fc:frame:image": `${process.env["HOST"]}/api/image?id=${id}`,
     "fc:frame:button:1": "Vote",
+    "fc:frame:button:1:action": "post_redirect",
     "fc:frame:button:2": "View Results",
   };
 
