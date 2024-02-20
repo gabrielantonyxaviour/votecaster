@@ -28,9 +28,9 @@ export default async function handler(
       }`;
       let button2Text;
       if (results) {
-        button2Text = "Hide Results";
-      } else {
         button2Text = "View Results";
+      } else {
+        button2Text = "Hide Results";
       }
 
       // Return an HTML response
