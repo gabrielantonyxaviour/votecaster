@@ -435,7 +435,7 @@ export default async function handler(
                 <p>
                   {poll.option_a +
                     " (" +
-                    Math.floor(voteData.votes[0] * 100) / voteData.total +
+                    Math.floor((voteData.votes[0] * 100) / voteData.total) +
                     "%) "}
                   {voteData.votes[0]} Vote(s)
                 </p>
