@@ -433,7 +433,7 @@ export default async function handler(
                 }}
               >
                 <p>
-                  {poll.option_d +
+                  {poll.option_a +
                     " (" +
                     Math.floor(voteData.votes[0] * 100) / voteData.total +
                     "%) "}
@@ -466,7 +466,7 @@ export default async function handler(
                 }}
               >
                 <p>
-                  {poll.option_d +
+                  {poll.option_b +
                     " (" +
                     Math.floor(
                       (voteData.votes[1] * 100) / voteData.total
@@ -501,7 +501,7 @@ export default async function handler(
                 }}
               >
                 <p>
-                  {poll.option_d +
+                  {poll.option_c +
                     " (" +
                     Math.floor(
                       (voteData.votes[2] * 100) / voteData.total
