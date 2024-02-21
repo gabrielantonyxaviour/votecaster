@@ -29,7 +29,7 @@ export default function YourPolls() {
   }
 }`,
     {},
-    { cache: false }
+    { cache: true }
   );
 
   useEffect(() => {

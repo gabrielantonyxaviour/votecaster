@@ -19,8 +19,8 @@ export default function CreatePage() {
     options: string[];
     duration: number;
   }>({
-    question: "",
-    options: ["Option 1", "Option 2", "Option 3", "Option 4 "],
+    question: "WHAT IS THE BEST MUSIC GENRE?",
+    options: ["Hip Hop", "R&B", "Pop", "Jazz"],
     duration: 0,
   });
   const [isSybil, setIsSybil] = useState(false);
@@ -45,7 +45,7 @@ export default function CreatePage() {
   }
 }`,
     {},
-    { cache: false }
+    { cache: true }
   );
   useEffect(() => {
     // console.log(data);

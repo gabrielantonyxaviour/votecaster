@@ -68,7 +68,7 @@ export default function NoirComponent() {
   }
 }`,
     {},
-    { cache: false }
+    { cache: true }
   );
 
   useEffect(() => {

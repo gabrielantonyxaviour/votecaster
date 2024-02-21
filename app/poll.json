@@ -1,10 +1,10 @@
 {
-  "question": "WHAT IS YOUR FAVOURITE GENRE IN MUSIC?",
+  "question": "WHO IS YOUR FAVOURITE TEACHER??",
   "options": [
-    "Hip hop",
-    "R&B",
-    "Pop",
-    "Jazz"
+    "Alice",
+    "Bob",
+    "Carol",
+    "Dave"
   ],
-  "duration": 300
+  "duration": 720
 }

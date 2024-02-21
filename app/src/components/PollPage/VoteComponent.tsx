@@ -72,7 +72,7 @@ export default function VoteComponent({ poll }: HomeProps) {
           }
         }`,
     {},
-    { cache: false }
+    { cache: true }
   );
   useEffect(() => {
     if (poll != null) setReady(true);

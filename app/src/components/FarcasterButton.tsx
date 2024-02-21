@@ -30,7 +30,7 @@ export default function FarcasterButton({
   }
 }`,
     {},
-    { cache: false }
+    { cache: true }
   );
   useEffect(() => {
     if (
