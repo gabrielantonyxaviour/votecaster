@@ -324,6 +324,8 @@ export default function NoirComponent() {
       setLogs((prev) => [...prev, "Wrong inputs 💔"]);
     }
   }
+
+  async function generateEddsaProof() {}
   return (
     <div className="w-full flex flex-col items-center justify-center  text-center mt-10">
       <p className="font-bold text-4xl mb-2">Noir app</p>
