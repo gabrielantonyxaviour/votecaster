@@ -74,62 +74,72 @@ export default function CreatePage() {
           {/* <ChooseFeatures isSybil={isSybil} setIsSybil={setIsSybil} /> */}
           <Confirmation
             post={async () => {
-              setIsDisabled(true);
-              setStatus("Uploading to IPFS...");
-              console.log("Uploading to IPFS...");
+              try {
+                setIsDisabled(true);
+                setStatus("Uploading to IPFS...");
+                console.log("Uploading to IPFS...");
 
-              const res = await axios.post("/api/pinata", poll, {
-                headers: {
-                  "Content-Type": "application/json",
-                },
-              });
-              setIpfsHash(res.data.IpfsHash);
-              setStatus("Initiating transaction...");
-              console.log("Initiating transaction...");
+                const res = await axios.post("/api/pinata", poll, {
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                });
+                setIpfsHash(res.data.IpfsHash);
+                setStatus("Initiating transaction...");
+                console.log("Initiating transaction...");
 
-              const publicClient = createPublicClient({
-                chain: scrollSepolia,
-                transport: http(),
-              });
-              console.log("Worked till now");
-              const unwatch = publicClient.watchContractEvent({
-                address: deployment,
-                abi,
-                onLogs: async (logs) => {
-                  console.log("Logged!");
-                  console.log((logs[0] as any).args.creatorAddress);
-                  if ((logs[0] as any).args.creatorAddress == address) {
-                    console.log("Got the right log!");
+                const publicClient = createPublicClient({
+                  chain: scrollSepolia,
+                  transport: http(),
+                });
+                console.log("Worked till now");
+                const unwatch = publicClient.watchContractEvent({
+                  address: deployment,
+                  abi,
+                  onLogs: async (logs) => {
+                    console.log("Logged!");
+                    console.log((logs[0] as any).args.creatorAddress);
+                    if ((logs[0] as any).args.creatorAddress == address) {
+                      console.log("Got the right log!");
 
-                    const { response: createPollResponse } = await createPoll({
-                      pollId: (logs[0] as any).args.pollId,
-                      question: poll.question,
-                      creator: address as string,
-                      farcaster_username: (data as any).Socials.Social[0]
-                        .fnames[0],
-                      optionA: poll.options.length > 0 ? poll.options[0] : "",
-                      optionB: poll.options.length > 1 ? poll.options[1] : "",
-                      optionC: poll.options.length > 2 ? poll.options[2] : "",
-                      optionD: poll.options.length > 3 ? poll.options[3] : "",
-                      isAnon: isSybil,
-                      validity: poll.duration,
-                    });
-                    console.log(createPollResponse);
-                    setPollId(createPollResponse.id);
-                    setStatus("Transaction Confirmed!");
-                    unwatch();
-                  }
-                },
-              });
+                      const { response: createPollResponse } = await createPoll(
+                        {
+                          pollId: (logs[0] as any).args.pollId,
+                          question: poll.question,
+                          creator: address as string,
+                          farcaster_username: (data as any).Socials.Social[0]
+                            .fnames[0],
+                          optionA:
+                            poll.options.length > 0 ? poll.options[0] : "",
+                          optionB:
+                            poll.options.length > 1 ? poll.options[1] : "",
+                          optionC:
+                            poll.options.length > 2 ? poll.options[2] : "",
+                          optionD:
+                            poll.options.length > 3 ? poll.options[3] : "",
+                          isAnon: isSybil,
+                          validity: poll.duration,
+                        }
+                      );
+                      console.log(createPollResponse);
+                      setPollId(createPollResponse.id);
+                      setStatus("Transaction Confirmed!");
+                      unwatch();
+                    }
+                  },
+                });
 
-              const tx = await createPollContractCall({
-                abi,
-                address: deployment,
-                functionName: "createPoll",
-                args: [res.data.IpfsHash, poll.duration, isSybil],
-              });
-              setTxHash("https://sepolia.scrollscan.dev/tx/" + tx);
-              setStatus("Waiting for Confirmation...");
+                const tx = await createPollContractCall({
+                  abi,
+                  address: deployment,
+                  functionName: "createPoll",
+                  args: [res.data.IpfsHash, poll.duration, isSybil],
+                });
+                setTxHash("https://sepolia.scrollscan.dev/tx/" + tx);
+                setStatus("Waiting for Confirmation...");
+              } catch (e) {
+                console.log(e);
+              }
             }}
             isEnabled={
               !isDisabled &&

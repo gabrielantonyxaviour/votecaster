@@ -1,10 +1,10 @@
 {
-  "question": "WHAT IS THE BEST MUSIC GENRE?",
+  "question": "DCVX",
   "options": [
-    "Hip Hop",
-    "R&B",
-    "Pop",
-    "Jazz"
+    "Option 1",
+    "Option 2",
+    "Option 3",
+    "Option 4"
   ],
-  "duration": 300
+  "duration": 120
 }

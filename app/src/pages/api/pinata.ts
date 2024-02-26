@@ -2,6 +2,7 @@ import axios from "axios";
 import type { NextApiRequest, NextApiResponse } from "next";
 import fs from "fs";
 import FormData from "form-data";
+import { Readable } from "stream";
 const PINATA_JWT = process.env.PINATA_JWT;
 export default async function handler(
   req: NextApiRequest,
@@ -12,11 +13,8 @@ export default async function handler(
     const jsonString = JSON.stringify(req.body, null, 2);
     const formData = new FormData();
 
-    const filePath = "./poll.json";
-    fs.writeFileSync(filePath, jsonString, "utf8");
-
-    formData.append("file", fs.createReadStream(filePath), {
-      filename: "image.jpg",
+    formData.append("file", Readable.from(jsonString), {
+      filename: "poll.json",
     });
 
     const pinataMetadata = JSON.stringify({
