@@ -32,12 +32,13 @@ import {
 import { scrollSepolia } from "viem/chains";
 
 import vote from "@/utils/supabase/vote";
+import getVoted from "@/utils/supabase/getVoted";
 
 type HomeProps = {
   poll: any;
 };
 export default function VoteComponent({ poll }: HomeProps) {
-  const [selectedOption, setSelectedOption] = useState(0);
+  const [selectedOption, setSelectedOption] = useState(4);
   const { address } = useAccount();
   const [hasProfile, setHasProfile] = useState(false);
   const [logs, setLogs] = useState<string[]>([]);
@@ -158,25 +159,33 @@ export default function VoteComponent({ poll }: HomeProps) {
       );
       setLogs((prev) => [
         ...prev,
-        "[" + Number(prev.length + 1) + "] " + "Generating proof... ⏳",
+        "[" + Number(prev.length + 1) + "] " + "Fetching State... 👀",
       ]);
       console.log({
-        signer_pub_x_key: Array.from(xCoordHex).map((byte) => `${byte}`),
-        signer_pub_y_key: Array.from(yCoordHex).map((byte) => `${byte}`),
-        signature: Array.from(trimmedSig).map((byte) => `${byte}`),
-        hashed_message: Array.from(
-          Buffer.from(hashMessage({ raw: hashData }).slice(2), "hex")
-        ).map((byte) => `${byte}`),
-        farcaster_id: parseInt(fid),
-        vote_priv: selectedOption,
-        poll_id: Array.from(pollIdArray).map((byte) => `${byte}`),
-        vote: selectedOption,
-        nullifier: Array.from(
-          Buffer.from(keccak256(trimmedSig).slice(2), "hex")
-        ).map((byte) => `${byte}`),
+        pollId: pollId,
+        nullifier: hexToBigInt(keccak256(trimmedSig)).toString(),
       });
-      const proof = await noir.generateFinalProof(
-        {
+      const { response } = await getVoted({
+        pollId: pollId,
+        nullifier: hexToBigInt(keccak256(trimmedSig)).toString(),
+      });
+
+      if (response) {
+        setLogs((prev) => [
+          ...prev,
+          "[" + Number(prev.length + 1) + "] " + "Already voted... 👎",
+        ]);
+      } else {
+        setLogs((prev) => [
+          ...prev,
+          "[" + Number(prev.length + 1) + "] " + "Not voted... 👍",
+        ]);
+
+        setLogs((prev) => [
+          ...prev,
+          "[" + Number(prev.length + 1) + "] " + "Generating proof... ⏳",
+        ]);
+        console.log({
           signer_pub_x_key: Array.from(xCoordHex).map((byte) => `${byte}`),
           signer_pub_y_key: Array.from(yCoordHex).map((byte) => `${byte}`),
           signature: Array.from(trimmedSig).map((byte) => `${byte}`),
@@ -184,76 +193,97 @@ export default function VoteComponent({ poll }: HomeProps) {
             Buffer.from(hashMessage({ raw: hashData }).slice(2), "hex")
           ).map((byte) => `${byte}`),
           farcaster_id: parseInt(fid),
-          vote_priv: 1,
+          vote_priv: selectedOption,
           poll_id: Array.from(pollIdArray).map((byte) => `${byte}`),
-          vote: 1,
+          vote: selectedOption,
           nullifier: Array.from(
             Buffer.from(keccak256(trimmedSig).slice(2), "hex")
           ).map((byte) => `${byte}`),
-        },
-        foreignCallHandler
-      );
-      setProof(bytesToHex(proof.proof));
-      setLogs((prev) => [
-        ...prev,
-        "[" + Number(prev.length + 1) + "] " + "Proof: " + proof.proof,
-      ]);
-      setLogs((prev) => [
-        ...prev,
-        "[" + Number(prev.length + 1) + "] " + "Proof Generation Success 😏",
-      ]);
-      setLogs((prev) => [
-        ...prev,
-        "[" + Number(prev.length + 1) + "] " + "Verifying proof... ⏳",
-      ]);
-      const isValid = await noir.verifyFinalProof(proof);
+        });
+        const proof = await noir.generateFinalProof(
+          {
+            signer_pub_x_key: Array.from(xCoordHex).map((byte) => `${byte}`),
+            signer_pub_y_key: Array.from(yCoordHex).map((byte) => `${byte}`),
+            signature: Array.from(trimmedSig).map((byte) => `${byte}`),
+            hashed_message: Array.from(
+              Buffer.from(hashMessage({ raw: hashData }).slice(2), "hex")
+            ).map((byte) => `${byte}`),
+            farcaster_id: parseInt(fid),
+            vote_priv: 1,
+            poll_id: Array.from(pollIdArray).map((byte) => `${byte}`),
+            vote: 1,
+            nullifier: Array.from(
+              Buffer.from(keccak256(trimmedSig).slice(2), "hex")
+            ).map((byte) => `${byte}`),
+          },
+          foreignCallHandler
+        );
+        setProof(bytesToHex(proof.proof));
+        setLogs((prev) => [
+          ...prev,
+          "[" + Number(prev.length + 1) + "] " + "Proof: " + proof.proof,
+        ]);
+        setLogs((prev) => [
+          ...prev,
+          "[" + Number(prev.length + 1) + "] " + "Proof Generation Success 😏",
+        ]);
+        setLogs((prev) => [
+          ...prev,
+          "[" + Number(prev.length + 1) + "] " + "Verifying proof... ⏳",
+        ]);
+        const isValid = await noir.verifyFinalProof(proof);
 
-      if (isValid) {
-        setLogs((prev) => [
-          ...prev,
-          "[" + Number(prev.length + 1) + "] " + "Proof verified ✅",
-        ]);
-        try {
-          await vote({
-            pollId: pollId,
-            vote: selectedOption,
-            nullifier: hexToBigInt(keccak256(trimmedSig)).toString(),
-            voter_address: address as string,
-          });
-          // const { request } = await publicClient.simulateContract({
-          //   account: relayerAccount,
-          //   address: deployment,
-          //   abi: abi,
-          //   functionName: "castVoteWithAnonAadhaar",
-          //   args: [
-          //     bytesToHex(proof.proof),
-          //     pollId,
-          //     selectedOption,
-          //     hexToBigInt(keccak256(trimmedSig)),
-          //     anonParams,
-          //   ],
-          // });
-          // const tx = await relayerWalletClient.writeContract(request);
-          // setLogs((prev) => [
-          //   ...prev,
-          //   "[" + Number(prev.length + 1) + "] " + "Transaction Sent ⏳",
-          // ]);
-          // setLogs((prev) => [
-          //   ...prev,
-          //   "[" + Number(prev.length + 1) + "] " + "Transaction Hash: " + tx,
-          // ]);
-        } catch (e) {
-          // console.log(e);
-          // setLogs((prev) => [
-          //   ...prev,
-          //   "[" + Number(prev.length + 1) + "] " + "Transaction Failed ❌",
-          // ]);
+        if (isValid) {
+          setLogs((prev) => [
+            ...prev,
+            "[" + Number(prev.length + 1) + "] " + "Proof verified ✅",
+          ]);
+          try {
+            await vote({
+              pollId: pollId,
+              vote: selectedOption,
+              nullifier: hexToBigInt(keccak256(trimmedSig)).toString(),
+              voter_address: address as string,
+            });
+
+            // const { request } = await publicClient.simulateContract({
+            //   account: relayerAccount,
+            //   address: deployment,
+            //   abi: abi,
+            //   functionName: "castVoteWithAnonAadhaar",
+            //   args: [
+            //     bytesToHex(proof.proof),
+            //     pollId,
+            //     selectedOption,
+            //     hexToBigInt(keccak256(trimmedSig)),
+            //     anonParams,
+            //   ],
+            // });
+            // const tx = await relayerWalletClient.writeContract(request);
+            // setLogs((prev) => [
+            //   ...prev,
+            //   "[" + Number(prev.length + 1) + "] " + "Transaction Sent ⏳",
+            // ]);
+            // setLogs((prev) => [
+            //   ...prev,
+            //   "[" + Number(prev.length + 1) + "] " + "Transaction Hash: " + tx,
+            // ]);
+          } catch (e) {
+            // console.log(e);
+            // setLogs((prev) => [
+            //   ...prev,
+            //   "[" + Number(prev.length + 1) + "] " + "Transaction Failed ❌",
+            // ]);
+          }
+        } else {
+          setLogs((prev) => [
+            ...prev,
+            "[" +
+              Number(prev.length + 1) +
+              "] " +
+              "Proof verification failed ❌",
+          ]);
         }
-      } else {
-        setLogs((prev) => [
-          ...prev,
-          "[" + Number(prev.length + 1) + "] " + "Proof verification failed ❌",
-        ]);
       }
     } catch (err) {
       console.log(err);
@@ -283,24 +313,24 @@ export default function VoteComponent({ poll }: HomeProps) {
               <div className="flex justify-between space-x-8 pt-12">
                 <div className="flex-1">
                   <SelectableButton
-                    isSelected={selectedOption === 1}
+                    isSelected={selectedOption === 0}
                     disabled={false}
                     text={poll.option_a}
                     click={() => {
-                      if (selectedOption !== 1) setSelectedOption(1);
-                      else setSelectedOption(0);
+                      if (selectedOption !== 0) setSelectedOption(0);
+                      else setSelectedOption(4);
                     }}
                   />
                 </div>
 
                 <div className="flex-1">
                   <SelectableButton
-                    isSelected={selectedOption === 2}
+                    isSelected={selectedOption === 1}
                     disabled={false}
                     text={poll.option_b}
                     click={() => {
-                      if (selectedOption !== 2) setSelectedOption(2);
-                      else setSelectedOption(0);
+                      if (selectedOption !== 1) setSelectedOption(1);
+                      else setSelectedOption(4);
                     }}
                   />
                 </div>
@@ -308,24 +338,24 @@ export default function VoteComponent({ poll }: HomeProps) {
               <div className="flex justify-between space-x-8 mt-4">
                 <div className="flex-1">
                   <SelectableButton
-                    isSelected={selectedOption === 3}
+                    isSelected={selectedOption === 2}
                     disabled={false}
                     text={poll.option_c}
                     click={() => {
-                      if (selectedOption !== 3) setSelectedOption(3);
-                      else setSelectedOption(0);
+                      if (selectedOption !== 2) setSelectedOption(2);
+                      else setSelectedOption(4);
                     }}
                   />
                 </div>
 
                 <div className="flex-1">
                   <SelectableButton
-                    isSelected={selectedOption === 4}
+                    isSelected={selectedOption === 3}
                     disabled={false}
                     text={poll.option_d}
                     click={() => {
-                      if (selectedOption !== 4) setSelectedOption(4);
-                      else setSelectedOption(0);
+                      if (selectedOption !== 3) setSelectedOption(3);
+                      else setSelectedOption(4);
                     }}
                   />
                 </div>
@@ -335,7 +365,7 @@ export default function VoteComponent({ poll }: HomeProps) {
                   <SelectableButton
                     text="🗳️ Cast Vote"
                     isSelected={false}
-                    disabled={selectedOption == 0}
+                    disabled={selectedOption == 4}
                     click={async () => {
                       await generateProof();
                     }}
