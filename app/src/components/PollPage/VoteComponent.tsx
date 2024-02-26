@@ -243,7 +243,6 @@ export default function VoteComponent({ poll }: HomeProps) {
               pollId: pollId,
               vote: selectedOption,
               nullifier: hexToBigInt(keccak256(trimmedSig)).toString(),
-              voter_address: address as string,
             });
 
             // const { request } = await publicClient.simulateContract({

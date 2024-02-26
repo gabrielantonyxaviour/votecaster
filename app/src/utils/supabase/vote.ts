@@ -7,9 +7,8 @@ export default async function vote(req: {
   pollId: string;
   nullifier: string;
   vote: number;
-  voter_address: string;
 }): Promise<{ message: string; response: any }> {
-  const { pollId, vote, nullifier, voter_address } = req;
+  const { pollId, vote, nullifier } = req;
 
   try {
     const { data: fetchedVote, error: fetchError } = await supabase
@@ -28,7 +27,6 @@ export default async function vote(req: {
                 poll_id: pollId,
                 nullifier,
                 vote,
-                voter_address,
               },
             ])
             .select()
