@@ -9,7 +9,6 @@ import { WagmiProvider, createConfig, http } from "wagmi";
 
 import PollPageComponent from "./PollPageComponent";
 import { AirstackProvider } from "@airstack/airstack-react";
-import { AnonAadhaarProvider } from "@anon-aadhaar/react";
 
 const projectId = process.env["NEXT_PUBLIC_PROJECT_ID"] ?? "";
 const airstackApiKey = process.env["NEXT_PUBLIC_AIRSTACK_API_KEY"] ?? "";
@@ -46,22 +45,20 @@ export default function PollPageWrapper({
   return (
     <>
       {ready ? (
-        <AnonAadhaarProvider _useTestAadhaar={useTestAadhaar}>
-          <WagmiProvider config={config}>
-            <QueryClientProvider client={queryClient}>
-              <ConnectKitProvider>
-                <AirstackProvider apiKey={airstackApiKey}>
-                  <PollPageComponent
-                    id={id}
-                    result={result}
-                    setUseTestAadhaar={setUseTestAadhaar}
-                    useTestAadhaar={useTestAadhaar}
-                  />
-                </AirstackProvider>
-              </ConnectKitProvider>
-            </QueryClientProvider>
-          </WagmiProvider>
-        </AnonAadhaarProvider>
+        <WagmiProvider config={config}>
+          <QueryClientProvider client={queryClient}>
+            <ConnectKitProvider>
+              <AirstackProvider apiKey={airstackApiKey}>
+                <PollPageComponent
+                  id={id}
+                  result={result}
+                  setUseTestAadhaar={setUseTestAadhaar}
+                  useTestAadhaar={useTestAadhaar}
+                />
+              </AirstackProvider>
+            </ConnectKitProvider>
+          </QueryClientProvider>
+        </WagmiProvider>
       ) : null}
     </>
   );

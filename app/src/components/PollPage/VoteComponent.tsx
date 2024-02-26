@@ -7,11 +7,7 @@ import SelectableButton from "@/components/SelectableButton";
 import { useAccount } from "wagmi";
 import { useQuery } from "@airstack/airstack-react";
 import { ConnectKitButton } from "connectkit";
-import {
-  AnonAadhaarProof,
-  LogInWithAnonAadhaar,
-  useAnonAadhaar,
-} from "@anon-aadhaar/react";
+
 import {
   BarretenbergBackend,
   CompiledCircuit,
@@ -34,14 +30,7 @@ import {
   toBytes,
 } from "viem";
 import { scrollSepolia } from "viem/chains";
-import { packGroth16Proof } from "@anon-aadhaar/core";
-import {
-  abi,
-  deployment,
-  publicClient,
-  relayerAccount,
-  relayerWalletClient,
-} from "@/utils/constants";
+
 import vote from "@/utils/supabase/vote";
 
 type HomeProps = {
@@ -52,10 +41,8 @@ export default function VoteComponent({ poll }: HomeProps) {
   const { address } = useAccount();
   const [hasProfile, setHasProfile] = useState(false);
   const [logs, setLogs] = useState<string[]>([]);
-  const [anonAadhaar] = useAnonAadhaar();
   const [walletClient, setWalletClient] = useState<any>();
   const [proof, setProof] = useState("");
-  const [anonParams, setAnonParams] = useState<any>();
   const [ready, setReady] = useState(false);
   const {
     data,
@@ -87,36 +74,6 @@ export default function VoteComponent({ poll }: HomeProps) {
       );
     }
   }, []);
-
-  useEffect(() => {
-    console.log("Anon Aadhaar: ", anonAadhaar.status);
-    console.log(anonAadhaar);
-    if (anonAadhaar.status === "logged-in") {
-      const identityNullifer =
-        anonAadhaar.anonAadhaarProof.proof.identityNullifier;
-      const userNullifier = anonAadhaar.anonAadhaarProof.proof.userNullifier;
-      const timestamp = anonAadhaar.anonAadhaarProof.proof.timestamp;
-      const signal = anonAadhaar.anonAadhaarProof.proof.signalHash;
-      const groth16Proof = packGroth16Proof(
-        anonAadhaar.anonAadhaarProof.proof.groth16Proof
-      );
-      console.log([
-        identityNullifer,
-        userNullifier,
-        timestamp,
-        hexToBigInt(address as `0x${string}`).toString(),
-        groth16Proof,
-      ]);
-      setAnonParams([
-        identityNullifer,
-        userNullifier,
-        timestamp,
-        signal,
-        groth16Proof,
-      ]);
-      setLogs(["[1] Anon Aadhar logged-in. Proof verified ✅"]);
-    }
-  }, [anonAadhaar]);
 
   useEffect(() => {
     if (
@@ -372,24 +329,9 @@ export default function VoteComponent({ poll }: HomeProps) {
                     }}
                   />
                 </div>
-              </div>
+              </div>{" "}
               {hasProfile ? (
                 <div className="flex-1 h-full flex flex-col space-y-4 justify-center items-center">
-                  <p className="text-xl font-semibold text-[#450C63] pt-12">
-                    AADHAR VERIFICATION
-                  </p>
-                  <div className="pb-2 space-y-4 ">
-                    <div className="flex justify-center">
-                      <LogInWithAnonAadhaar />
-                    </div>
-                    {anonAadhaar.status == "logged-in" && (
-                      <div className="whitespace-normal overflow-y-auto h-[100px] mx-auto ">
-                        <AnonAadhaarProof
-                          code={JSON.stringify(anonAadhaar, null, 2)}
-                        />
-                      </div>
-                    )}
-                  </div>
                   <SelectableButton
                     text="🗳️ Cast Vote"
                     isSelected={false}

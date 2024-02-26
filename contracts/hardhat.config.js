@@ -38,9 +38,7 @@ module.exports = {
       },
     ],
   },
-  dependencyCompiler: {
-    paths: ["@anon-aadhaar/contracts"],
-  },
+
   networks: {
     ...networks,
   },

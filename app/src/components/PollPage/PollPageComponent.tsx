@@ -10,12 +10,7 @@ type PollProps = {
   result: boolean;
 };
 
-export default function PollPageComponent({
-  id,
-  result,
-  setUseTestAadhaar,
-  useTestAadhaar,
-}: PollProps) {
+export default function PollPageComponent({ id, result }: PollProps) {
   const [poll, setPoll] = useState<any>({
     question: "",
     options: ["", "", "", ""],

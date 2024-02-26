@@ -19,7 +19,7 @@ export default function Confirmation({
   ipfsHash: string;
 }) {
   return (
-    <div className="h-[33%] w-full bg-[#FBF6FF] rounded-xl px-20 py-8">
+    <div className="h-[50%] w-full  bg-[#FBF6FF] rounded-xl px-20 flex flex-col justify-center">
       <p className="text-center font-bold text-[#450C63] text-2xl">
         CONFIRMATION
       </p>

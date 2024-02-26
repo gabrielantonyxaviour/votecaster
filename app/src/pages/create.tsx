@@ -1,4 +1,3 @@
-import ChooseFeatures from "@/components/Create/ChooseFeatures";
 import Confirmation from "@/components/Create/Confirmation";
 import CreateQuestion from "@/components/Create/CreateQuestion";
 import Navbar from "@/components/Navbar";
@@ -71,8 +70,8 @@ export default function CreatePage() {
         {pollId != "" && (
           <CreatedModal pollId={pollId} close={() => setPollId("")} />
         )}
-        <div className="flex flex-col justify-between w-[39%] h-full py-3">
-          <ChooseFeatures isSybil={isSybil} setIsSybil={setIsSybil} />
+        <div className="flex flex-col justify-center w-[39%] h-full py-3">
+          {/* <ChooseFeatures isSybil={isSybil} setIsSybil={setIsSybil} /> */}
           <Confirmation
             post={async () => {
               setIsDisabled(true);

@@ -10,10 +10,6 @@
   },
   "dependencies": {
     "@airstack/airstack-react": "^0.6.2",
-    "@anon-aadhaar/contracts": "^1.0.1",
-    "@anon-aadhaar/core": "^1.0.1",
-    "@anon-aadhaar/react": "^1.0.1",
-    "@farcaster/hub-nodejs": "^0.11.0",
     "@fortawesome/fontawesome-svg-core": "^6.5.1",
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
