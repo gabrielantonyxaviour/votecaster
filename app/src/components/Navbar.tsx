@@ -16,16 +16,16 @@ export default function Navbar() {
 
       <div className="flex space-x-4 my-auto">
         <Link
-          href={"/polls"}
-          className={router.pathname == "/polls" ? "underline" : ""}
-        >
-          Polls
-        </Link>
-        <Link
           href={"/create"}
           className={router.pathname == "/create" ? "underline" : ""}
         >
           Create
+        </Link>
+        <Link
+          href={"/polls"}
+          className={router.pathname == "/polls" ? "underline" : ""}
+        >
+          Polls
         </Link>
       </div>
       <div className="flex space-x-4">

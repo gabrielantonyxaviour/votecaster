@@ -19,8 +19,8 @@ export default function CreatePage() {
     options: string[];
     duration: number;
   }>({
-    question: "WHAT IS THE BEST MUSIC GENRE?",
-    options: ["Hip Hop", "R&B", "Pop", "Jazz"],
+    question: "",
+    options: ["Option 1", "Option 2", "Option 3", "Option 4"],
     duration: 0,
   });
   const [isSybil, setIsSybil] = useState(false);
