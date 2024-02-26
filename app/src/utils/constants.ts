@@ -4,7 +4,7 @@ import { privateKeyToAccount } from "viem/accounts";
 import { scrollSepolia } from "viem/chains";
 import { createConfig, http } from "wagmi";
 
-export const deployment = "0x108A91edD1329e17409A86b54D4204A102534ec3";
+export const deployment = "0xc6b011774FE1393AE254d19456e76F0f1b5B09Eb";
 export const chainId = 534351;
 const projectId = process.env["NEXT_PUBLIC_PROJECT_ID"] ?? "";
 export const publicClient = createPublicClient({
@@ -37,13 +37,7 @@ export const config = createConfig(
 );
 export const abi = [
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "_anonAaadharVerifier",
-        type: "address",
-      },
-    ],
+    inputs: [],
     stateMutability: "nonpayable",
     type: "constructor",
   },
@@ -80,12 +74,6 @@ export const abi = [
         name: "validityDuration",
         type: "uint256",
       },
-      {
-        indexed: false,
-        internalType: "bool",
-        name: "isAnonAadharEnabled",
-        type: "bool",
-      },
     ],
     name: "PollCreated",
     type: "event",
@@ -114,30 +102,6 @@ export const abi = [
     ],
     name: "VoteCast",
     type: "event",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    name: "anonAadhaarNullifier",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
   },
   {
     inputs: [],
@@ -174,68 +138,8 @@ export const abi = [
         name: "nullifierHash",
         type: "uint256",
       },
-      {
-        components: [
-          {
-            internalType: "uint256",
-            name: "identityNullifier",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "userNullifier",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "timestamp",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "signal",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256[8]",
-            name: "groth16Proof",
-            type: "uint256[8]",
-          },
-        ],
-        internalType: "struct PrivCast.AnonAadhaarInput",
-        name: "anonParams",
-        type: "tuple",
-      },
     ],
-    name: "castVoteWithAnonAadhar",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes",
-        name: "proof",
-        type: "bytes",
-      },
-      {
-        internalType: "uint256",
-        name: "pollId",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "vote",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "nullifierHash",
-        type: "uint256",
-      },
-    ],
-    name: "castVoteWithoutAnonAadhar",
+    name: "castVote",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -251,11 +155,6 @@ export const abi = [
         internalType: "uint256",
         name: "validityDuration",
         type: "uint256",
-      },
-      {
-        internalType: "bool",
-        name: "isAnonAadharEnabled",
-        type: "bool",
       },
     ],
     name: "createPoll",
@@ -295,25 +194,6 @@ export const abi = [
         internalType: "contract UltraVerifier",
         name: "",
         type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "timestamp",
-        type: "uint256",
-      },
-    ],
-    name: "isLessThan3HoursAgo",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
       },
     ],
     stateMutability: "view",
@@ -364,58 +244,7 @@ export const abi = [
       },
       {
         internalType: "bool",
-        name: "isAnonAadharEnabled",
-        type: "bool",
-      },
-      {
-        internalType: "bool",
         name: "isExists",
-        type: "bool",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        components: [
-          {
-            internalType: "uint256",
-            name: "identityNullifier",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "userNullifier",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "timestamp",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "signal",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256[8]",
-            name: "groth16Proof",
-            type: "uint256[8]",
-          },
-        ],
-        internalType: "struct PrivCast.AnonAadhaarInput",
-        name: "anonParams",
-        type: "tuple",
-      },
-    ],
-    name: "verifyAnonAadharProof",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
         type: "bool",
       },
     ],

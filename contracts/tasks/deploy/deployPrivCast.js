@@ -13,11 +13,8 @@ task("deploy-priv-cast", "Deploys the PrivCast contract")
     console.log("\n__Compiling Contracts__");
     await run("compile");
 
-    const anonAadharVerifier = "0xA09E07Cc47eF94eF56eC5DcF338379AD86A2DF4B"; // Scroll Sepolia Anon Aadhar Verifier
     const privCastContractFactory = await ethers.getContractFactory("PrivCast");
-    const privCastContract = await privCastContractFactory.deploy(
-      anonAadharVerifier
-    );
+    const privCastContract = await privCastContractFactory.deploy();
 
     console.log(
       `\nWaiting ${
@@ -48,7 +45,7 @@ task("deploy-priv-cast", "Deploys the PrivCast contract")
         console.log("\nVerifying contract...");
         await run("verify:verify", {
           address: privCastContract.address,
-          constructorArguments: [anonAadharVerifier],
+          constructorArguments: [],
         });
         console.log("Contract verified");
       } catch (error) {

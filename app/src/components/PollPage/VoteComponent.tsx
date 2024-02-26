@@ -161,10 +161,7 @@ export default function VoteComponent({ poll }: HomeProps) {
         ...prev,
         "[" + Number(prev.length + 1) + "] " + "Fetching State... 👀",
       ]);
-      console.log({
-        pollId: pollId,
-        nullifier: hexToBigInt(keccak256(trimmedSig)).toString(),
-      });
+
       const { response } = await getVoted({
         pollId: pollId,
         nullifier: hexToBigInt(keccak256(trimmedSig)).toString(),
