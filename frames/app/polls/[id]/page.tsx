@@ -9,7 +9,7 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 async function getPoll(pollId: string): Promise<any> {
   try {
     const { data: fetchedPoll, error: fetchError } = await supabase
-      .from("polls")
+      .from("polls_secret")
       .select("*")
       .eq("id", pollId);
 

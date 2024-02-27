@@ -9,7 +9,7 @@ export default async function getPollsByCreator(req: {
   const { creator } = req;
   try {
     const { data: fetchedPolls, error: fetchError } = await supabase
-      .from("polls")
+      .from("polls_secret")
       .select("*")
       .eq("creator", creator);
 

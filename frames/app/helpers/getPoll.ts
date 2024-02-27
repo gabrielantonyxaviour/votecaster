@@ -9,7 +9,7 @@ export default async function getPoll(req: {
   const { pollId } = req;
   try {
     const { data: fetchedPoll, error: fetchError } = await supabase
-      .from("polls")
+      .from("polls_secret")
       .select("*")
       .eq("id", pollId);
 

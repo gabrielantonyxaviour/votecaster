@@ -11,7 +11,7 @@ export default async function getVoted(req: {
 
   try {
     const { data: fetchedVote, error: fetchError } = await supabase
-      .from("votes")
+      .from("votes_secret")
       .select("*")
       .eq("poll_id", pollId)
       .eq("nullifier", nullifier);

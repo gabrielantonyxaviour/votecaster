@@ -12,7 +12,7 @@ export default async function vote(req: {
 
   try {
     const { data: fetchedVote, error: fetchError } = await supabase
-      .from("votes")
+      .from("votes_secret")
       .select("*")
       .eq("pollId", pollId)
       .eq("nullifier", nullifier);
@@ -21,7 +21,7 @@ export default async function vote(req: {
     if (fetchError || fetchedVote == null || fetchedVote.length === 0) {
       const { data, error } = supabase
         ? await supabase
-            .from("votes")
+            .from("votes_secret")
             .insert([
               {
                 poll_id: pollId,
