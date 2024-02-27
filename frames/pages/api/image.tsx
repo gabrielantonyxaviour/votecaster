@@ -30,7 +30,7 @@ export default async function handler(
           display: "flex",
           width: "100%",
           height: "100%",
-          backgroundColor: "#450C63",
+          backgroundColor: "#BF080A",
           paddingLeft: 50,
           paddingRight: 50,
           fontSize: 24,
@@ -47,7 +47,7 @@ export default async function handler(
             style={{
               flex: 1,
               width: "80%",
-              backgroundColor: "#FBF6FF",
+              backgroundColor: "#FDE2C4",
               margin: "auto",
               marginTop: 70,
               display: "flex",
@@ -59,7 +59,7 @@ export default async function handler(
           >
             <p
               style={{
-                color: "#450C63",
+                color: "#BF080A",
                 textTransform: "uppercase",
                 fontWeight: "bold",
                 marginTop: 60,
@@ -80,7 +80,7 @@ export default async function handler(
             >
               <p
                 style={{
-                  color: "#9508BF",
+                  color: "#BF0808",
                   fontSize: 15,
                   marginTop: 10,
                   marginBottom: 20,
@@ -89,7 +89,7 @@ export default async function handler(
                 }}
               >
                 Create anonymous polls on&nbsp;
-                <span style={{ color: "#450C63" }}>priv.cast</span>
+                <span style={{ color: "#BF080A" }}>priv.cast</span>
               </p>
             </div>
           </div>
@@ -116,7 +116,7 @@ export default async function handler(
             display: "flex",
             width: "100%",
             height: "100%",
-            backgroundColor: "#450C63",
+            backgroundColor: "#BF080A",
             paddingLeft: 50,
             paddingRight: 50,
             fontSize: 24,
@@ -133,7 +133,7 @@ export default async function handler(
               style={{
                 flex: 1,
                 width: "80%",
-                backgroundColor: "#FBF6FF",
+                backgroundColor: "#FDE2C4",
                 margin: "auto",
                 marginTop: 70,
                 display: "flex",
@@ -145,7 +145,7 @@ export default async function handler(
             >
               <p
                 style={{
-                  color: "#9508BF",
+                  color: "#BF0808",
                   fontSize: 18,
                   lineHeight: 1,
                   marginTop: 5,
@@ -156,7 +156,7 @@ export default async function handler(
               </p>
               <p
                 style={{
-                  color: "#450C63",
+                  color: "#BF080A",
                   textTransform: "uppercase",
                   fontWeight: "bold",
                   marginTop: 5,
@@ -181,7 +181,7 @@ export default async function handler(
                     width: "35%",
                     height: 40,
                     margin: "auto",
-                    background: "#450C63",
+                    background: "#BF080A",
                     borderRadius: 5,
                     textAlign: "center",
                     color: "#ffffff",
@@ -198,7 +198,7 @@ export default async function handler(
                     width: "35%",
                     height: 40,
                     margin: "auto",
-                    background: "#450C63",
+                    background: "#BF080A",
                     borderRadius: 5,
                     textAlign: "center",
                     color: "#ffffff",
@@ -222,7 +222,7 @@ export default async function handler(
                     width: "35%",
                     height: 40,
                     margin: "auto",
-                    background: "#450C63",
+                    background: "#BF080A",
                     borderRadius: 5,
                     textAlign: "center",
                     color: "#ffffff",
@@ -239,7 +239,7 @@ export default async function handler(
                     width: "35%",
                     height: 40,
                     margin: "auto",
-                    background: "#450C63",
+                    background: "#BF080A",
                     borderRadius: 5,
                     textAlign: "center",
                     color: "#ffffff",
@@ -259,7 +259,7 @@ export default async function handler(
               >
                 <p
                   style={{
-                    color: "#9508BF",
+                    color: "#BF0808",
                     fontSize: 15,
                     marginTop: 10,
                     marginBottom: 20,
@@ -268,7 +268,7 @@ export default async function handler(
                   }}
                 >
                   Create anonymous polls on&nbsp;
-                  <span style={{ color: "#450C63" }}>priv.cast</span>
+                  <span style={{ color: "#BF080A" }}>priv.cast</span>
                 </p>
               </div>
               <div
@@ -284,7 +284,7 @@ export default async function handler(
                       borderRadius: "100%",
                       height: 12,
                       width: 12,
-                      backgroundColor: "#450C63",
+                      backgroundColor: "#BF080A",
                       marginTop: "auto",
                       marginBottom: "auto",
                     }}
@@ -295,7 +295,7 @@ export default async function handler(
                       marginTop: 0,
                       marginBottom: 0,
                       marginLeft: 5,
-                      color: "#450C63",
+                      color: "#BF080A",
                     }}
                   >
                     Anonymous
@@ -311,7 +311,7 @@ export default async function handler(
                         borderRadius: "100%",
                         height: 12,
                         width: 12,
-                        backgroundColor: "#450C63",
+                        backgroundColor: "#BF080A",
                         marginTop: "auto",
                         marginBottom: "auto",
                       }}
@@ -323,7 +323,7 @@ export default async function handler(
                         marginTop: 0,
                         marginBottom: 0,
                         marginLeft: 5,
-                        color: "#450C63",
+                        color: "#BF080A",
                       }}
                     >
                       Sybil Resistant
@@ -358,7 +358,7 @@ export default async function handler(
             display: "flex",
             width: "100%",
             height: "100%",
-            backgroundColor: "#450C63",
+            backgroundColor: "#BF080A",
             paddingLeft: 50,
             paddingRight: 50,
             fontSize: 24,
@@ -375,7 +375,7 @@ export default async function handler(
               style={{
                 flex: 1,
                 width: "80%",
-                backgroundColor: "#FBF6FF",
+                backgroundColor: "#FDE2C4",
                 margin: "auto",
                 marginTop: 70,
                 display: "flex",
@@ -387,7 +387,7 @@ export default async function handler(
             >
               <p
                 style={{
-                  color: "#9508BF",
+                  color: "#BF0808",
                   fontSize: 14,
                   lineHeight: 1,
                   marginBottom: 5,
@@ -397,7 +397,7 @@ export default async function handler(
               </p>
               <p
                 style={{
-                  color: "#450C63",
+                  color: "#BF080A",
                   textTransform: "uppercase",
                   fontWeight: "bold",
                   marginTop: 5,
@@ -421,7 +421,7 @@ export default async function handler(
                     voteData.votes[0] == voteData.maxVotes &&
                     voteData.maxVotes != 0
                       ? "#ffffff"
-                      : "#450C63",
+                      : "#BF080A",
                   borderRadius: 5,
                   textAlign: "center",
                   color:
@@ -453,7 +453,7 @@ export default async function handler(
                     voteData.votes[1] == voteData.maxVotes &&
                     voteData.maxVotes != 0
                       ? "#ffffff"
-                      : "#450C63",
+                      : "#BF080A",
                   borderRadius: 5,
 
                   textAlign: "center",
@@ -489,7 +489,7 @@ export default async function handler(
                     voteData.votes[2] == voteData.maxVotes &&
                     voteData.maxVotes != 0
                       ? "#ffffff"
-                      : "#450C63",
+                      : "#BF080A",
                   borderRadius: 5,
                   textAlign: "center",
                   color:
@@ -523,7 +523,7 @@ export default async function handler(
                     voteData.votes[3] == voteData.maxVotes &&
                     voteData.maxVotes != 0
                       ? "#ffffff"
-                      : "#450C63",
+                      : "#BF080A",
                   borderRadius: 5,
                   textAlign: "center",
                   color:
@@ -555,7 +555,7 @@ export default async function handler(
               >
                 <p
                   style={{
-                    color: "#9508BF",
+                    color: "#BF0808",
                     fontSize: 15,
                     marginTop: 10,
                     marginBottom: 20,
@@ -564,7 +564,7 @@ export default async function handler(
                   }}
                 >
                   Create anonymous polls on&nbsp;
-                  <span style={{ color: "#450C63" }}>priv.cast</span>
+                  <span style={{ color: "#BF080A" }}>priv.cast</span>
                 </p>
               </div>
             </div>

@@ -29,11 +29,7 @@ export default function App({
           <QueryClientProvider client={queryClient}>
             <ConnectKitProvider>
               <AirstackProvider apiKey={airstackApiKey}>
-                <Component
-                  {...pageProps}
-                  setUseTestAadhaar={setUseTestAadhaar}
-                  useTestAadhaar={useTestAadhaar}
-                />
+                <Component {...pageProps} />
               </AirstackProvider>
             </ConnectKitProvider>
           </QueryClientProvider>

@@ -54,11 +54,11 @@ export default function YourPolls() {
     console.log(address);
   }, []);
   return (
-    <div className="w-full rounded-xl bg-[#FBF6FF] text-[#450C63] px-14 h-full pt-10   mt-4 ">
+    <div className="w-full rounded-xl bg-[#FDE2C4] text-[#BF080A] px-14 h-full pt-10   mt-4 ">
       <div className="flex justify-between">
         <p className="text-3xl font-bold">My Polls</p>
       </div>
-      {polls.length === 0 ? (
+      {polls != undefined || polls == null || polls.length === 0 ? (
         <div className="flex flex-col justify-center h-full items-center">
           {address == undefined ? (
             <p className="font-semibold text-lg mb-2">
@@ -91,7 +91,7 @@ export default function YourPolls() {
             polls.map((poll: any, index: any) => (
               <div
                 key={index}
-                className=" bg-[#450C63] border border-[#450C63] rounded-xl cursor-pointer"
+                className=" bg-[#BF080A] border border-[#BF080A] rounded-xl cursor-pointer"
                 onClick={() => {
                   router.push("/polls/" + poll.id + "?result=true");
                 }}
@@ -101,7 +101,7 @@ export default function YourPolls() {
                   width={300}
                   height={300}
                   alt="poll"
-                  className="border border-[#450C63] rounded-xl"
+                  className="border border-[#BF080A] rounded-xl"
                 />
               </div>
             ))}

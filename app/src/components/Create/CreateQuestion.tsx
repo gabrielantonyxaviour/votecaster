@@ -22,9 +22,9 @@ export default function CreateQuestion({
   const [durationInput, setDurationInput] = useState("");
   return (
     <div className="py-3  h-full w-[60%]">
-      <div className=" h-full bg-[#FBF6FF] rounded-xl py-12 px-12">
+      <div className=" h-full bg-[#FDE2C4] rounded-xl py-12 px-12">
         <textarea
-          className="w-[90%] h-[45%] text-5xl font-bold placeholder:text-[#DCAFFF] text-[#450C63] bg-transparent border-none focus:outline-none resize-none leading-tight"
+          className="w-[90%] h-[45%] text-5xl font-bold placeholder:text-[#D87070] text-[#BF080A] bg-transparent border-none focus:outline-none resize-none leading-tight"
           placeholder="ENTER YOUR QUESTION EX. WHICH TEAM IS WINNING LA LIGA?"
           onChange={(e) => {
             setPoll({ ...poll, question: e.target.value.toUpperCase() });
@@ -103,9 +103,9 @@ export default function CreateQuestion({
             />
           </div>
         </div>
-        <p className="pt-8 pb-4 font-bold text-[#450C63] text-2xl">Duration</p>
+        <p className="pt-8 pb-4 font-bold text-[#BF080A] text-2xl">Duration</p>
         <div className="flex w-full space-x-4">
-          <div className="bg-[#4A0C63] rounded-sm">
+          <div className="bg-[#630C0C] rounded-sm">
             <div className="bg-white -translate-y-1 -translate-x-1 rounded-sm border-2 border-[#4A0C63]">
               <input
                 value={durationInput}
@@ -118,7 +118,7 @@ export default function CreateQuestion({
                     duration: parseInt(filteredValue) * values[selectedIndex],
                   });
                 }}
-                className="text-[#8A08BF] text-md font-semibold mx-4 my-2 bg-transparent border-none focus:outline-none w-full"
+                className="text-[#BF0808] text-md font-semibold mx-4 my-2 bg-transparent border-none focus:outline-none w-full"
               />
             </div>
           </div>

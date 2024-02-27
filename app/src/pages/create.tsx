@@ -6,11 +6,17 @@ import { Data, QueryResponse } from "@/utils/airstackInterface";
 import { useQuery } from "@airstack/airstack-react";
 import { useAccount, useWriteContract } from "wagmi";
 import axios from "axios";
-import { abi, deployment } from "@/utils/constants";
+import {
+  abi,
+  deployment,
+  secret_contract_address,
+  secret_contract_hash,
+} from "@/utils/constants";
 import { scrollSepolia } from "viem/chains";
 import { createPublicClient, http } from "viem";
 import CreatedModal from "@/components/CreatedModal";
 import createPoll from "@/utils/supabase/createPoll";
+import { MetaMaskWallet, SecretNetworkClient } from "secretjs";
 
 export default function CreatePage() {
   const [poll, setPoll] = useState<{
@@ -30,8 +36,6 @@ export default function CreatePage() {
   const [txHash, setTxHash] = useState<string>("");
   const [isDisabled, setIsDisabled] = useState(false);
   const [status, setStatus] = useState("");
-  const { writeContractAsync: createPollContractCall } = useWriteContract();
-
   const { data, loading, error }: QueryResponse = useQuery<Data>(
     `  query MyQuery {
   Socials(
@@ -46,9 +50,7 @@ export default function CreatePage() {
     {},
     { cache: true }
   );
-  useEffect(() => {
-    // console.log(data);
-  }, [data]);
+
   useEffect(() => {
     if (
       data != null &&
@@ -61,6 +63,28 @@ export default function CreatePage() {
       setHasProfile(false);
     }
   }, [data, loading, error]);
+  interface ConnectionResult {
+    wallet: MetaMaskWallet; // Replace with the actual type for MetaMaskWallet
+    secretjs: SecretNetworkClient; // Replace with the actual type for SecretNetworkClient
+  }
+  const connectWallet = async (): Promise<ConnectionResult | undefined> => {
+    try {
+      const wallet = await MetaMaskWallet.create(
+        (window as any).ethereum,
+        address as string
+      );
+      const secretjs = new SecretNetworkClient({
+        url: "https://api.pulsar3.scrttestnet.com",
+        chainId: "pulsar-3",
+        wallet: wallet,
+        walletAddress: wallet.address,
+      });
+      console.log("Connected to Secret Network", secretjs);
+      return { wallet, secretjs };
+    } catch (error) {
+      console.error("Error connecting to MetaMask", error);
+    }
+  };
 
   return (
     <div className="max-w-[1200px] mx-auto h-screen py-8">
@@ -85,57 +109,30 @@ export default function CreatePage() {
                   },
                 });
                 setIpfsHash(res.data.IpfsHash);
+
                 setStatus("Initiating transaction...");
                 console.log("Initiating transaction...");
-
-                const publicClient = createPublicClient({
-                  chain: scrollSepolia,
-                  transport: http(),
-                });
-                console.log("Worked till now");
-                const unwatch = publicClient.watchContractEvent({
-                  address: deployment,
-                  abi,
-                  onLogs: async (logs) => {
-                    console.log("Logged!");
-                    console.log((logs[0] as any).args.creatorAddress);
-                    if ((logs[0] as any).args.creatorAddress == address) {
-                      console.log("Got the right log!");
-
-                      const { response: createPollResponse } = await createPoll(
-                        {
-                          pollId: (logs[0] as any).args.pollId,
-                          question: poll.question,
-                          creator: address as string,
-                          farcaster_username: (data as any).Socials.Social[0]
-                            .fnames[0],
-                          optionA:
-                            poll.options.length > 0 ? poll.options[0] : "",
-                          optionB:
-                            poll.options.length > 1 ? poll.options[1] : "",
-                          optionC:
-                            poll.options.length > 2 ? poll.options[2] : "",
-                          optionD:
-                            poll.options.length > 3 ? poll.options[3] : "",
-                          isAnon: isSybil,
-                          validity: poll.duration,
-                        }
-                      );
-                      console.log(createPollResponse);
-                      setPollId(createPollResponse.id);
-                      setStatus("Transaction Confirmed!");
-                      unwatch();
-                    }
+                const result = await connectWallet();
+                const tx = await result?.secretjs.tx.compute.executeContract(
+                  {
+                    sender: result.wallet.address,
+                    contract_address: secret_contract_address,
+                    msg: {
+                      create_poll: {
+                        poll_uri: res.data.ipfsHash,
+                        validity: poll.duration,
+                      },
+                    },
+                    code_hash: secret_contract_hash,
                   },
-                });
+                  { gasLimit: 100_000 }
+                );
 
-                const tx = await createPollContractCall({
-                  abi,
-                  address: deployment,
-                  functionName: "createPoll",
-                  args: [res.data.IpfsHash, poll.duration, isSybil],
-                });
-                setTxHash("https://sepolia.scrollscan.dev/tx/" + tx);
+                setTxHash(
+                  ("https://testnet.ping.pub/secret/tx/" +
+                    tx?.transactionHash) as string
+                );
+
                 setStatus("Waiting for Confirmation...");
               } catch (e) {
                 console.log(e);

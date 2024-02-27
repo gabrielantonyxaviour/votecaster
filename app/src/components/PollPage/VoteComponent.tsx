@@ -301,9 +301,9 @@ export default function VoteComponent({ poll }: HomeProps) {
       </div>
       <div className="flex justify-between h-full">
         {ready && (
-          <div className="w-[60%] h-full bg-[#FBF6FF]">
+          <div className="w-[60%] h-full bg-[#FDE2C4]">
             <div className="flex flex-col h-full p-12">
-              <p className="text-[#450C63] font-bold text-5xl">
+              <p className="text-[#BF080A] font-bold text-5xl">
                 {poll.question}
               </p>
               <div className="flex justify-between space-x-8 pt-12">
@@ -369,7 +369,7 @@ export default function VoteComponent({ poll }: HomeProps) {
                 </div>
               ) : (
                 <div className="flex-1 h-full flex flex-col space-y-4 justify-center items-center">
-                  <p className="text-lg font-semibold text-[#450C63] pt-12">
+                  <p className="text-lg font-semibold text-[#BF080A] pt-12">
                     Connected Wallet does not have a Farcaster Account
                   </p>
                 </div>
@@ -377,8 +377,8 @@ export default function VoteComponent({ poll }: HomeProps) {
             </div>
           </div>
         )}
-        <div className="h-[80%] text-[#450C63] bg-[#FBF6FF] w-[35%] my-auto p-12">
-          <p className="text-[#450C63] font-bold text-3xl text-center pb-4">
+        <div className="h-[80%] text-[#BF080A] bg-[#FDE2C4] w-[35%] my-auto p-12">
+          <p className="text-[#BF080A] font-bold text-3xl text-center pb-4">
             LOGS
           </p>
 

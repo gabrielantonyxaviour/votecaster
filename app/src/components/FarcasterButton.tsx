@@ -51,14 +51,14 @@ export default function FarcasterButton({
     hasProfile && (
       <div
         className={`${
-          isInverted ? "bg-black" : "bg-[#4A0C63]"
+          isInverted ? "bg-black" : "bg-[#630C0C]"
         } rounded-lg mt-1`}
         onClick={() => {}}
       >
         <div
           className={`${
-            isInverted ? "bg-white" : "bg-[#8A08BF]"
-          } -translate-y-1 translate-x-1 rounded-lg border-2 border-[#4A0C63]  px-4 py-2 flex space-x-2 cursor-default`}
+            isInverted ? "bg-white" : "bg-[#BF0808]"
+          } -translate-y-1 translate-x-1 rounded-lg border-2 border-[#630C0C]  px-4 py-2 flex space-x-2 cursor-default`}
           onClick={() => {
             console.log("clicked");
             // click();

@@ -17,7 +17,7 @@ export default function DurationDropdown({
     setIsOpen(!isOpen);
   };
   return (
-    <div className="bg-[#4A0C63] rounded-sm w-[20%]">
+    <div className="bg-[#630C0C] rounded-sm w-[20%]">
       <div
         className={`relative -translate-y-1 -translate-x-1 inline-block text-left w-full bg-white border-2 rounded-sm border-[#3C3C3C] `}
       >

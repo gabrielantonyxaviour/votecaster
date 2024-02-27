@@ -9,7 +9,7 @@ export default function Navbar() {
   const router = useRouter();
 
   return (
-    <div className="flex justify-between p-4 bg-[#FBF6FF] text-[#450C63] rounded-xl py-5">
+    <div className="flex justify-between p-4 bg-[#FDE2C4] text-[#BF080A] rounded-xl py-5">
       <Link href={"/"} className="text-2xl font-bold my-auto ">
         PRIV.CAST
       </Link>

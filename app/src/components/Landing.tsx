@@ -12,7 +12,7 @@ export default function Landing() {
     "Cast polls in farcaster where the users can vote without revealing their identity. The sybil resistant polls ensure that the polls are not manipulated by fake votes.";
   return (
     <div className="py-3">
-      <div className="w-full rounded-xl bg-[#FBF6FF] text-[#450C63] px-20 pt-20  ">
+      <div className="w-full rounded-xl bg-[#FDE2C4] text-[#BF080A] px-20 pt-20  ">
         <div className="flex">
           <div className="flex flex-col space-y-4 justify-between w-[50%] ">
             <p className="w-[90%] text-5xl font-semibold">{hero}</p>
@@ -36,8 +36,8 @@ export default function Landing() {
             />
           </div>
         </div>
-        <p className="text-md text-center my-2 font-normal text-[#9508BF] pt-14 pb-4">
-          Built with 💜 by gabrielaxy.eth
+        <p className="text-md text-center my-2 font-normal text-[#BF0808] pt-14 pb-4">
+          Built with ❤️ by gabrielaxy.eth
         </p>
       </div>
     </div>

@@ -6,6 +6,12 @@ import { createConfig, http } from "wagmi";
 
 export const deployment = "0xc6b011774FE1393AE254d19456e76F0f1b5B09Eb";
 export const chainId = 534351;
+
+export const secret_contract_hash =
+  "399e98325fb7893b25b4c2867e34ca494381e74dea20d4a2630aa0ac680b7ab8";
+export const secret_contract_address =
+  "secret14rucfjdat9a2etkn5n6s8m6q3lar8y8r8dn2c4";
+
 const projectId = process.env["NEXT_PUBLIC_PROJECT_ID"] ?? "";
 export const publicClient = createPublicClient({
   chain: scrollSepolia,

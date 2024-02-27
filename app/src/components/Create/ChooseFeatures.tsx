@@ -9,8 +9,8 @@ export default function ChooseFeatures({
   setIsSybil: (value: boolean) => void;
 }) {
   return (
-    <div className="h-[65%] w-full bg-[#FBF6FF] rounded-xl px-20 pt-12 pb-6">
-      <p className="text-center font-bold text-[#450C63] text-2xl">
+    <div className="h-[65%] w-full bg-[#FDE2C4] rounded-xl px-20 pt-12 pb-6">
+      <p className="text-center font-bold text-[#BF080A] text-2xl">
         CHOOSE FEATURES
       </p>
       <div className="mx-auto">
@@ -22,7 +22,7 @@ export default function ChooseFeatures({
             click={() => {}}
           />
         </div>
-        <p className="text-[#450C63] text-sm text-center pt-2">
+        <p className="text-[#BF080A] text-sm text-center pt-2">
           Voters generate a proof to vote without revealing their identity with
           100% intractability.
         </p>
@@ -34,7 +34,7 @@ export default function ChooseFeatures({
             click={() => setIsSybil(!isSybil)}
           />
         </div>
-        <p className="text-[#450C63] text-sm text-center pt-2">
+        <p className="text-[#BF080A] text-sm text-center pt-2">
           Voters should prove their AADHAR identity by producing a proof which
           will be verified before a vote is cast.
         </p>

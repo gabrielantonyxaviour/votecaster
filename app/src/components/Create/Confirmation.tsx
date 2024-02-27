@@ -19,18 +19,18 @@ export default function Confirmation({
   ipfsHash: string;
 }) {
   return (
-    <div className="h-[50%] w-full  bg-[#FBF6FF] rounded-xl px-20 flex flex-col justify-center">
-      <p className="text-center font-bold text-[#450C63] text-2xl">
+    <div className="h-[50%] w-full  bg-[#FDE2C4] rounded-xl px-20 flex flex-col justify-center">
+      <p className="text-center font-bold text-[#BF080A] text-2xl">
         CONFIRMATION
       </p>
       {!hasProfile && (
-        <p className="font-semibold text-[#450C63] text-md text-center px-4 pt-4">
+        <p className="font-semibold text-[#BF080A] text-md text-center px-4 pt-4">
           Connected Wallet does not have a farcaster account
         </p>
       )}
       {(status == "Uploading to IPFS..." ||
         status == "Initiating transaction...") && (
-        <p className="font-semibold text-[#450C63] text-md text-center px-4 pt-4">
+        <p className="font-semibold text-[#BF080A] text-md text-center px-4 pt-4">
           {status}
         </p>
       )}
@@ -44,7 +44,7 @@ export default function Confirmation({
           />
         </div>
       )}
-      <div className="text-[#450C63] text-sm font-normal text-center mt-4">
+      <div className="text-[#BF080A] text-sm font-normal text-center mt-4">
         {ipfsHash != "" && (
           <>
             <p className="font-semibold text-md">Uploaded to IPFS</p>

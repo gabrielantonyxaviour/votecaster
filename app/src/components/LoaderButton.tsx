@@ -20,10 +20,10 @@ export default function LoaderButton({
   console.log("Remaining", remaining);
 
   return (
-    <div className="bg-[#4A0C63] relative rounded-sm  ">
+    <div className="bg-[#630C0C] relative rounded-sm  ">
       <div
         className={`${
-          biggest ? "bg-white" : "bg-[#8A08BF]"
+          biggest ? "bg-white" : "bg-[#BF0808]"
         } -translate-y-1 -translate-x-1 rounded-l-sm border-2 border-[#4A0C63]  w-full`}
       >
         <p
