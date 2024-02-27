@@ -15,9 +15,8 @@ pub fn instantiate(
     msg: InstantiateMsg,
 ) -> StdResult<Response> {
     let state = State {
-        poll_count: 0,
-        polls: vec![],
-
+        poll_count: msg.poll_count,
+        polls: msg.polls,
     };
 
     deps.api
