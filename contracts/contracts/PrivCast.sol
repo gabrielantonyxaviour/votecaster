@@ -69,6 +69,11 @@ contract PrivCast{
         }
     }
 
+    function getVotes(uint pollId) external view returns (bytes[] memory) {
+        return polls[pollId].encryptedVotes;
+    }
+
+
    
 
 }
