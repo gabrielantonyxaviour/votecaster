@@ -75,10 +75,14 @@ pub fn try_vote(deps: DepsMut, env: Env, info: MessageInfo,poll_id: u64, farcast
     }
 
     config(deps.storage).update(|mut state| -> Result<_, StdError> {
-        let poll = state.polls.get(poll_id as usize).unwrap();
-        poll.votes.insert(vote, poll.votes.get(&vote).unwrap_or(&0) + 1);
-        poll.has_voted.insert(farcaster_id, true);
-        Ok(state)
+        if let Some(poll) = state.polls.get_mut(poll_id as usize) {
+            poll.votes.insert(vote, poll.votes.get(&vote).unwrap_or(&0) + 1);
+            poll.has_voted.insert(farcaster_id, true);
+            Ok(state)
+        } else {
+            // Handle the case where poll_id is out of bounds
+            Err(StdError::generic_err("Invalid poll_id"))
+        }
     })?;
 
     deps.api.debug("vote created successfully");
