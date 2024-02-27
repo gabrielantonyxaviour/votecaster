@@ -4,19 +4,15 @@ import Navbar from "@/components/Navbar";
 import React, { useEffect, useState } from "react";
 import { Data, QueryResponse } from "@/utils/airstackInterface";
 import { useQuery } from "@airstack/airstack-react";
-import { useAccount, useWriteContract } from "wagmi";
+import { useAccount } from "wagmi";
 import axios from "axios";
 import {
-  abi,
-  deployment,
   secret_contract_address,
   secret_contract_hash,
 } from "@/utils/constants";
-import { scrollSepolia } from "viem/chains";
-import { createPublicClient, http } from "viem";
 import CreatedModal from "@/components/CreatedModal";
 import createPoll from "@/utils/supabase/createPoll";
-import { MetaMaskWallet, SecretNetworkClient } from "secretjs";
+import connectSecretWallet from "@/utils/connectSecretWallet";
 
 export default function CreatePage() {
   const [poll, setPoll] = useState<{
@@ -63,28 +59,6 @@ export default function CreatePage() {
       setHasProfile(false);
     }
   }, [data, loading, error]);
-  interface ConnectionResult {
-    wallet: MetaMaskWallet; // Replace with the actual type for MetaMaskWallet
-    secretjs: SecretNetworkClient; // Replace with the actual type for SecretNetworkClient
-  }
-  const connectWallet = async (): Promise<ConnectionResult | undefined> => {
-    try {
-      const wallet = await MetaMaskWallet.create(
-        (window as any).ethereum,
-        address as string
-      );
-      const secretjs = new SecretNetworkClient({
-        url: "https://api.pulsar3.scrttestnet.com",
-        chainId: "pulsar-3",
-        wallet: wallet,
-        walletAddress: wallet.address,
-      });
-      console.log("Connected to Secret Network", secretjs);
-      return { wallet, secretjs };
-    } catch (error) {
-      console.error("Error connecting to MetaMask", error);
-    }
-  };
 
   return (
     <div className="max-w-[1200px] mx-auto h-screen py-8">
@@ -112,7 +86,7 @@ export default function CreatePage() {
 
                 setStatus("Initiating transaction...");
                 console.log("Initiating transaction...");
-                const result = await connectWallet();
+                const result = await connectSecretWallet(address as string);
                 const tx = await result?.secretjs.tx.compute.executeContract(
                   {
                     sender: result.wallet.address,

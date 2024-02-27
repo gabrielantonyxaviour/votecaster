@@ -1,17 +1,25 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import FarcasterButton from "../FarcasterButton";
 import { ConnectKitButton } from "connectkit";
 import getVotes from "@/utils/supabase/getVotes";
 import LoaderButton from "../LoaderButton";
 import SelectableButton from "../SelectableButton";
+import connectSecretWallet from "@/utils/connectSecretWallet";
+import { useAccount } from "wagmi";
+import {
+  secret_contract_address,
+  secret_contract_hash,
+} from "@/utils/constants";
 export default function ResultComponent({ poll }: { poll: any }) {
   const [votesPercent, setVotesPercent] = useState([0, 0, 0, 0]);
   const [votes, setVotes] = useState([0, 0, 0, 0]);
   const [biggest, setBiggest] = useState(0);
   const [ready, setReady] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(0);
+  const [timeLeft, setTimeLeft] = useState(-1);
+  const [fetchedResults, setFetchedResults] = useState(false);
+  const { address } = useAccount();
   useEffect(() => {
     (async function () {
       const { response: votesResponse } = await getVotes({ pollId: poll.id });
@@ -36,10 +44,25 @@ export default function ResultComponent({ poll }: { poll: any }) {
   }, [poll.id]);
 
   useEffect(() => {
+    if (timeLeft === 0 && fetchedResults == false) {
+      (async function () {
+        const connection = await connectSecretWallet(address as string);
+        const wallet = connection?.wallet;
+        const tx = await connection?.secretjs.query.compute.queryContract({
+          contract_address: secret_contract_address,
+          code_hash: secret_contract_hash,
+          query: { get_results: { poll_id: poll.id } },
+        });
+      })();
+    }
+  }, [address, timeLeft]);
+  useEffect(() => {
     const targetTimestamp =
       Math.floor(new Date(poll.created_at).getTime() / 1000) + poll.validity;
+
     const intervalId = setInterval(() => {
       const currentTime = Math.floor(Date.now() / 1000);
+
       if (currentTime > targetTimestamp) {
         setTimeLeft(0);
         clearInterval(intervalId);
@@ -73,7 +96,7 @@ export default function ResultComponent({ poll }: { poll: any }) {
                 {poll.question}
               </p>
 
-              {timeLeft === 0 ? (
+              {timeLeft === 0 && fetchedResults == true ? (
                 <div className="flex flex-col space-y-4">
                   <LoaderButton
                     name={poll.option_a}
@@ -117,15 +140,17 @@ export default function ResultComponent({ poll }: { poll: any }) {
                   <p className="text-[#BF080A] font-bold text-xl text-center">
                     POLL IS STILL ONGOING. RESULTS IN
                   </p>
-                  <p className="text-[#BF080A] pt-4 text-2xl  text-center">
-                    {Math.floor(timeLeft / 86400)} Days,{" "}
-                    {Math.floor((timeLeft % 86400) / 3600) < 10 ? "0" : ""}
-                    {Math.floor((timeLeft % 86400) / 3600)}:
-                    {Math.floor((timeLeft % 3600) / 60) < 10 ? "0" : ""}
-                    {Math.floor((timeLeft % 3600) / 60)}:
-                    {timeLeft % 60 < 10 ? "0" : ""}
-                    {timeLeft % 60}
-                  </p>
+                  {timeLeft > 0 && (
+                    <p className="text-[#BF080A] pt-4 text-2xl  text-center">
+                      {Math.floor(timeLeft / 86400)} Days,{" "}
+                      {Math.floor((timeLeft % 86400) / 3600) < 10 ? "0" : ""}
+                      {Math.floor((timeLeft % 86400) / 3600)}:
+                      {Math.floor((timeLeft % 3600) / 60) < 10 ? "0" : ""}
+                      {Math.floor((timeLeft % 3600) / 60)}:
+                      {timeLeft % 60 < 10 ? "0" : ""}
+                      {timeLeft % 60}
+                    </p>
+                  )}
                   <div className="flex justify-center pt-20">
                     <SelectableButton
                       isSelected={true}
