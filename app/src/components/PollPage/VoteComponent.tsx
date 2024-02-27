@@ -293,7 +293,7 @@ export default function VoteComponent({ poll }: HomeProps) {
   return (
     <div className="max-w-[1200px] mx-auto h-screen py-8">
       <div className="flex justify-between pb-12 ">
-        <p className="text-3xl font-bold ">PRIV.CAST</p>
+        <p className="text-3xl font-bold text-[#FDE2C4]">PRIV.CAST</p>
         <div className="flex space-x-4 ">
           <FarcasterButton isInverted={true} />
           <ConnectKitButton theme="retro" />

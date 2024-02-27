@@ -33,29 +33,37 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const id = params.id;
   const { response } = await getPoll({ pollId: id });
-  if (response.length == 0 || response == null || response == undefined) {
+  if (response == null || response == undefined || response.length == 0) {
     console.log("No poll found");
-  }
-  const fcMetadata: Record<string, string> = {
-    "fc:frame": "vNext",
-    "fc:frame:post_url": `${process.env["HOST"]}/api/vote?id=${id}`,
-    "fc:frame:image": `${process.env["HOST"]}/api/image?id=${id}`,
-    "fc:frame:button:1": "Vote",
-    "fc:frame:button:1:action": "post_redirect",
-    "fc:frame:button:2": "View Results",
-  };
 
-  return {
-    title: response.question,
-    openGraph: {
+    return {
+      title: "No poll found",
+      openGraph: {
+        title: "No poll found",
+      },
+    };
+  } else {
+    const fcMetadata: Record<string, string> = {
+      "fc:frame": "vNext",
+      "fc:frame:post_url": `${process.env["HOST"]}/api/vote?id=${id}`,
+      "fc:frame:image": `${process.env["HOST"]}/api/image?id=${id}`,
+      "fc:frame:button:1": "Vote",
+      "fc:frame:button:1:action": "post_redirect",
+      "fc:frame:button:2": "View Results",
+    };
+
+    return {
       title: response.question,
-      images: [`/api/image?id=${id}`],
-    },
-    other: {
-      ...fcMetadata,
-    },
-    metadataBase: new URL(process.env["HOST"] || ""),
-  };
+      openGraph: {
+        title: response.question,
+        images: [`/api/image?id=${id}`],
+      },
+      other: {
+        ...fcMetadata,
+      },
+      metadataBase: new URL(process.env["HOST"] || ""),
+    };
+  }
 }
 function getMeta(poll: any) {
   // This didn't work for some reason
