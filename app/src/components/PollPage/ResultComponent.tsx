@@ -44,17 +44,30 @@ export default function ResultComponent({ poll }: { poll: any }) {
   }, [poll.id]);
 
   useEffect(() => {
-    if (timeLeft === 0 && fetchedResults == false) {
-      (async function () {
-        const connection = await connectSecretWallet(address as string);
-        const wallet = connection?.wallet;
-        const tx = await connection?.secretjs.query.compute.queryContract({
-          contract_address: secret_contract_address,
-          code_hash: secret_contract_hash,
-          query: { get_results: { poll_id: poll.id } },
-        });
-      })();
-    }
+    (async function () {
+      const connection = await connectSecretWallet(address as string);
+
+      if (timeLeft === 0 && fetchedResults == false) {
+        const my_query = await connection?.secretjs.query.compute.queryContract(
+          {
+            contract_address: secret_contract_address,
+            code_hash: secret_contract_hash,
+            query: { get_results: { poll_id: poll.id } },
+          }
+        );
+        console.log(my_query);
+        setFetchedResults(true);
+      } else if (timeLeft > 0) {
+        const my_query = await connection?.secretjs.query.compute.queryContract(
+          {
+            contract_address: secret_contract_address,
+            code_hash: secret_contract_hash,
+            query: { get_vote_count: { poll_id: poll.id } },
+          }
+        );
+        console.log(my_query);
+      }
+    })();
   }, [address, timeLeft]);
   useEffect(() => {
     const targetTimestamp =
