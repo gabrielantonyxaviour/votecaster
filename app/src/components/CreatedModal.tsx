@@ -38,13 +38,13 @@ export default function CreatedModal({
           Paste this url in your cast to view as Farcaster Frames
         </p>
         <p className=" font-bold text-md text-center mt-2">
-          {"https://priv-cast.vercel.app/polls/" + pollId}
+          {"https://priv-cast-secret.vercel.app/polls/" + pollId}
           <FontAwesomeIcon
             icon={faCopy}
             className="cursor-pointer ml-2"
             onClick={() => {
               navigator.clipboard.writeText(
-                "https://priv-cast.vercel.app/polls/" + pollId
+                "https://priv-cast-secret.vercel.app/polls/" + pollId
               );
             }}
           />

@@ -194,6 +194,13 @@ export default function VoteComponent({ poll }: HomeProps) {
                           "] " +
                           "Transaction Pending... ⏳",
                       ]);
+                      console.log({
+                        farcaster_id: Number(
+                          (data as any).Socials.Social[0].userId
+                        ),
+                        poll_id: poll.id,
+                        vote: selectedOption,
+                      });
                       const tx =
                         await result?.secretjs.tx.compute.executeContract(
                           {
@@ -201,8 +208,9 @@ export default function VoteComponent({ poll }: HomeProps) {
                             contract_address: secret_contract_address,
                             msg: {
                               vote: {
-                                farcaster_id: (data as any).Socials.Social[0]
-                                  .userId,
+                                farcaster_id: Number(
+                                  (data as any).Socials.Social[0].userId
+                                ),
                                 poll_id: poll.id,
                                 vote: selectedOption,
                               },
