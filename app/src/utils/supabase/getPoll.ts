@@ -8,7 +8,6 @@ export default async function getPoll(req: {
 }): Promise<{ message: string; response: any }> {
   const { pollId } = req;
   try {
-    console.log("pollId", pollId);
     const { data: fetchedPoll, error: fetchError } = await supabase
       .from("polls_secret")
       .select("*")

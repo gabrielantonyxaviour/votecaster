@@ -32,6 +32,7 @@ export async function generateMetadata(
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const id = params.id;
+  console.log(id);
   const { response } = await getPoll({ pollId: id });
   if (response == null || response == undefined || response.length == 0) {
     console.log("No poll found");
