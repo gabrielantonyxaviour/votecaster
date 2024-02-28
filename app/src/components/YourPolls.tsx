@@ -97,7 +97,7 @@ export default function YourPolls() {
                 }}
               >
                 <Image
-                  src="https://priv-cast-frames.vercel.app/api/image?id=1"
+                  src="https://priv-cast-secret-frames.vercel.app/api/image?id=1"
                   width={300}
                   height={300}
                   alt="poll"

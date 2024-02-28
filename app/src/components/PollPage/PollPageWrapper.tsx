@@ -23,7 +23,7 @@ const config = createConfig(
     },
     appDescription:
       "PRIVACY PRESERVED, SYBIL RESISTANT POLLS NOW IN FARCASTER.",
-    appUrl: "https://priv-cast.vercel.app", // your app's url
+    appUrl: "https://priv-cast-secret.vercel.app", // your app's url
     appIcon: "https://family.co/logo.png",
   })
 );
