@@ -7,8 +7,7 @@ use crate::state::{Poll};
 
 #[derive(Serialize, Deserialize, Clone, Debug, Eq, PartialEq, JsonSchema)]
 pub struct InstantiateMsg {
-    pub poll_count: u64,
-    pub polls: Vec<Poll>,
+
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, Eq, PartialEq, JsonSchema)]
@@ -40,4 +39,9 @@ pub struct VoteCountResponse{
 #[derive(Serialize, Deserialize, Clone, Debug, Eq, PartialEq, JsonSchema)]
 pub struct  ResultsResponse{
     pub results: HashMap<u64, u64>,
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug, Eq, PartialEq, JsonSchema)]
+pub struct PollResponse{
+    pub poll: Poll,
 }

@@ -4,8 +4,8 @@ use cosmwasm_std::{
     entry_point, to_binary, Binary, Deps, DepsMut, Env, MessageInfo, Response, StdError, StdResult,
 };
 
-use crate::msg::{ExecuteMsg, InstantiateMsg, PollCountResponse, QueryMsg, ResultsResponse, VoteCountResponse};
-use crate::state::{config, config_read, Poll, State};
+use crate::msg::{ExecuteMsg, InstantiateMsg, PollCountResponse,PollResponse, QueryMsg, ResultsResponse, VoteCountResponse};
+use crate::state::{ Poll, Polls,POLL_COUNT, POLLS};
 
 #[entry_point]
 pub fn instantiate(
@@ -14,14 +14,9 @@ pub fn instantiate(
     info: MessageInfo,
     msg: InstantiateMsg,
 ) -> StdResult<Response> {
-    let state = State {
-        poll_count: msg.poll_count,
-        polls: msg.polls,
-    };
 
     deps.api
         .debug(format!("Contract was initialized by {}", info.sender).as_str());
-    config(deps.storage).save(&state)?;
 
     Ok(Response::default())
 }
@@ -35,19 +30,30 @@ pub fn execute(deps: DepsMut, env: Env, info: MessageInfo, msg: ExecuteMsg) -> S
 }
 
 pub fn try_create_poll(deps: DepsMut,env: Env, poll_uri: String, validity: u64) -> StdResult<Response> {
-    config(deps.storage).update(|mut state| -> Result<_, StdError> {
-        state.polls.push(Poll {
-            id: state.poll_count,
-            uri: poll_uri,
-            created_at: env.block.time,
-            validity: validity,
-            votes: HashMap::new(),
-            has_voted: HashMap::new(),
-            vote_count: 0,
-        });
-        state.poll_count += 1;
-        Ok(state)
-    })?;
+      // Update decrypted_votes logic
+
+    let mut poll_count=POLL_COUNT.load(deps.storage).unwrap_or(0);
+    let mut polls = POLLS
+      .load(deps.storage)
+      .unwrap_or(Polls {
+          polls: Vec::new(),
+      });
+
+    polls.polls.push(Poll{
+        id: poll_count as u64,
+        uri: poll_uri,
+        created_at: env.block.time,
+        validity: validity,
+        votes: HashMap::new(),
+        has_voted: HashMap::new(),
+        vote_count: 0,
+    });
+
+    poll_count=poll_count+1;
+
+    // Save decrypted votes to storage
+    POLLS.save(deps.storage, &polls)?;
+    POLL_COUNT.save(deps.storage, &poll_count)?;
 
     deps.api.debug("poll created successfully");
     Ok(Response::default())
@@ -55,36 +61,38 @@ pub fn try_create_poll(deps: DepsMut,env: Env, poll_uri: String, validity: u64) 
 
 
 pub fn try_vote(deps: DepsMut, env: Env, info: MessageInfo,poll_id: u64, farcaster_id: u64, vote: u64) -> StdResult<Response> {
-    let state = config_read(deps.storage).load()?;
-    let poll = state.polls.get(poll_id as usize).unwrap();
+    let mut poll_count=POLL_COUNT.load(deps.storage).unwrap_or(0);
+    let mut polls = POLLS
+      .load(deps.storage)
+      .unwrap_or(Polls {
+          polls: Vec::new(),
+      });
    
-   // check if poll exists
-    if(poll_id < 0 || poll_id >= state.poll_count){
+    // check if poll exists
+    if(poll_id < 0 || poll_id >= poll_count){
         return Err(StdError::generic_err("Invalid poll id"));
     }
-   
-    // check if voting is live
-    if(env.block.time.seconds() > poll.created_at.seconds() + poll.validity){
-        return Err(StdError::generic_err("Voting has ended"));
-    }
-    
-    // check if already voted
-    if(poll.has_voted.contains_key(&farcaster_id)){
-        return Err(StdError::generic_err("Already voted"));
-    }
 
-    config(deps.storage).update(|mut state| -> Result<_, StdError> {
-        if let Some(poll) = state.polls.get_mut(poll_id as usize) {
-            poll.votes.insert(vote, poll.votes.get(&vote).unwrap_or(&0) + 1);
-            poll.has_voted.insert(farcaster_id, true);
-            Ok(state)
-        } else {
-            // Handle the case where poll_id is out of bounds
-            Err(StdError::generic_err("Invalid poll_id"))
+    if let Some(poll) = polls.polls.get_mut(poll_id) {
+        // check if voting is live
+        if(env.block.time.seconds() > poll.created_at.seconds() + poll.validity){
+            return Err(StdError::generic_err("Voting has ended"));
         }
-    })?;
+        
+        // check if already voted
+        if(poll.has_voted.contains_key(&farcaster_id)){
+            return Err(StdError::generic_err("Already voted")); 
+        }
+    
+        poll.votes.insert(vote, poll.votes.get(&vote).unwrap_or(&0) + 1);
+        poll.has_voted.insert(farcaster_id, true);
+    
+        polls.save(deps)?;
+    }else{
+        Err(StdError::generic_err("Poll not found"))
 
-    deps.api.debug("vote created successfully");
+    }
+
     Ok(Response::default())
 }
 
@@ -99,18 +107,40 @@ pub fn query(deps: Deps, _env: Env, msg: QueryMsg) -> StdResult<Binary> {
 }
 
 fn query_poll_count(deps: Deps) -> StdResult<PollCountResponse> {
-    let state = config_read(deps.storage).load()?;
-    Ok(PollCountResponse { poll_count: state.poll_count })
+    let mut poll_count=POLL_COUNT.load(deps.storage).unwrap_or(0);
+    Ok(PollCountResponse { poll_count: poll_count })
 }
 
 fn query_vote_count(deps: Deps, poll_id: u64) -> StdResult<VoteCountResponse> {
-    let state = config_read(deps.storage).load()?;
-    let poll = state.polls.get(poll_id as usize).unwrap();
+    let mut poll_count=POLL_COUNT.load(deps.storage).unwrap_or(0);
+    let mut polls = POLLS
+      .load(deps.storage)
+      .unwrap_or(Polls {
+          polls: Vec::new(),
+      });
+    let poll = polls.polls.get(poll_id as usize).unwrap();
     Ok(VoteCountResponse { vote_count: poll.vote_count })
 }
 
 fn query_get_results(deps: Deps, poll_id: u64) -> StdResult<ResultsResponse> {
-    let state = config_read(deps.storage).load()?;
-    let poll = state.polls.get(poll_id as usize).unwrap();
+    let mut poll_count=POLL_COUNT.load(deps.storage).unwrap_or(0);
+    let mut polls = POLLS
+      .load(deps.storage)
+      .unwrap_or(Polls {
+          polls: Vec::new(),
+      });
+    let poll = polls.polls.get(poll_id as usize).unwrap();
     Ok(ResultsResponse {results: poll.votes.clone()})
+}
+
+
+fn query_get_poll(deps: Deps, poll_id: u64) -> StdResult<PollResponse> {
+    let mut poll_count=POLL_COUNT.load(deps.storage).unwrap_or(0);
+    let mut polls = POLLS
+      .load(deps.storage)
+      .unwrap_or(Polls {
+          polls: Vec::new(),
+      });
+    let poll = polls.polls.get(poll_id as usize).unwrap();
+    Ok(PollResponse {poll: poll.clone()})
 }

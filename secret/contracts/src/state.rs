@@ -1,18 +1,8 @@
 use std::collections::HashMap;
-
-use schemars::JsonSchema;
+use secret_toolkit_storage::Item;
 use serde::{Deserialize, Serialize};
-
-use cosmwasm_std::{Addr, Storage, Timestamp};
-use cosmwasm_storage::{singleton, singleton_read, ReadonlySingleton, Singleton};
-
-pub static CONFIG_KEY: &[u8] = b"config";
-
-#[derive(Serialize, Deserialize, Clone, Debug, Eq, PartialEq, JsonSchema)]
-pub struct State {
-    pub poll_count: u64,
-    pub polls: Vec<Poll>,
-}
+use cosmwasm_std::{ Timestamp};
+use schemars::JsonSchema;
 
 
 #[derive(Serialize, Deserialize, Clone, Debug, Eq, PartialEq, JsonSchema)]
@@ -25,11 +15,10 @@ pub struct Poll{
     pub has_voted: HashMap<u64, bool>,  
     pub vote_count: u64,
 }
-
-pub fn config(storage: &mut dyn Storage) -> Singleton<State> {
-    singleton(storage, CONFIG_KEY)
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Eq, JsonSchema)]
+pub struct Polls{
+    pub polls: Vec<Poll>,
 }
 
-pub fn config_read(storage: &dyn Storage) -> ReadonlySingleton<State> {
-    singleton_read(storage, CONFIG_KEY)
-}
+pub static POLL_COUNT: Item<u64> = Item::new(b"poll_count");
+pub static POLLS: Item<Polls> = Item::new(b"polls");
