@@ -60,7 +60,7 @@ pub fn try_create_poll(deps: DepsMut,env: Env, poll_uri: String, validity: u64) 
 }
 
 
-pub fn try_vote(deps: DepsMut, env: Env, info: MessageInfo,poll_id: u64, farcaster_id: u64, vote: u64) -> StdResult<Response> {
+pub fn try_vote(deps: DepsMut, env: Env, info: MessageInfo, poll_id: u64, farcaster_id: u64, vote: u64) -> StdResult<Response> {
     let mut poll_count=POLL_COUNT.load(deps.storage).unwrap_or(0);
     let mut polls = POLLS
       .load(deps.storage)
@@ -73,7 +73,7 @@ pub fn try_vote(deps: DepsMut, env: Env, info: MessageInfo,poll_id: u64, farcast
         return Err(StdError::generic_err("Invalid poll id"));
     }
 
-    if let Some(poll) = polls.polls.get_mut(poll_id) {
+    if let Some(poll) = polls.polls.get_mut(poll_id as usize) {
         // check if voting is live
         if(env.block.time.seconds() > poll.created_at.seconds() + poll.validity){
             return Err(StdError::generic_err("Voting has ended"));
@@ -87,9 +87,9 @@ pub fn try_vote(deps: DepsMut, env: Env, info: MessageInfo,poll_id: u64, farcast
         poll.votes.insert(vote, poll.votes.get(&vote).unwrap_or(&0) + 1);
         poll.has_voted.insert(farcaster_id, true);
     
-        polls.save(deps)?;
+        POLLS.save(deps.storage, &polls)?;
     }else{
-        Err(StdError::generic_err("Poll not found"))
+        return Err(StdError::generic_err("Poll not found"))
 
     }
 

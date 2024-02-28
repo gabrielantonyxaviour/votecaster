@@ -12,7 +12,6 @@ export default async function createPoll(req: {
   optionB: string;
   optionC: string;
   optionD: string;
-  isAnon: boolean;
   validity: number;
 }): Promise<{ message: string; response: any }> {
   const {
@@ -24,7 +23,6 @@ export default async function createPoll(req: {
     optionB,
     optionC,
     optionD,
-    isAnon,
     validity,
   } = req;
 
@@ -48,7 +46,6 @@ export default async function createPoll(req: {
                 option_b: optionB,
                 option_c: optionC,
                 option_d: optionD,
-                is_anon: isAnon,
                 farcaster_username,
                 validity,
               },

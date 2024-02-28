@@ -87,8 +87,9 @@ export default function CreatePage() {
                   "https://amber-accessible-porpoise-584.mypinata.cloud/ipfs/bafkreidqg5a6sxvrj76epzah6jagsxj4sto5shnyl43yx77xaebwct5xee";
                 setStatus("Initiating transaction...");
                 setIpfsHash(ipfsHash_ as string);
-                console.log("Initiating transaction...");
                 const result = await connectSecretWallet(address as string);
+                setStatus("Waiting for Confirmation...");
+
                 const tx = await result?.secretjs.tx.compute.executeContract(
                   {
                     sender: result.wallet.address,
@@ -110,7 +111,20 @@ export default function CreatePage() {
                     tx?.transactionHash) as string
                 );
 
-                setStatus("Waiting for Confirmation...");
+                const { response: createPollResponse } = await createPoll({
+                  pollId: "1",
+                  question: poll.question,
+                  creator: result?.wallet.address as string,
+                  farcaster_username: (data as any).Socials.Social[0].fnames[0],
+                  optionA: poll.options.length > 0 ? poll.options[0] : "",
+                  optionB: poll.options.length > 1 ? poll.options[1] : "",
+                  optionC: poll.options.length > 2 ? poll.options[2] : "",
+                  optionD: poll.options.length > 3 ? poll.options[3] : "",
+                  validity: poll.duration,
+                });
+                console.log(createPollResponse);
+                setPollId(createPollResponse.id);
+                setStatus("Transaction Confirmed! ✅");
               } catch (e) {
                 console.log(e);
               }
