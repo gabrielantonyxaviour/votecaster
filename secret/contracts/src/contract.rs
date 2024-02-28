@@ -56,7 +56,7 @@ pub fn try_create_poll(deps: DepsMut,env: Env, poll_uri: String, validity: u64) 
     POLL_COUNT.save(deps.storage, &poll_count)?;
 
     deps.api.debug("poll created successfully");
-    Ok(Response::default())
+    Ok(Response::default().add_attribute_plaintext("poll_id", (poll_count-1).to_string()))
 }
 
 

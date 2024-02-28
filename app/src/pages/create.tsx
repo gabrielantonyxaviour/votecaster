@@ -77,16 +77,14 @@ export default function CreatePage() {
                 setStatus("Uploading to IPFS...");
                 console.log("Uploading to IPFS...");
 
-                // const res = await axios.post("/api/pinata", poll, {
-                //   headers: {
-                //     "Content-Type": "application/json",
-                //   },
-                // });
-                // setIpfsHash(res.data.IpfsHash);
-                const ipfsHash_ =
-                  "https://amber-accessible-porpoise-584.mypinata.cloud/ipfs/bafkreidqg5a6sxvrj76epzah6jagsxj4sto5shnyl43yx77xaebwct5xee";
+                const res = await axios.post("/api/pinata", poll, {
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                });
+                setIpfsHash(res.data.IpfsHash);
                 setStatus("Initiating transaction...");
-                setIpfsHash(ipfsHash_ as string);
+                setIpfsHash(res.data.IpfsHash);
                 const result = await connectSecretWallet(address as string);
                 setStatus("Waiting for Confirmation...");
 
@@ -96,7 +94,7 @@ export default function CreatePage() {
                     contract_address: secret_contract_address,
                     msg: {
                       create_poll: {
-                        poll_uri: ipfsHash_,
+                        poll_uri: res.data.IpfsHash,
                         validity: poll.duration,
                       },
                     },
@@ -112,7 +110,9 @@ export default function CreatePage() {
                 );
 
                 const { response: createPollResponse } = await createPoll({
-                  pollId: "1",
+                  pollId: (tx?.arrayLog as any)[
+                    (tx?.arrayLog as any).length - 1
+                  ].value,
                   question: poll.question,
                   creator: result?.wallet.address as string,
                   farcaster_username: (data as any).Socials.Social[0].fnames[0],

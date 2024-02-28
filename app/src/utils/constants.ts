@@ -8,9 +8,9 @@ export const deployment = "0xc6b011774FE1393AE254d19456e76F0f1b5B09Eb";
 export const chainId = 534351;
 
 export const secret_contract_hash =
-  "96e7bf38c0ed143f0832af06931f698fc40b4085e0f89093849ab23ae9f5b0ac";
+  "549c190c386e75e63da318ac4829ffd21c86e1d5c9bb4aa0403411ecddb68573";
 export const secret_contract_address =
-  "secret1grtchygtnmd9ryt600z4mx38y08r33awmj3wz3";
+  "secret18pxt6fppe53j075aqyvlzu9r30fearztwdactp";
 
 const projectId = process.env["NEXT_PUBLIC_PROJECT_ID"] ?? "";
 export const publicClient = createPublicClient({
