@@ -30,7 +30,7 @@ export default async function createPoll(req: {
 
   try {
     const { data: fetchedPoll, error: fetchError } = await supabase
-      .from("polls")
+      .from("polls_duplicate")
       .select("*")
       .eq("pollId", pollId);
 
@@ -38,7 +38,7 @@ export default async function createPoll(req: {
     if (fetchError || fetchedPoll == null || fetchedPoll.length === 0) {
       const { data, error } = supabase
         ? await supabase
-            .from("polls")
+            .from("polls_duplicate")
             .insert([
               {
                 id: parseInt(pollId),

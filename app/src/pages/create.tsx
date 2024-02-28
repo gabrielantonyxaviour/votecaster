@@ -117,7 +117,7 @@ export default function CreatePage() {
                             poll.options.length > 2 ? poll.options[2] : "",
                           optionD:
                             poll.options.length > 3 ? poll.options[3] : "",
-                          isAnon: isSybil,
+                          isAnon: false,
                           validity: poll.duration,
                         }
                       );
@@ -133,7 +133,7 @@ export default function CreatePage() {
                   abi,
                   address: deployment,
                   functionName: "createPoll",
-                  args: [res.data.IpfsHash, poll.duration, isSybil],
+                  args: [res.data.IpfsHash, poll.duration],
                 });
                 setTxHash("https://sepolia.scrollscan.dev/tx/" + tx);
                 setStatus("Waiting for Confirmation...");
