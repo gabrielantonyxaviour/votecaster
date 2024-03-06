@@ -584,12 +584,10 @@ export default async function handler(
     }
   }
 
-  // Handle the request and send the response
   const pngBuffer = await sharp(Buffer.from(pollSvg))
     .toFormat("png")
     .toBuffer();
 
-  // Set the content type to PNG and send the response
   res.setHeader("Content-Type", "image/png");
   res.setHeader("Cache-Control", "max-age=10");
   res.send(pngBuffer);
