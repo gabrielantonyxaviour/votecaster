@@ -48,10 +48,5 @@ contract PrivCast{
         publicInputs[0] = bytes32(pollId);
         publicInputs[1] = bytes32(_vote);
         publicInputs[2] = bytes32(_nullifierHash);
-        
-  
     }
-
-   
-
 }

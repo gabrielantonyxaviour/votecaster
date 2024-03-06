@@ -45,15 +45,15 @@ module.exports = {
   etherscan: {
     apiKey: {
       sepolia: networks.ethereumSepolia.verifyApiKey,
-      scrollSepolia: networks.scrollSepolia.verifyApiKey,
+      optimismSepolia: networks.optimismSepolia.verifyApiKey,
     },
     customChains: [
       {
-        network: "scrollSepolia",
-        chainId: networks.scrollSepolia.chainId,
+        network: "optimismSepolia",
+        chainId: networks.optimismSepolia.chainId,
         urls: {
-          apiURL: "https://api-sepolia.scrollscan.com/api/",
-          browserURL: "https://sepolia.scrollscan.dev",
+          apiURL: "https://api-sepolia-optimistic.etherscan.io/api",
+          browserURL: "https://sepolia-optimism.etherscan.io",
         },
       },
     ],

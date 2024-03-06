@@ -15,16 +15,6 @@ if (SECOND_PRIVATE_KEY) {
 }
 
 const networks = {
-  scrollSepolia: {
-    url: "https://sepolia-rpc.scroll.io",
-    gasPrice: undefined,
-    nonce: undefined,
-    accounts,
-    verifyApiKey: process.env.SCROLL_API_KEY || "UNSET",
-    chainId: 534351,
-    confirmations: DEFAULT_VERIFICATION_BLOCK_CONFIRMATIONS,
-    nativeCurrencySymbol: "ETH",
-  },
   ethereumSepolia: {
     url: process.env.SEPOLIA_RPC_URL || "UNSET",
     gasPrice: undefined,
@@ -32,6 +22,16 @@ const networks = {
     accounts,
     verifyApiKey: process.env.ETHERSCAN_API_KEY || "UNSET",
     chainId: 11155111,
+    confirmations: DEFAULT_VERIFICATION_BLOCK_CONFIRMATIONS,
+    nativeCurrencySymbol: "ETH",
+  },
+  optimismSepolia: {
+    url: process.env.OP_SEPOLIA_RPC_URL || "UNSET",
+    gasPrice: undefined,
+    nonce: undefined,
+    accounts,
+    verifyApiKey: process.env.OPSCAN_API_KEY || "UNSET",
+    chainId: 11155420,
     confirmations: DEFAULT_VERIFICATION_BLOCK_CONFIRMATIONS,
     nativeCurrencySymbol: "ETH",
   },
