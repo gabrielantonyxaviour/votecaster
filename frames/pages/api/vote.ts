@@ -21,12 +21,37 @@ export default async function handler(
         if (result && result.isOk() && result.value.valid) {
           validatedMessage = result.value.message;
         }
-
+        console.log("DATA HASH");
+        console.log(
+          Buffer.from(
+            frameMessage.data.hash
+              .match(/[0-9a-fA-F]{2}/g)
+              .map((hex: any) => parseInt(hex, 16))
+          ).toString("hex")
+        );
+        console.log("SIGNATURE");
+        console.log(
+          Buffer.from(
+            frameMessage.signature
+              .match(/[0-9a-fA-F]{2}/g)
+              .map((hex: any) => parseInt(hex, 16))
+          ).toString("hex")
+        );
+        console.log("RESULTS");
+        console.log(result);
         console.log("FRAME MESSAGE");
         console.log({
-          hash: Buffer.from(frameMessage.data.hash).toString("hex"),
-          signature: Buffer.from(frameMessage.signature).toString("hex"),
-          result,
+          hash: Buffer.from(
+            frameMessage.data.hash
+              .match(/[0-9a-fA-F]{2}/g)
+              .map((hex: any) => parseInt(hex, 16))
+          ).toString("hex"),
+          signature: Buffer.from(
+            frameMessage.signature
+              .match(/[0-9a-fA-F]{2}/g)
+              .map((hex: any) => parseInt(hex, 16))
+          ).toString("hex"),
+          result: result,
         });
 
         res.status(200).send({
