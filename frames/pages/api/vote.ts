@@ -23,7 +23,11 @@ export default async function handler(
         }
 
         console.log("FRAME MESSAGE");
-        console.log(frameMessage);
+        console.log({
+          hash: Buffer.from(frameMessage.data.hash).toString("hex"),
+          signature: Buffer.from(frameMessage.signature).toString("hex"),
+          result,
+        });
 
         res.status(200).send({
           hash: Buffer.from(frameMessage.data.hash).toString("hex"),
