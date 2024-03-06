@@ -1,3 +1,4 @@
+import axios from "axios";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -12,8 +13,17 @@ export default async function handler(
         return res.status(400).send("Missing poll ID");
       }
 
-      let buttonId = 0;
+      console.log("IMAGE HOST: ", process.env.IMG_HOST);
+      const IMG_HOST = process.env.IMG_HOST || "";
 
+      const response = axios.post(IMG_HOST + "/api/vote", req.body, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      console.log(response);
+
+      let buttonId = 0;
       buttonId = req.body?.untrustedData?.buttonIndex || 0;
 
       if (buttonId === 1) {

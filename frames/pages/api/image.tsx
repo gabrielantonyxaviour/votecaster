@@ -18,8 +18,6 @@ export default async function handler(
     req.query["results"] != undefined
       ? (req.query["results"] as string)
       : "false";
-  console.log(pollId);
-  console.log(results);
   let { response: poll } = await getPoll({ pollId: pollId.toString() });
 
   let pollSvg;
