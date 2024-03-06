@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 // import {Poll, POLL_EXPIRY} from "@/app/types";
-// import { getSSLHubRpcClient, Message } from "@farcaster/hub-nodejs";
+import { getSSLHubRpcClient, Message } from "@farcaster/hub-nodejs";
 
 // const HUB_URL = process.env["HUB_URL"];
 // const client = HUB_URL ? getSSLHubRpcClient(HUB_URL) : undefined;
@@ -22,9 +22,12 @@ export default async function handler(
 
       // let validatedMessage: Message | undefined = undefined;
       try {
-        // const frameMessage = Message.decode(
-        //   Buffer.from(req.body?.trustedData?.messageBytes || "", "hex")
-        // );
+        const frameMessage = Message.decode(
+          Buffer.from(req.body?.trustedData?.messageBytes || "", "hex")
+        );
+        console.log("FRAME MESSAGE");
+        console.log(frameMessage);
+
         // const result = await client?.validateMessage(frameMessage);
         // if (result && result.isOk() && result.value.valid) {
         //   validatedMessage = result.value.message;
