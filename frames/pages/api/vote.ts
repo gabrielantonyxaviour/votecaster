@@ -17,11 +17,15 @@ export default async function handler(
           Buffer.from(req.body?.trustedData?.messageBytes || "", "hex")
         );
 
+        console.log("HUB URL");
+        console.log(HUB_URL);
         const result = await client?.validateMessage(frameMessage);
         if (result && result.isOk() && result.value.valid) {
           validatedMessage = result.value.message;
         }
 
+        console.log("RESULT");
+        console.log(result);
         console.log("DATA HASH");
         console.log(frameMessage.data.hash);
         console.log("SIGNATURE");
