@@ -17,30 +17,15 @@ export default async function handler(
           Buffer.from(req.body?.trustedData?.messageBytes || "", "hex")
         );
 
-        console.log("HUB URL");
-        console.log(HUB_URL);
-        const result = await client?.validateMessage(frameMessage);
-        if (result && result.isOk() && result.value.valid) {
-          validatedMessage = result.value.message;
-        }
-
-        console.log("RESULT");
-        console.log(result);
-        console.log("DATA HASH");
-        console.log(frameMessage.data.hash);
-        console.log("SIGNATURE");
-        console.log(frameMessage.signature);
+        console.log("FRAME MESSAGE");
+        console.log(frameMessage);
 
         console.log("FRAME MESSAGE");
         console.log({
-          hash: frameMessage.data.hash.toString("hex"),
-          signature: frameMessage.signature.toString("hex"),
-          result: result,
+          frameMessage: frameMessage,
         });
         res.status(200).send({
-          hash: frameMessage.data.hash.toString("hex"),
-          signature: frameMessage.signature.toString("hex"),
-          result: result,
+          frameMessage: frameMessage,
         });
       } catch (e) {
         console.log("ERROR");
