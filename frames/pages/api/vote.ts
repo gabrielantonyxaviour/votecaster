@@ -9,23 +9,19 @@ export default async function handler(
 ) {
   if (req.method === "POST") {
     try {
-      console.log("BODY");
-      console.log(req.body);
-      let validatedMessage: Message | undefined = undefined;
       try {
         const frameMessage: any = Message.decode(
           Buffer.from(req.body?.trustedData?.messageBytes || "", "hex")
         );
 
         console.log("FRAME MESSAGE");
-        console.log(frameMessage);
-
-        console.log("FRAME MESSAGE");
         console.log({
-          frameMessage: frameMessage,
+          hash: frameMessage.hash.toString("hex"),
+          signature: frameMessage.signature.toString("hex"),
         });
         res.status(200).send({
-          frameMessage: frameMessage,
+          hash: frameMessage.hash.toString("hex"),
+          signature: frameMessage.signature.toString("hex"),
         });
       } catch (e) {
         console.log("ERROR");
