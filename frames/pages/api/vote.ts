@@ -21,12 +21,11 @@ export default async function handler(
         if (result && result.isOk() && result.value.valid) {
           validatedMessage = result.value.message;
         }
-        console.log("RESULTS");
-        console.log(result);
+
         console.log("DATA HASH");
-        console.log(frameMessage.data.hash.toString("hex"));
+        console.log(frameMessage.data.hash);
         console.log("SIGNATURE");
-        console.log(frameMessage.signature.toString("hex"));
+        console.log(frameMessage.signature);
 
         console.log("FRAME MESSAGE");
         console.log({
@@ -40,6 +39,8 @@ export default async function handler(
           result: result,
         });
       } catch (e) {
+        console.log("ERROR");
+        console.log(e);
         res.status(400).send("Invalid message");
       }
     } catch (e) {
