@@ -1,9 +1,9 @@
 import axios from "axios";
 import type { NextApiRequest, NextApiResponse } from "next";
-import fs from "fs";
 import FormData from "form-data";
 import { Readable } from "stream";
 const PINATA_JWT = process.env.PINATA_JWT;
+const GATEWAY_KEY = process.env.GATEWAY_KEY;
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -41,7 +41,9 @@ export default async function handler(
     res.status(200).json({
       IpfsHash:
         "https://amethyst-impossible-ptarmigan-368.mypinata.cloud/ipfs/" +
-        response.data.IpfsHash,
+        response.data.IpfsHash +
+        "?pinataGatewayToken=" +
+        GATEWAY_KEY,
     });
   } catch (error) {
     console.log(error);
