@@ -9,7 +9,7 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 async function getPoll(pollId: string): Promise<any> {
   try {
     const { data: fetchedPoll, error: fetchError } = await supabase
-      .from("polls_secret")
+      .from("polls")
       .select("*")
       .eq("id", pollId);
 
@@ -88,15 +88,6 @@ export async function generateMetadata(
     metadataBase: new URL(process.env["HOST"] || ""),
   };
 }
-function getMeta(poll: any) {
-  // This didn't work for some reason
-  return (
-    <Head>
-      <meta property="og:image" content="" key="test"></meta>
-      <meta property="og:title" content="My page title" key="title" />
-    </Head>
-  );
-}
 
 export default function PollPage({ params }: { params: { id: string } }) {
   const poll = getPoll(params.id);
@@ -111,10 +102,6 @@ export default function PollPage({ params }: { params: { id: string } }) {
             "fc:frame:image": `${process.env["HOST"]}/api/image?id=${params.id}`,
             "og:image:": `${process.env["HOST"]}/api/image?id=${params.id}`,
             "og:title": polls[parseInt(params.id)].question,
-            "fc:frame:button:1": "JavaScript",
-            "fc:frame:button:2": "Python",
-            "fc:frame:button:3": "Java",
-            "fc:frame:button:4": "C++",
           })}
         </p>
       </div>
