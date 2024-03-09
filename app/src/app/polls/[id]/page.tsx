@@ -26,9 +26,9 @@ export async function generateMetadata(
   };
 
   return {
-    title: response.question,
+    title: response == null ? "NOT FOUND" : response.question,
     openGraph: {
-      title: response.question,
+      title: response == null ? "NIL" : response.question,
       images: [`/api/image?id=${id}`],
     },
     other: {
