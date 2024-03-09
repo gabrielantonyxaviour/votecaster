@@ -16,13 +16,6 @@ export default async function handler(
       console.log("IMAGE HOST: ", process.env.IMG_HOST);
       const IMG_HOST = process.env.IMG_HOST || "";
 
-      const response = axios.post(IMG_HOST + "/api/vote", req.body, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      console.log(response);
-
       let buttonId = 0;
       buttonId = req.body?.untrustedData?.buttonIndex || 0;
 
