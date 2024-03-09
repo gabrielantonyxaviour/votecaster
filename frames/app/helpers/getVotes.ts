@@ -15,7 +15,7 @@ export default async function getVotes(req: {
 
     console.log(fetchedVotes);
 
-    if (fetchError || fetchedVotes == null || fetchedVotes.length === 0) {
+    if (fetchError || fetchedVotes == null) {
       return {
         message: "Votes does not exist",
         response: null,
@@ -43,7 +43,7 @@ export default async function getVotes(req: {
         response: {
           votes,
           total: fetchedVotes.length == 0 ? 1 : fetchedVotes.length,
-          maxVotes: max,
+          maxVotes: max == 0 ? 1 : max,
         },
       };
     }
