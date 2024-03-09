@@ -12,7 +12,7 @@ export default async function getPoll(req: {
       .from("polls")
       .select("*")
       .eq("id", pollId);
-
+    console.log(pollId);
     console.log(fetchedPoll);
 
     if (fetchError || fetchedPoll == null || fetchedPoll.length === 0) {

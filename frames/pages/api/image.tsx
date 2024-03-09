@@ -21,7 +21,7 @@ export default async function handler(
   let { response: poll } = await getPoll({ pollId: pollId.toString() });
 
   let pollSvg;
-  if (poll.length == 0) {
+  if (poll == null || poll.length == 0) {
     pollSvg = await satori(
       <div
         style={{
