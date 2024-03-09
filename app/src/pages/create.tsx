@@ -32,6 +32,7 @@ export default function CreatePage() {
   const [txHash, setTxHash] = useState<string>("");
   const [isDisabled, setIsDisabled] = useState(false);
   const [status, setStatus] = useState("");
+
   const { data, loading, error }: QueryResponse = useQuery<Data>(
     `  query MyQuery {
   Socials(

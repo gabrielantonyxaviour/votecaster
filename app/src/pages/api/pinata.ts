@@ -40,7 +40,7 @@ export default async function handler(
 
     res.status(200).json({
       IpfsHash:
-        "https://amber-accessible-porpoise-584.mypinata.cloud/ipfs/" +
+        "https://silver-absolute-wren-28.mypinata.cloud/ipfs/" +
         response.data.IpfsHash,
     });
   } catch (error) {
