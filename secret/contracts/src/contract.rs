@@ -4,7 +4,7 @@ use cosmwasm_std::{
     entry_point, to_binary, Binary, Deps, DepsMut, Env, MessageInfo, Response, StdError, StdResult,
 };
 
-use crate::msg::{ExecuteMsg, InstantiateMsg, PollCountResponse,PollResponse, QueryMsg, ResultsResponse, VoteCountResponse, IsVotedResponse};
+use crate::msg::{ExecuteMsg, InstantiateMsg, PollCountResponse,PollResponse, QueryMsg, ResultsResponse, VoteCountResponse, HasVotedResponse};
 use crate::state::{ Poll, Polls,POLL_COUNT, POLLS};
 
 #[entry_point]
@@ -69,18 +69,18 @@ pub fn try_vote(deps: DepsMut, env: Env, info: MessageInfo, poll_id: u64, farcas
       });
    
     // check if poll exists
-    if(poll_id < 0 || poll_id >= poll_count){
+    if poll_id >= poll_count {
         return Err(StdError::generic_err("Invalid poll id"));
     }
 
     if let Some(poll) = polls.polls.get_mut(poll_id as usize) {
         // check if voting is live
-        if(env.block.time.seconds() > poll.created_at.seconds() + poll.validity){
+        if env.block.time.seconds() > poll.created_at.seconds() + poll.validity {
             return Err(StdError::generic_err("Voting has ended"));
         }
         
         // check if already voted
-        if(poll.has_voted.contains_key(&farcaster_id)){
+        if poll.has_voted.contains_key(&farcaster_id) {
             return Err(StdError::generic_err("Already voted")); 
         }
     
@@ -103,6 +103,7 @@ pub fn query(deps: Deps, _env: Env, msg: QueryMsg) -> StdResult<Binary> {
         QueryMsg::GetPollCount {} => to_binary(&query_poll_count(deps)?),  
         QueryMsg::GetVoteCount {poll_id} => to_binary(&query_vote_count(deps, poll_id)?),
         QueryMsg::GetResults {poll_id} => to_binary(&query_get_results(deps, poll_id)?),  
+        QueryMsg::GetVoted {poll_id, farcaster_id} => to_binary(&query_check_voted(deps, poll_id, farcaster_id)?),
     }
 }
 
@@ -122,14 +123,14 @@ fn query_vote_count(deps: Deps, poll_id: u64) -> StdResult<VoteCountResponse> {
     Ok(VoteCountResponse { vote_count: poll.vote_count })
 }
 
-fn query_check_voted(deps: Deps, poll_id: u64) -> StdResult<IsVotedResponse>m {
+fn query_check_voted(deps: Deps, poll_id: u64, farcaster_id: u64) -> StdResult<HasVotedResponse> {
     let mut polls = POLLS
     .load(deps.storage)
     .unwrap_or(Polls {
         polls: Vec::new(),
     });
   let poll = polls.polls.get(poll_id as usize).unwrap();
-  Ok(IsVotedResponse {is_voted: poll.has_voted.contains_key(&farcaster_id)}); 
+  Ok(HasVotedResponse { has_voted: poll.has_voted.contains_key(&farcaster_id)})
 }
 
 fn query_get_results(deps: Deps, poll_id: u64) -> StdResult<ResultsResponse> {

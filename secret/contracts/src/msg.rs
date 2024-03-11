@@ -23,6 +23,7 @@ pub enum QueryMsg {
     GetResults {poll_id: u64},
     GetPollCount {},
     GetVoteCount {poll_id: u64},
+    GetVoted {poll_id: u64, farcaster_id: u64},
 }
 
 // We define a custom struct for each query response
@@ -46,7 +47,8 @@ pub struct PollResponse{
     pub poll: Poll,
 }
 
+#[derive(Serialize, Deserialize, Clone, Debug, Eq, PartialEq, JsonSchema)]
 
-pub strcut IsVotedResponse{
-    pub is_voted: bool,
+pub struct HasVotedResponse{
+    pub has_voted: bool,
 }
