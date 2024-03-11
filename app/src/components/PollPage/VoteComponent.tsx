@@ -210,7 +210,7 @@ export default function VoteComponent({ poll }: HomeProps) {
                             ("https://testnet.ping.pub/secret/tx/" +
                               tx?.transactionHash)) as string,
                         ]);
-                        vote({
+                        await vote({
                           pollId: poll.id,
                           nullifier: (data as any).Socials.Social[0].userId,
                           vote: selectedOption,

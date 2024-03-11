@@ -15,14 +15,9 @@ export default async function getVotes(req: {
 
     console.log(fetchedVotes);
 
-    if (fetchError || fetchedVotes == null || fetchedVotes.length === 0) {
-      return {
-        message: "Votes does not exist",
-        response: null,
-      };
-    } else {
-      const votes = [0, 0, 0, 0];
-      let max = 0;
+    const votes = [0, 0, 0, 0];
+    let max = 0;
+    if (fetchedVotes != null) {
       fetchedVotes.forEach((vote: any) => {
         if (vote.vote === 0) {
           votes[0] = votes[0] + 1;
@@ -38,15 +33,21 @@ export default async function getVotes(req: {
           if (max < votes[3]) max = votes[3];
         }
       });
-      return {
-        message: "Success",
-        response: {
-          votes,
-          total: fetchedVotes.length == 0 ? 1 : fetchedVotes.length,
-          maxVotes: max,
-        },
-      };
     }
+
+    return {
+      message: "Success",
+      response: {
+        votes,
+        total:
+          fetchedVotes != null
+            ? fetchedVotes.length == 0
+              ? 1
+              : fetchedVotes.length
+            : 0,
+        maxVotes: max,
+      },
+    };
   } catch (error) {
     console.error("Error getting votes:", error);
     return { message: "Internal Server Error", response: null };

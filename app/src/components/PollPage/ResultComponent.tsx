@@ -48,24 +48,31 @@ export default function ResultComponent({ poll }: { poll: any }) {
       const connection = await connectSecretWallet(address as string);
 
       if (timeLeft === 0 && fetchedResults == false) {
-        const my_query = await connection?.secretjs.query.compute.queryContract(
-          {
-            contract_address: secret_contract_address,
-            code_hash: secret_contract_hash,
-            query: { get_results: { poll_id: poll.id } },
-          }
-        );
-        console.log(my_query);
-        setFetchedResults(true);
+        console.log("Querying resultts");
+        try {
+          const my_query =
+            await connection?.secretjs.query.compute.queryContract({
+              contract_address: secret_contract_address,
+              code_hash: secret_contract_hash,
+              query: { get_results: { poll_id: poll.id } },
+            });
+          console.log(my_query);
+          setFetchedResults(true);
+        } catch (e) {
+          console.log(e);
+        }
       } else if (timeLeft > 0) {
-        const my_query = await connection?.secretjs.query.compute.queryContract(
-          {
-            contract_address: secret_contract_address,
-            code_hash: secret_contract_hash,
-            query: { get_vote_count: { poll_id: poll.id } },
-          }
-        );
-        console.log(my_query);
+        try {
+          const my_query =
+            await connection?.secretjs.query.compute.queryContract({
+              contract_address: secret_contract_address,
+              code_hash: secret_contract_hash,
+              query: { get_vote_count: { poll_id: poll.id } },
+            });
+          console.log(my_query);
+        } catch (e) {
+          console.log(e);
+        }
       }
     })();
   }, [address, timeLeft]);
@@ -153,17 +160,16 @@ export default function ResultComponent({ poll }: { poll: any }) {
                   <p className="text-[#BF080A] font-bold text-xl text-center">
                     POLL IS STILL ONGOING. RESULTS IN
                   </p>
-                  {timeLeft > 0 && (
-                    <p className="text-[#BF080A] pt-4 text-2xl  text-center">
-                      {Math.floor(timeLeft / 86400)} Days,{" "}
-                      {Math.floor((timeLeft % 86400) / 3600) < 10 ? "0" : ""}
-                      {Math.floor((timeLeft % 86400) / 3600)}:
-                      {Math.floor((timeLeft % 3600) / 60) < 10 ? "0" : ""}
-                      {Math.floor((timeLeft % 3600) / 60)}:
-                      {timeLeft % 60 < 10 ? "0" : ""}
-                      {timeLeft % 60}
-                    </p>
-                  )}
+
+                  <p className="text-[#BF080A] pt-4 text-2xl  text-center">
+                    {Math.floor(timeLeft / 86400)} Days,{" "}
+                    {Math.floor((timeLeft % 86400) / 3600) < 10 ? "0" : ""}
+                    {Math.floor((timeLeft % 86400) / 3600)}:
+                    {Math.floor((timeLeft % 3600) / 60) < 10 ? "0" : ""}
+                    {Math.floor((timeLeft % 3600) / 60)}:
+                    {timeLeft % 60 < 10 ? "0" : ""}
+                    {timeLeft % 60}
+                  </p>
                   <div className="flex justify-center pt-20">
                     <SelectableButton
                       isSelected={true}
