@@ -67,7 +67,7 @@ export default function VoteComponent({ poll }: HomeProps) {
     { cache: true }
   );
   useEffect(() => {
-    if (poll != null) setReady(true);
+    if (poll != null && poll.question != "") setReady(true);
   }, [poll]);
   useEffect(() => {
     if ((window as any).ethereum != undefined) {
@@ -230,20 +230,22 @@ export default function VoteComponent({ poll }: HomeProps) {
             </div>
           </div>
         )}
-        <div className="h-[80%] text-[#BF080A] bg-[#FDE2C4] w-[35%] my-auto p-12">
-          <p className="text-[#BF080A] font-bold text-3xl text-center pb-4">
-            LOGS
-          </p>
-
-          {logs.map((log, index) => (
-            <p
-              key={index}
-              className="text-sm py-1 whitespace-normal text-nowrap overflow-x-auto "
-            >
-              {log}
+        {ready && (
+          <div className="h-[80%] text-[#BF080A] bg-[#FDE2C4] w-[35%] my-auto p-12">
+            <p className="text-[#BF080A] font-bold text-3xl text-center pb-4">
+              LOGS
             </p>
-          ))}
-        </div>
+
+            {logs.map((log, index) => (
+              <p
+                key={index}
+                className="text-sm py-1 whitespace-normal text-nowrap overflow-x-auto "
+              >
+                {log}
+              </p>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
