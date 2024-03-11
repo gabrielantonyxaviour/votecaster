@@ -24,7 +24,7 @@ export default function Confirmation({
       <p className="text-center font-bold text-[#BF080A] text-2xl">
         CONFIRMATION
       </p>
-      {false && (
+      {!hasProfile && (
         <p className="font-semibold text-[#BF080A] text-md text-center px-4 pt-4">
           Connected Wallet does not have a farcaster account
         </p>
@@ -40,7 +40,7 @@ export default function Confirmation({
           <SelectableButton
             text="📝 Post your poll"
             isSelected={false}
-            disabled={false}
+            disabled={!isEnabled}
             click={post}
           />
         </div>
