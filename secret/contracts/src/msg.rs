@@ -45,3 +45,8 @@ pub struct  ResultsResponse{
 pub struct PollResponse{
     pub poll: Poll,
 }
+
+
+pub strcut IsVotedResponse{
+    pub is_voted: bool,
+}

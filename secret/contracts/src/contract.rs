@@ -4,7 +4,7 @@ use cosmwasm_std::{
     entry_point, to_binary, Binary, Deps, DepsMut, Env, MessageInfo, Response, StdError, StdResult,
 };
 
-use crate::msg::{ExecuteMsg, InstantiateMsg, PollCountResponse,PollResponse, QueryMsg, ResultsResponse, VoteCountResponse};
+use crate::msg::{ExecuteMsg, InstantiateMsg, PollCountResponse,PollResponse, QueryMsg, ResultsResponse, VoteCountResponse, IsVotedResponse};
 use crate::state::{ Poll, Polls,POLL_COUNT, POLLS};
 
 #[entry_point]
@@ -120,6 +120,16 @@ fn query_vote_count(deps: Deps, poll_id: u64) -> StdResult<VoteCountResponse> {
       });
     let poll = polls.polls.get(poll_id as usize).unwrap();
     Ok(VoteCountResponse { vote_count: poll.vote_count })
+}
+
+fn query_check_voted(deps: Deps, poll_id: u64) -> StdResult<IsVotedResponse>m {
+    let mut polls = POLLS
+    .load(deps.storage)
+    .unwrap_or(Polls {
+        polls: Vec::new(),
+    });
+  let poll = polls.polls.get(poll_id as usize).unwrap();
+  Ok(IsVotedResponse {is_voted: poll.has_voted.contains_key(&farcaster_id)}); 
 }
 
 fn query_get_results(deps: Deps, poll_id: u64) -> StdResult<ResultsResponse> {

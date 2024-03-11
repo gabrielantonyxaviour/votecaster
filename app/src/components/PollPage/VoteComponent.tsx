@@ -48,7 +48,6 @@ export default function VoteComponent({ poll }: HomeProps) {
   const [hasProfile, setHasProfile] = useState(false);
   const [logs, setLogs] = useState<string[]>([]);
   const [walletClient, setWalletClient] = useState<any>();
-  const [proof, setProof] = useState("");
   const [ready, setReady] = useState(false);
   const {
     data,
