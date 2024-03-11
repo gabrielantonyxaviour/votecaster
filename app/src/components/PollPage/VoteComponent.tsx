@@ -9,27 +9,7 @@ import { useQuery } from "@airstack/airstack-react";
 import { ConnectKitButton } from "connectkit";
 import connectSecretWallet from "@/utils/connectSecretWallet";
 
-import {
-  BarretenbergBackend,
-  CompiledCircuit,
-} from "@noir-lang/backend_barretenberg";
-import {
-  ForeignCallHandler,
-  ForeignCallInput,
-  ForeignCallOutput,
-  Noir,
-} from "@noir-lang/noir_js";
-import {
-  bytesToHex,
-  createWalletClient,
-  custom,
-  encodePacked,
-  hashMessage,
-  hexToBigInt,
-  keccak256,
-  recoverPublicKey,
-  toBytes,
-} from "viem";
+import { createWalletClient, custom } from "viem";
 import { scrollSepolia } from "viem/chains";
 
 import vote from "@/utils/supabase/vote";
@@ -166,57 +146,76 @@ export default function VoteComponent({ poll }: HomeProps) {
                     isSelected={false}
                     disabled={selectedOption == 4}
                     click={async () => {
-                      const result = await connectSecretWallet(
-                        address as string
-                      );
-                      setLogs((prev) => [
-                        ...prev,
-                        "[" +
-                          Number(prev.length + 1) +
-                          "] " +
-                          "Transaction Pending... ⏳",
-                      ]);
-                      console.log({
-                        farcaster_id: Number(
-                          (data as any).Socials.Social[0].userId
-                        ),
-                        poll_id: poll.id,
-                        vote: selectedOption,
+                      const { response: isVoted } = await getVoted({
+                        pollId: poll.id,
+                        nullifier: (data as any).Socials.Social[0].userId,
                       });
-                      const tx =
-                        await result?.secretjs.tx.compute.executeContract(
-                          {
-                            sender: result.wallet.address,
-                            contract_address: secret_contract_address,
-                            msg: {
-                              vote: {
-                                farcaster_id: Number(
-                                  (data as any).Socials.Social[0].userId
-                                ),
-                                poll_id: poll.id,
-                                vote: selectedOption,
-                              },
-                            },
-                            code_hash: secret_contract_hash,
-                          },
-                          { gasLimit: 100_000 }
+                      if (isVoted) {
+                        setLogs((prev) => [
+                          ...prev,
+                          "[" +
+                            Number(prev.length + 1) +
+                            "] " +
+                            "Already Voted",
+                        ]);
+                      } else {
+                        const result = await connectSecretWallet(
+                          address as string
                         );
-                      console.log(tx);
-                      setLogs((prev) => [
-                        ...prev,
-                        "[" +
-                          Number(prev.length + 1) +
-                          "] " +
-                          "Transaction Confimed ✅",
-                      ]);
-                      setLogs((prev) => [
-                        ...prev,
-                        ("[" +
-                          Number(prev.length + 1) +
-                          "] " +
-                          ("https://testnet.ping.pub/secret/tx/" +
-                            tx?.transactionHash)) as string,
-                      ]);
+                        setLogs((prev) => [
+                          ...prev,
+                          "[" +
+                            Number(prev.length + 1) +
+                            "] " +
+                            "Transaction Pending... ⏳",
+                        ]);
+                        console.log({
+                          farcaster_id: Number(
+                            (data as any).Socials.Social[0].userId
+                          ),
+                          poll_id: poll.id,
+                          vote: selectedOption,
+                        });
+                        const tx =
+                          await result?.secretjs.tx.compute.executeContract(
+                            {
+                              sender: result.wallet.address,
+                              contract_address: secret_contract_address,
+                              msg: {
+                                vote: {
+                                  farcaster_id: Number(
+                                    (data as any).Socials.Social[0].userId
+                                  ),
+                                  poll_id: poll.id,
+                                  vote: selectedOption,
+                                },
+                              },
+                              code_hash: secret_contract_hash,
+                            },
+                            { gasLimit: 100_000 }
+                          );
+                        console.log(tx);
+                        setLogs((prev) => [
+                          ...prev,
+                          "[" +
+                            Number(prev.length + 1) +
+                            "] " +
+                            "Transaction Confimed ✅",
+                        ]);
+                        setLogs((prev) => [
+                          ...prev,
+                          ("[" +
+                            Number(prev.length + 1) +
+                            "] " +
+                            ("https://testnet.ping.pub/secret/tx/" +
+                              tx?.transactionHash)) as string,
+                        ]);
+                        vote({
+                          pollId: poll.id,
+                          nullifier: (data as any).Socials.Social[0].userId,
+                          vote: selectedOption,
+                        });
+                      }
                     }}
                   />
                 </div>
