@@ -13,7 +13,7 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const id = params.id;
   const { response } = await getPoll({ pollId: id });
-  if (response.length == 0 || response == null || response == undefined) {
+  if (response == null || response.length == 0 || response == undefined) {
     console.log("No poll found");
   }
   const fcMetadata: Record<string, string> = {

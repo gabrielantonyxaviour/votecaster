@@ -94,23 +94,6 @@ export default function VoteComponent({ poll }: HomeProps) {
     }
   }, [data, loading, queryError]);
 
-  const foreignCallHandler: ForeignCallHandler = async (
-    name: string,
-    inputs: ForeignCallInput[]
-  ): Promise<ForeignCallOutput[]> => {
-    if (data != null) {
-      const fid = (data as any).Socials.Social[0].userId;
-      console.log(parseInt(fid));
-      console.log(parseInt(fid).toString(16));
-      console.log(["0x" + parseInt(fid).toString(16).padStart(64, "0")]);
-      return ["0x" + parseInt(fid).toString(16).padStart(64, "0")];
-    } else {
-      return [
-        "0x000000000000000000000000000000000000000000000000000000000003cee9",
-      ];
-    }
-  };
-
   return (
     <div className="max-w-[1200px] mx-auto h-screen py-8">
       <div className="flex justify-between pb-12 ">
