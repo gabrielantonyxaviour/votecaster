@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import SelectableButton from "../SelectableButton";
+import { faL } from "@fortawesome/free-solid-svg-icons";
 
 export default function Confirmation({
   post,
@@ -23,7 +24,7 @@ export default function Confirmation({
       <p className="text-center font-bold text-[#BF080A] text-2xl">
         CONFIRMATION
       </p>
-      {!hasProfile && (
+      {false && (
         <p className="font-semibold text-[#BF080A] text-md text-center px-4 pt-4">
           Connected Wallet does not have a farcaster account
         </p>
@@ -39,7 +40,7 @@ export default function Confirmation({
           <SelectableButton
             text="📝 Post your poll"
             isSelected={false}
-            disabled={!isEnabled}
+            disabled={false}
             click={post}
           />
         </div>
