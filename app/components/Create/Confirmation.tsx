@@ -23,11 +23,11 @@ export default function Confirmation({
       <p className="text-center font-bold text-[#450C63] text-2xl">
         CONFIRMATION
       </p>
-      {!hasProfile && (
+      {/* {!hasProfile && (
         <p className="font-semibold text-[#450C63] text-md text-center px-4 pt-4">
           Connected Wallet does not have a farcaster account
         </p>
-      )}
+      )} */}
       {(status == "Uploading to IPFS..." ||
         status == "Initiating transaction...") && (
         <p className="font-semibold text-[#450C63] text-md text-center px-4 pt-4">

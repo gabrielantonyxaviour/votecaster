@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useQuery } from "@airstack/airstack-react";
 import { useAccount, useWriteContract } from "wagmi";
 import axios from "axios";
-import { abi, deployment } from "../../utils/constants";
+import { abi, deployment } from "@/utils/constants";
 import { scrollSepolia } from "viem/chains";
 import { createPublicClient, http } from "viem";
 import Navbar from "@/components/Navbar";
@@ -43,7 +43,10 @@ export default function CreatePage() {
   );
 
   useEffect(() => {
-    if (data?.Socials?.Social?.length > 0) {
+    if (
+      data?.Wallet?.socials?.length != undefined &&
+      data?.Wallet?.socials?.length > 0
+    ) {
       setHasProfile(true);
     } else {
       setHasProfile(false);
@@ -85,7 +88,8 @@ export default function CreatePage() {
                           pollId: logs[0].args.pollId,
                           question: poll.question,
                           creator: address as string,
-                          farcaster_username: data.Socials.Social[0].fnames[0],
+                          farcaster_username: data?.Wallet.socials[0]
+                            .profileName[0] as string,
                           optionA: poll.options[0] || "",
                           optionB: poll.options[1] || "",
                           optionC: poll.options[2] || "",
@@ -113,9 +117,7 @@ export default function CreatePage() {
                 console.error(e);
               }
             }}
-            isEnabled={
-              !isDisabled && poll.question && hasProfile && poll.duration
-            }
+            isEnabled={!isDisabled && poll.question != "" && poll.duration != 0}
             status={status}
             isSigned={false}
             hasProfile={hasProfile}

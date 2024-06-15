@@ -64,12 +64,6 @@ export default function YourPolls() {
             <p className="font-semibold text-lg mb-2">
               Connect wallet to view your polls
             </p>
-          ) : !hasProfile ? (
-            <>
-              <p className="font-semibold text-lg mb-2">
-                Connected Wallet does not have a Farcaster Profile 🙁
-              </p>
-            </>
           ) : (
             <>
               <p className="font-semibold text-lg mb-2">
