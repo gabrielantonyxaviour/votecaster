@@ -7,6 +7,8 @@ export default async function getPollsByCreator(req: {
   creator: string;
 }): Promise<{ message: string; response: any }> {
   const { creator } = req;
+  console.log("CREATOR");
+  console.log(creator);
   try {
     const { data: fetchedPolls, error: fetchError } = await supabase
       .from("polls")

@@ -4,7 +4,7 @@ import { ConnectKitProvider, getDefaultConfig } from "connectkit";
 
 import React, { useEffect, useState } from "react";
 
-import { scrollSepolia } from "viem/chains";
+import { sepolia } from "viem/chains";
 import { WagmiProvider, createConfig, http } from "wagmi";
 
 import PollPageComponent from "./PollPageComponent";
@@ -12,14 +12,15 @@ import { AirstackProvider } from "@airstack/airstack-react";
 
 const projectId = process.env["NEXT_PUBLIC_PROJECT_ID"] ?? "";
 const airstackApiKey = process.env["NEXT_PUBLIC_AIRSTACK_API_KEY"] ?? "";
+const sepoliaRpcUrl = process.env["NEXT_PUBLIC_SEPOLIA_RPC_URL"] ?? "";
 const config = createConfig(
   getDefaultConfig({
     appName: "Priv Cast",
     walletConnectProjectId: projectId,
-    chains: [scrollSepolia],
+    chains: [sepolia],
     ssr: true,
     transports: {
-      [scrollSepolia.id]: http("https://rpc.ankr.com/scroll_sepolia_testnet"),
+      [sepolia.id]: http(sepoliaRpcUrl),
     },
     appDescription:
       "PRIVACY PRESERVED, SYBIL RESISTANT POLLS NOW IN FARCASTER.",

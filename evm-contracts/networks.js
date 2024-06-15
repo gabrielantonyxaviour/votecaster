@@ -16,7 +16,9 @@ if (SECOND_PRIVATE_KEY) {
 
 const networks = {
   ethereumSepolia: {
-    url: process.env.SEPOLIA_RPC_URL || "UNSET",
+    url:
+      "https://eth-sepolia.g.alchemy.com/v2/" +
+      process.env.ALCHEMY_API_KEY_SEPOLIA,
     gasPrice: undefined,
     nonce: undefined,
     accounts,
@@ -24,6 +26,7 @@ const networks = {
     chainId: 11155111,
     confirmations: DEFAULT_VERIFICATION_BLOCK_CONFIRMATIONS,
     nativeCurrencySymbol: "ETH",
+    privCastDeployment: "",
   },
 };
 

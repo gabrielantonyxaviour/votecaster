@@ -29,7 +29,7 @@ import {
   recoverPublicKey,
   toBytes,
 } from "viem";
-import { scrollSepolia } from "viem/chains";
+import { sepolia } from "viem/chains";
 
 import vote from "@/utils/supabase/vote";
 import getVoted from "@/utils/supabase/getVoted";
@@ -69,7 +69,7 @@ export default function VoteComponent({ poll }: HomeProps) {
     if ((window as any).ethereum != undefined) {
       setWalletClient(
         createWalletClient({
-          chain: scrollSepolia,
+          chain: sepolia,
           transport: custom((window as any).ethereum),
         })
       );

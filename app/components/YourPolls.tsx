@@ -42,6 +42,7 @@ export default function YourPolls() {
       ) {
         setHasProfile(true);
         const polls = await getPollsByCreator({ creator: address as string });
+        console.log("POLLS");
         console.log(polls);
         setPolls(polls.response);
       } else {
@@ -50,9 +51,6 @@ export default function YourPolls() {
     })();
   }, [data, loading, queryError]);
 
-  useEffect(() => {
-    console.log(address);
-  }, []);
   return (
     <div className="w-full rounded-xl bg-[#FBF6FF] text-[#450C63] px-14 h-full pt-10   mt-4 ">
       <div className="flex justify-between">

@@ -20,7 +20,7 @@ import {
   recoverPublicKey,
   toBytes,
 } from "viem";
-import { scrollSepolia } from "viem/chains";
+import { sepolia } from "viem/chains";
 import { ConnectKitButton } from "connectkit";
 import { useAccount } from "wagmi";
 import { useQuery } from "@airstack/airstack-react";
@@ -75,7 +75,7 @@ export default function NoirComponent() {
     if ((window as any).ethereum != undefined) {
       setWalletClient(
         createWalletClient({
-          chain: scrollSepolia,
+          chain: sepolia,
           transport: custom((window as any).ethereum),
         })
       );

@@ -22,9 +22,6 @@ contract PrivCast{
     uint256 public pollIdCounter;
     address public anonAadhaarVerifierAddr;
 
-    constructor() {
-        pollIdCounter=0;
-    }
 
     event PollCreated(uint256 pollId, address creatorAddress, string pollUri, uint256 createdTimestamp, uint256 validityDuration);
     event VoteCast(uint256 pollId, uint256 voterFarcasterId, address voterAddress);

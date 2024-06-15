@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import { useQuery } from "@airstack/airstack-react";
 import { useAccount, useWriteContract } from "wagmi";
 import axios from "axios";
-import { abi, deployment } from "@/utils/constants";
-import { scrollSepolia } from "viem/chains";
+import { privCastAbi, privCastAddress } from "@/utils/constants";
+import { sepolia } from "viem/chains";
 import { createPublicClient, http } from "viem";
 import Navbar from "@/components/Navbar";
 import Confirmation from "@/components/Create/Confirmation";
@@ -74,44 +74,46 @@ export default function CreatePage() {
                 setStatus("Initiating transaction...");
 
                 const publicClient = createPublicClient({
-                  chain: scrollSepolia,
+                  chain: sepolia,
                   transport: http(),
                 });
 
                 const unwatch = publicClient.watchContractEvent({
-                  address: deployment,
-                  abi,
+                  address: privCastAddress,
+                  abi: privCastAbi,
                   onLogs: async (logs) => {
-                    if (logs[0].args.creatorAddress === address) {
-                      const { response: createPollResponse } = await createPoll(
-                        {
-                          pollId: logs[0].args.pollId,
-                          question: poll.question,
-                          creator: address as string,
-                          farcaster_username: data?.Wallet.socials[0]
-                            .profileName[0] as string,
-                          optionA: poll.options[0] || "",
-                          optionB: poll.options[1] || "",
-                          optionC: poll.options[2] || "",
-                          optionD: poll.options[3] || "",
-                          isAnon: false,
-                          validity: poll.duration,
-                        }
-                      );
-                      setPollId(createPollResponse.id);
-                      setStatus("Transaction Confirmed!");
-                      unwatch();
-                    }
+                    console.log("LOGS RECEIVED");
+                    console.log(logs);
+                    // if (logs[0]..creatorAddress === address) {
+                    //   const { response: createPollResponse } = await createPoll(
+                    //     {
+                    //       pollId: logs[0].args.pollId,
+                    //       question: poll.question,
+                    //       creator: address as string,
+                    //       farcaster_username: data?.Wallet.socials[0]
+                    //         .profileName[0] as string,
+                    //       optionA: poll.options[0] || "",
+                    //       optionB: poll.options[1] || "",
+                    //       optionC: poll.options[2] || "",
+                    //       optionD: poll.options[3] || "",
+                    //       isAnon: false,
+                    //       validity: poll.duration,
+                    //     }
+                    //   );
+                    //   setPollId(createPollResponse.id);
+                    //   setStatus("Transaction Confirmed!");
+                    //   unwatch();
+                    // }
                   },
                 });
 
                 const tx = await createPollContractCall({
-                  abi,
-                  address: deployment,
+                  abi: privCastAbi,
+                  address: privCastAddress,
                   functionName: "createPoll",
                   args: [res.data.IpfsHash, poll.duration],
                 });
-                setTxHash("https://sepolia.scrollscan.dev/tx/" + tx);
+                setTxHash("https://sepolia.etherscan.io/tx/" + tx);
                 setStatus("Waiting for Confirmation...");
               } catch (e) {
                 console.error(e);

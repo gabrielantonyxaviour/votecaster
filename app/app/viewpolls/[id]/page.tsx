@@ -51,9 +51,7 @@ export default function PollPage({
     process.env["HOST"] && (
       <PollPageWrapper
         id={params.id}
-        result={JSON.parse(
-          searchParams.results == "true" ? searchParams.results : "false"
-        )}
+        result={searchParams.results == "true" ? true : false}
       />
     )
   );
