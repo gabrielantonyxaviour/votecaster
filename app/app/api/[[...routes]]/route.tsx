@@ -6,7 +6,8 @@ import { Button, Frog, TextInput } from "frog";
 import { devtools } from "frog/dev";
 import { handle } from "frog/next";
 import { serveStatic } from "frog/serve-static";
-import { BytesToNumberOpts } from "viem";
+import { get } from "http";
+import { BytesToNumberOpts, parseEther } from "viem";
 
 type State = {
   question: string;
@@ -73,6 +74,30 @@ app.frame("/", (c) => {
       <Button value="apples">Create 🪄</Button>,
       <Button.Link href="http://privcast.com/">Visit PrivCast</Button.Link>,
     ],
+  });
+});
+app.frame("/test", (c) => {
+  return c.res({
+    action: "/tx",
+    image: (
+      <div
+        style={{
+          alignItems: "center",
+          background: "white",
+          backgroundSize: "100% 100%",
+          display: "flex",
+          flexDirection: "column",
+          flexWrap: "nowrap",
+          height: "100%",
+          justifyContent: "center",
+          textAlign: "center",
+          width: "100%",
+        }}
+      >
+        <img key={2} src="/frames/home.png" />
+      </div>
+    ),
+    intents: [<Button action="/tx">Test</Button>],
   });
 });
 app.frame("/createqn", (c) => {

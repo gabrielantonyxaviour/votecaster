@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import ResultComponent from "./ResultComponent";
-import VoteComponent from "./VoteComponent";
+// import VoteComponent from "./VoteComponent";
 import getPoll from "@/utils/supabase/getPoll";
 
 type PollProps = {
@@ -28,9 +28,9 @@ export default function PollPageComponent({ id, result }: PollProps) {
     })();
   }, []);
 
-  return result ? (
-    <ResultComponent poll={poll} />
-  ) : (
-    <VoteComponent poll={poll} />
-  );
+  return result && <ResultComponent poll={poll} />;
+  // :
+  // (
+  //   <VoteComponent poll={poll} />
+  // );
 }
