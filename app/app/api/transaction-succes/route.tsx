@@ -10,6 +10,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   console.log("body");
   console.log(body);
   const frameMessage = await getFrameMessage(body);
+  const production = process.env.NEXT_PUBLIC_PRODUCTION == "true";
   console.log("frameMessage");
   console.log(frameMessage);
   return new NextResponse(
@@ -20,7 +21,9 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
         },
       ],
       image: {
-        src: `http://localhost:3000/frames/theme2.png`,
+        src: `${
+          production ? "https://privcast.com" : "http://localhost:3000"
+        }/frames/theme2.png`,
       },
     })
   );
