@@ -3409,7 +3409,7 @@ app.frame("/create", (c) => {
       intents: [
         <Button action="/choosemins">Back ↩️</Button>,
         <Button action="/choosetheme/0">Theme 🖼️</Button>,
-        <Button value="op2">Create 🪄</Button>,
+        <Button action="/tx">Next ➡️</Button>,
       ],
     });
 });
@@ -3768,7 +3768,7 @@ app.frame("/createpreview", (c) => {
     intents: [
       <Button action="/choosemins">Back ↩️</Button>,
       <Button action="/choosetheme/0">Theme 🖼️</Button>,
-      <Button value="op2">Create 🪄</Button>,
+      <Button action="/tx">Next ➡️</Button>,
     ],
   });
 });
@@ -4013,7 +4013,7 @@ app.frame("/poll/:[pollid]", async (c) => {
             width: "800px",
             textWrap: "wrap",
             zIndex: 10,
-            color: "black",
+            color: "white",
             justifyContent: "center",
             textAlign: "center",
           }}
@@ -4030,7 +4030,7 @@ app.frame("/poll/:[pollid]", async (c) => {
             width: "800px",
             textWrap: "wrap",
             zIndex: 10,
-            color: "black",
+            color: "white",
           }}
         >
           {fetched?.op1}
@@ -4045,7 +4045,7 @@ app.frame("/poll/:[pollid]", async (c) => {
             width: "800px",
             textWrap: "wrap",
             zIndex: 10,
-            color: "black",
+            color: "white",
           }}
         >
           {fetched?.op2}
@@ -4060,7 +4060,7 @@ app.frame("/poll/:[pollid]", async (c) => {
             width: "800px",
             textWrap: "wrap",
             zIndex: 10,
-            color: "black",
+            color: "white",
           }}
         >
           {fetched?.op3}
@@ -4075,7 +4075,7 @@ app.frame("/poll/:[pollid]", async (c) => {
             width: "800px",
             textWrap: "wrap",
             zIndex: 10,
-            color: "black",
+            color: "white",
           }}
         >
           {fetched?.op4}

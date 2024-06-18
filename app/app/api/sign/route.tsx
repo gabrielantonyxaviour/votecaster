@@ -5,7 +5,6 @@ async function getResponse(req: NextRequest): Promise<NextResponse | Response> {
   const timestamp = Date.now();
   process.env.TIMESTAMP = JSON.stringify(timestamp);
   const txData: FrameTransactionResponse = {
-    // Sepolia
     chainId: "eip155:11155111",
     method: "eth_personalSign",
     params: {
