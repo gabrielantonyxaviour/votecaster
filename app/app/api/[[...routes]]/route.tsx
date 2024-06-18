@@ -76,6 +76,7 @@ app.frame("/", (c) => {
     ],
   });
 });
+
 app.frame("/test", (c) => {
   return c.res({
     action: "/tx",
@@ -829,7 +830,7 @@ app.frame("/chooseday", (c) => {
   const op4 = frameData?.inputText;
   console.log(op4);
   const state = deriveState((previousState) => {
-    if (op4 !== undefined) {
+    if (op4 != undefined) {
       previousState.options.d = op4;
       if (previousState.optionsCreated == 3) previousState.optionsCreated = 4;
     }
@@ -2695,10 +2696,11 @@ app.frame("/create", (c) => {
     }
   });
   if (
-    mins == undefined ||
-    isNaN(parsedMins) ||
-    mins!.length > 2 ||
-    mins!.length < 0
+    frameData?.buttonIndex != 1 &&
+    (mins == undefined ||
+      isNaN(parsedMins) ||
+      mins!.length > 2 ||
+      mins!.length < 0)
   ) {
     return c.res({
       action: "/createpreview",
