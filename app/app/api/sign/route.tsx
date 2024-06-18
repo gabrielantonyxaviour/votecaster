@@ -10,7 +10,8 @@ async function getResponse(req: NextRequest): Promise<NextResponse | Response> {
     params: {
       abi: [],
       to: `0x89c27f76EEF3e09D798FB06a66Dd461d7d21f111`,
-      value: "Hello",
+      data: "0x3f6f8421b793d5a2897c0c24a1e3f8b6e28478e6d02b2a14c759c9b70b27e6f4",
+      value: "0",
     },
   };
   return NextResponse.json(txData);
