@@ -1,11 +1,11 @@
 import { FrameTransactionResponse } from "@coinbase/onchainkit/frame";
 import { NextRequest, NextResponse } from "next/server";
-
+import { baseSepolia } from "viem/chains";
 async function getResponse(req: NextRequest): Promise<NextResponse | Response> {
   const timestamp = Date.now();
   process.env.TIMESTAMP = JSON.stringify(timestamp);
   const txData: FrameTransactionResponse = {
-    chainId: "eip155:11155111",
+    chainId: `eip155:${baseSepolia.id}`,
     method: "eth_personalSign",
     params: {
       abi: [],
