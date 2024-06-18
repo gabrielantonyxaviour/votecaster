@@ -1294,16 +1294,13 @@ app.frame("/chooseday", (c) => {
         <Button action="/createop4">Back ↩️</Button>,
 
         <Button action="/choosehours">Next ➡️</Button>,
-        <Button action="/createpreview">Preview</Button>,
       ],
     });
 });
 app.frame("/choosehours", (c) => {
   const { frameData, deriveState } = c;
   const days = frameData?.inputText;
-  console.log(frameData);
-  console.log("days:", days);
-  const parsedDays = parseInt(days ? days : "0");
+  const parsedDays = parseInt(days != undefined ? days : "0");
   const state = deriveState((previousState) => {
     if (days !== undefined) {
       if (!isNaN(parsedDays) && days.length < 3 && days.length > 0) {
@@ -1311,7 +1308,13 @@ app.frame("/choosehours", (c) => {
       }
     }
   });
-  if (isNaN(parsedDays) || days!.length > 2 || days!.length < 0) {
+  if (
+    frameData?.buttonIndex != 1 &&
+    (days == undefined ||
+      isNaN(parsedDays) ||
+      days!.length > 2 ||
+      days!.length < 0)
+  ) {
     return c.res({
       action: "/choosehours",
       image: (
@@ -1666,7 +1669,6 @@ app.frame("/choosehours", (c) => {
         <Button action="/createop4">Back ↩️</Button>,
 
         <Button action="/choosehours">Next ➡️</Button>,
-        <Button action="/createpreview">Preview</Button>,
       ],
     });
   } else
@@ -1978,15 +1980,15 @@ app.frame("/choosehours", (c) => {
         <Button action="/chooseday">Back ↩️</Button>,
 
         <Button action="/choosemins">Next ➡️</Button>,
-        <Button action="/createpreview">Preview</Button>,
       ],
     });
 });
 app.frame("/choosemins", (c) => {
   const { frameData, deriveState } = c;
   const hours = frameData?.inputText;
-  console.log(hours);
-  const parsedhours = parseInt(hours ? hours : "0");
+  const parsedhours = parseInt(hours != undefined ? hours : "0");
+  console.log("Frame data");
+  console.log(frameData);
   const state = deriveState((previousState) => {
     if (hours !== undefined) {
       if (!isNaN(parsedhours) && hours.length < 3 && hours.length > 0) {
@@ -1998,7 +2000,13 @@ app.frame("/choosemins", (c) => {
       }
     }
   });
-  if (isNaN(parsedhours) || hours!.length > 2 || hours!.length < 0) {
+  if (
+    frameData?.buttonIndex != 1 &&
+    (hours == undefined ||
+      isNaN(parsedhours) ||
+      hours!.length > 2 ||
+      hours!.length < 0)
+  ) {
     return c.res({
       image: (
         <div
@@ -2303,11 +2311,10 @@ app.frame("/choosemins", (c) => {
         </div>
       ),
       intents: [
-        <TextInput placeholder="Enter Hours in hh format" />,
+        <TextInput placeholder="Enter Hours in proper HH format" />,
         <Button action="/chooseday">Back ↩️</Button>,
 
         <Button action="/choosemins">Next ➡️</Button>,
-        <Button action="/createpreview">Preview</Button>,
       ],
     });
   } else
@@ -2664,16 +2671,16 @@ app.frame("/choosemins", (c) => {
         <TextInput placeholder="Enter Minutes in MM format" />,
         <Button action="/choosehours">Back ↩️</Button>,
 
-        <Button action="/createpreview">Next ➡️</Button>,
-        <Button action="/createpreview">Preview</Button>,
+        <Button action="/create">Next ➡️</Button>,
       ],
     });
 });
-app.frame("/createpreview", (c) => {
+app.frame("/create", (c) => {
   const { frameData, deriveState } = c;
   const mins = frameData?.inputText;
-  console.log(mins);
-  const parsedMins = parseInt(mins ? mins : "0");
+  console.log("frameData");
+  console.log(frameData);
+  const parsedMins = parseInt(mins != undefined ? mins : "0");
   const state = deriveState((previousState) => {
     if (mins !== undefined) {
       if (!isNaN(parsedMins) && mins.length < 3 && mins.length > 0) {
@@ -2687,7 +2694,12 @@ app.frame("/createpreview", (c) => {
       }
     }
   });
-  if (isNaN(parsedMins) || mins!.length > 2 || mins!.length < 0) {
+  if (
+    mins == undefined ||
+    isNaN(parsedMins) ||
+    mins!.length > 2 ||
+    mins!.length < 0
+  ) {
     return c.res({
       action: "/createpreview",
       image: (
@@ -3038,11 +3050,10 @@ app.frame("/createpreview", (c) => {
         </div>
       ),
       intents: [
-        <TextInput placeholder="Enter Minutes in MM format" />,
+        <TextInput placeholder="Enter Minutes in proper MM format" />,
         <Button action="/choosehours">Back ↩️</Button>,
 
         <Button action="/createpreview">Next ➡️</Button>,
-        <Button action="/createpreview">Preview</Button>,
       ],
     });
   } else
@@ -3402,6 +3413,365 @@ app.frame("/createpreview", (c) => {
       ],
     });
 });
+app.frame("/createpreview", (c) => {
+  const { deriveState } = c;
+  const state = deriveState();
+  return c.res({
+    action: "/createpoll",
+    image: (
+      <div
+        style={{
+          alignItems: "center",
+          background: "white",
+          backgroundSize: "100% 100%",
+          display: "flex",
+          flexDirection: "column",
+          flexWrap: "nowrap",
+          height: "100%",
+          justifyContent: "center",
+          textAlign: "center",
+          width: "100%",
+        }}
+      >
+        <div style={{ display: "flex" }}>
+          <img
+            key={9}
+            style={{ zIndex: 1, width: "102%" }}
+            src={`/frames/validity.png`}
+          />
+        </div>
+        {state.validity.day.toString().length == 2 && (
+          <div
+            style={{
+              fontFamily: "fantasy",
+              fontSize: "50px",
+              position: "absolute",
+              top: "106px",
+              left: "0px",
+              right: "30px",
+              marginRight: "30px",
+              width: "630px",
+              textWrap: "wrap",
+              zIndex: 10,
+              color: "black",
+              justifyContent: "center",
+              textAlign: "center",
+            }}
+          >
+            {state.validity.day.toString().charAt(0)}
+          </div>
+        )}
+        {state.validity.day.toString().length == 2 && (
+          <div
+            style={{
+              fontFamily: "fantasy",
+              fontSize: "50px",
+              position: "absolute",
+              top: "106px",
+              left: "0px",
+              right: "10px",
+              width: "810px",
+              textWrap: "wrap",
+              zIndex: 10,
+              color: "black",
+              justifyContent: "center",
+              textAlign: "center",
+            }}
+          >
+            {state.validity.day.toString().charAt(1)}
+          </div>
+        )}{" "}
+        {state.validity.day.toString().length == 1 && (
+          <div
+            style={{
+              fontFamily: "fantasy",
+              fontSize: "50px",
+              position: "absolute",
+              top: "106px",
+              left: "0px",
+              right: "30px",
+              marginRight: "30px",
+              width: "630px",
+              textWrap: "wrap",
+              zIndex: 10,
+              color: "black",
+              justifyContent: "center",
+              textAlign: "center",
+            }}
+          >
+            0
+          </div>
+        )}
+        {state.validity.day.toString().length == 1 && (
+          <div
+            style={{
+              fontFamily: "fantasy",
+              fontSize: "50px",
+              position: "absolute",
+              top: "106px",
+              left: "0px",
+              right: "10px",
+              width: "810px",
+              textWrap: "wrap",
+              zIndex: 10,
+              color: "black",
+              justifyContent: "center",
+              textAlign: "center",
+            }}
+          >
+            {state.validity.day.toString().charAt(0)}
+          </div>
+        )}
+        {state.validity.hours.toString().length == 2 && (
+          <div
+            style={{
+              fontFamily: "fantasy",
+              fontSize: "50px",
+              position: "absolute",
+              top: "106px",
+              left: "0px",
+              right: "30px",
+              marginRight: "30px",
+              width: "1115px",
+              textWrap: "wrap",
+              zIndex: 10,
+              color: "black",
+              justifyContent: "center",
+              textAlign: "center",
+            }}
+          >
+            {state.validity.hours.toString().charAt(0)}
+          </div>
+        )}
+        {state.validity.hours.toString().length == 2 && (
+          <div
+            style={{
+              fontFamily: "fantasy",
+              fontSize: "50px",
+              position: "absolute",
+              top: "106px",
+              left: "0px",
+              right: "10px",
+              width: "1300px",
+              textWrap: "wrap",
+              zIndex: 10,
+              color: "black",
+              justifyContent: "center",
+              textAlign: "center",
+            }}
+          >
+            {state.validity.hours.toString().charAt(1)}
+          </div>
+        )}
+        {state.validity.hours.toString().length == 1 && (
+          <div
+            style={{
+              fontFamily: "fantasy",
+              fontSize: "50px",
+              position: "absolute",
+              top: "106px",
+              left: "0px",
+              right: "30px",
+              marginRight: "30px",
+              width: "1115px",
+              textWrap: "wrap",
+              zIndex: 10,
+              color: "black",
+              justifyContent: "center",
+              textAlign: "center",
+            }}
+          >
+            0
+          </div>
+        )}
+        {state.validity.hours.toString().length == 1 && (
+          <div
+            style={{
+              fontFamily: "fantasy",
+              fontSize: "50px",
+              position: "absolute",
+              top: "106px",
+              left: "0px",
+              right: "10px",
+              width: "1300px",
+              textWrap: "wrap",
+              zIndex: 10,
+              color: "black",
+              justifyContent: "center",
+              textAlign: "center",
+            }}
+          >
+            {state.validity.hours.toString().charAt(0)}
+          </div>
+        )}
+        {state.validity.minutes.toString().length == 2 && (
+          <div
+            style={{
+              fontFamily: "fantasy",
+              fontSize: "50px",
+              position: "absolute",
+              top: "106px",
+              left: "0px",
+              right: "30px",
+              marginRight: "30px",
+              width: "1590px",
+              textWrap: "wrap",
+              zIndex: 10,
+              color: "black",
+              justifyContent: "center",
+              textAlign: "center",
+            }}
+          >
+            {state.validity.minutes.toString().charAt(0)}
+          </div>
+        )}
+        {state.validity.minutes.toString().length == 2 && (
+          <div
+            style={{
+              fontFamily: "fantasy",
+              fontSize: "50px",
+              position: "absolute",
+              top: "106px",
+              left: "0px",
+              right: "10px",
+              width: "1775px",
+              textWrap: "wrap",
+              zIndex: 10,
+              color: "black",
+              justifyContent: "center",
+              textAlign: "center",
+            }}
+          >
+            {state.validity.minutes.toString().charAt(1)}
+          </div>
+        )}
+        {state.validity.minutes.toString().length == 1 && (
+          <div
+            style={{
+              fontFamily: "fantasy",
+              fontSize: "50px",
+              position: "absolute",
+              top: "106px",
+              left: "0px",
+              right: "30px",
+              marginRight: "30px",
+              width: "1590px",
+              textWrap: "wrap",
+              zIndex: 10,
+              color: "black",
+              justifyContent: "center",
+              textAlign: "center",
+            }}
+          >
+            0
+          </div>
+        )}
+        {state.validity.minutes.toString().length == 1 && (
+          <div
+            style={{
+              fontFamily: "fantasy",
+              fontSize: "50px",
+              position: "absolute",
+              top: "106px",
+              left: "0px",
+              right: "10px",
+              width: "1775px",
+              textWrap: "wrap",
+              zIndex: 10,
+              color: "black",
+              justifyContent: "center",
+              textAlign: "center",
+            }}
+          >
+            {state.validity.minutes.toString().charAt(0)}
+          </div>
+        )}
+        <div
+          style={{
+            fontFamily: "fantasy",
+            fontSize: "50px",
+            position: "absolute",
+            top: "210px",
+            left: "200px",
+            width: "800px",
+            textWrap: "wrap",
+            zIndex: 10,
+            color: "black",
+            justifyContent: "center",
+            textAlign: "center",
+          }}
+        >
+          {state.question}
+        </div>
+        <div
+          style={{
+            fontFamily: "fantasy",
+            fontSize: "30px",
+            position: "absolute",
+            top: "418px",
+            left: "230px",
+            width: "800px",
+            textWrap: "wrap",
+            zIndex: 10,
+            color: "black",
+          }}
+        >
+          {state.options.a}
+        </div>
+        <div
+          style={{
+            fontFamily: "fantasy",
+            fontSize: "30px",
+            position: "absolute",
+            top: "418px",
+            left: "670px",
+            width: "800px",
+            textWrap: "wrap",
+            zIndex: 10,
+            color: "black",
+          }}
+        >
+          {state.options.b}
+        </div>
+        <div
+          style={{
+            fontFamily: "fantasy",
+            fontSize: "30px",
+            position: "absolute",
+            top: "535px",
+            left: "230px",
+            width: "800px",
+            textWrap: "wrap",
+            zIndex: 10,
+            color: "black",
+          }}
+        >
+          {state.options.c}
+        </div>
+        <div
+          style={{
+            fontFamily: "fantasy",
+            fontSize: "30px",
+            position: "absolute",
+            top: "535px",
+            left: "670px",
+            width: "800px",
+            textWrap: "wrap",
+            zIndex: 10,
+            color: "black",
+          }}
+        >
+          {state.options.d}
+        </div>
+      </div>
+    ),
+    intents: [
+      <Button action="/choosemins">Back ↩️</Button>,
+      <Button action="/choosetheme/0">Theme 🖼️</Button>,
+      <Button value="op2">Create 🪄</Button>,
+    ],
+  });
+});
 app.frame("/choosetheme/:theme", (c) => {
   const params = c.req.param();
   const theme = params["theme"];
@@ -3588,7 +3958,7 @@ app.frame("/choosetheme/:theme", (c) => {
       </div>
     ),
     intents: [
-      <Button.Reset>Back ↩️</Button.Reset>,
+      <Button action="/createpreview">Back ↩️</Button>,
       <Button
         action={`/choosetheme/${
           parseInt(theme) == 0 ? 6 : parseInt(theme) - 1
