@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useQuery } from "@airstack/airstack-react";
 import { useAccount, useWriteContract } from "wagmi";
 import axios from "axios";
-import { privCastAbi, privCastAddress } from "@/utils/constants";
+import { PRIV_CAST_ABI, PRIV_CAST_ADDRESS } from "@/utils/constants";
 import { sepolia } from "viem/chains";
 import { createPublicClient, http } from "viem";
 import Navbar from "@/components/Navbar";
@@ -79,8 +79,8 @@ export default function CreatePage() {
                 });
 
                 const unwatch = publicClient.watchContractEvent({
-                  address: privCastAddress,
-                  abi: privCastAbi,
+                  address: PRIV_CAST_ADDRESS,
+                  abi: PRIV_CAST_ABI,
                   onLogs: async (logs) => {
                     console.log("LOGS RECEIVED");
                     console.log(logs);
@@ -108,8 +108,8 @@ export default function CreatePage() {
                 });
 
                 const tx = await createPollContractCall({
-                  abi: privCastAbi,
-                  address: privCastAddress,
+                  abi: PRIV_CAST_ABI,
+                  address: PRIV_CAST_ADDRESS,
                   functionName: "createPoll",
                   args: [res.data.IpfsHash, poll.duration],
                 });

@@ -1,12 +1,8 @@
 import { PRIV_CAST_ABI, PRIV_CAST_ADDRESS } from "@/utils/constants";
-import {
-  FrameRequest,
-  FrameTransactionResponse,
-  getFrameMessage,
-} from "@coinbase/onchainkit/frame";
+import { FrameTransactionResponse } from "@coinbase/onchainkit/frame";
 import { NextRequest, NextResponse } from "next/server";
 import { encodeFunctionData } from "viem";
-import { baseSepolia, sepolia } from "viem/chains";
+import { sepolia } from "viem/chains";
 import pinataSDK from "@pinata/sdk";
 async function getResponse(req: NextRequest): Promise<NextResponse | Response> {
   const pinata = new pinataSDK(
@@ -22,7 +18,6 @@ async function getResponse(req: NextRequest): Promise<NextResponse | Response> {
   process.env.TIMESTAMP = JSON.stringify(timestamp);
 
   const body = JSON.parse(process.env.POLL || "{}");
-
   const options: any = {
     pinataMetadata: {
       name: "PRIV CAST POLL " + Math.floor(Math.random() * 10000001).toString(),
