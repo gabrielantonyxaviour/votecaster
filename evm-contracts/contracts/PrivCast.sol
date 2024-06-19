@@ -88,4 +88,8 @@ contract PrivCast{
 
         return pollsInfo;
     }
+
+    function getCurrentTimestamp() external view returns (uint) {
+        return block.timestamp;
+    }
 }

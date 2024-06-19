@@ -2676,6 +2676,7 @@ app.frame("/choosemins", (c) => {
       ],
     });
 });
+
 app.frame("/create", (c) => {
   const { frameData, deriveState } = c;
   const mins = frameData?.inputText;
@@ -3058,7 +3059,14 @@ app.frame("/create", (c) => {
         <Button action="/createpreview">Next ➡️</Button>,
       ],
     });
-  } else
+  } else {
+    process.env.POLL = JSON.stringify(state);
+    process.env.VALIDITY = (
+      state.validity.day * 24 * 60 * 60 +
+      state.validity.hours * 60 * 60 +
+      state.validity.minutes * 60
+    ).toString();
+
     return c.res({
       action: "/createpoll",
       image: (
@@ -3411,13 +3419,21 @@ app.frame("/create", (c) => {
       intents: [
         <Button action="/choosemins">Back ↩️</Button>,
         <Button action="/choosetheme/0">Theme 🖼️</Button>,
-        <Button action="/tx">Next ➡️</Button>,
+        <Button action="/create-poll">Next ➡️</Button>,
       ],
     });
+  }
 });
+
 app.frame("/createpreview", (c) => {
   const { deriveState } = c;
   const state = deriveState();
+  process.env.POLL = JSON.stringify(state);
+  process.env.VALIDITY = (
+    state.validity.day * 24 * 60 * 60 +
+    state.validity.hours * 60 * 60 +
+    state.validity.minutes * 60
+  ).toString();
   return c.res({
     action: "/createpoll",
     image: (
@@ -3774,6 +3790,7 @@ app.frame("/createpreview", (c) => {
     ],
   });
 });
+
 app.frame("/choosetheme/:theme", (c) => {
   const params = c.req.param();
   const theme = params["theme"];
@@ -4092,6 +4109,7 @@ app.frame("/poll/:[pollid]", async (c) => {
     ],
   });
 });
+
 app.frame("/createpoll", async (c) => {
   const { frameData, deriveState } = c;
   const state = deriveState();
@@ -4136,6 +4154,7 @@ app.frame("/createpoll", async (c) => {
     ],
   });
 });
+
 devtools(app, { serveStatic });
 
 export const GET = handle(app);

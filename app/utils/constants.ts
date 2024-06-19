@@ -1,5 +1,333 @@
 const baseSepoliaPublicClientAddress =
   "0xfaFCfceC4e29e9b4ECc8C0a3f7df1011580EEEf2";
+const PRIV_CAST_ABI: any = [
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "pollId",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "address",
+        name: "creatorAddress",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "string",
+        name: "pollUri",
+        type: "string",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "createdTimestamp",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "validityDuration",
+        type: "uint256",
+      },
+    ],
+    name: "PollCreated",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "pollId",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "voterFarcasterId",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "address",
+        name: "voterAddress",
+        type: "address",
+      },
+    ],
+    name: "VoteCast",
+    type: "event",
+  },
+  {
+    inputs: [],
+    name: "anonAadhaarVerifierAddr",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "string",
+        name: "pollUri",
+        type: "string",
+      },
+      {
+        internalType: "uint256",
+        name: "validityDuration",
+        type: "uint256",
+      },
+    ],
+    name: "createPoll",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    name: "farcasterNullifiers",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bool",
+        name: "open",
+        type: "bool",
+      },
+    ],
+    name: "getAllPolls",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "id",
+            type: "uint256",
+          },
+          {
+            internalType: "string",
+            name: "pollUri",
+            type: "string",
+          },
+          {
+            internalType: "uint256",
+            name: "voteCount",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "startTimestamp",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "validityDuration",
+            type: "uint256",
+          },
+          {
+            internalType: "bytes[]",
+            name: "encryptedVotes",
+            type: "bytes[]",
+          },
+        ],
+        internalType: "struct PrivCast.PollInfo[]",
+        name: "",
+        type: "tuple[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getCurrentTimestamp",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_pollId",
+        type: "uint256",
+      },
+    ],
+    name: "getPoll",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+      {
+        internalType: "string",
+        name: "",
+        type: "string",
+      },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "pollId",
+        type: "uint256",
+      },
+    ],
+    name: "getVotes",
+    outputs: [
+      {
+        internalType: "bytes[]",
+        name: "",
+        type: "bytes[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "pollIdCounter",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    name: "polls",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "id",
+        type: "uint256",
+      },
+      {
+        internalType: "string",
+        name: "pollUri",
+        type: "string",
+      },
+      {
+        internalType: "uint256",
+        name: "voteCount",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "createdTimestamp",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "validityDuration",
+        type: "uint256",
+      },
+      {
+        internalType: "bool",
+        name: "isExists",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "pollId",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "farcasterId",
+        type: "uint256",
+      },
+      {
+        internalType: "bytes",
+        name: "encryptedVote",
+        type: "bytes",
+      },
+    ],
+    name: "vote",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+];
+const PRIV_CAST_ADDRESS: `0x${string}` =
+  "0x3AcD5676656E608e1417F1C1bBCe841cD52d70cF";
 
 const routingContract = "secret17y4avu53kyujrcyd3zyx3t3g3cph5ama24287j";
 const routingCodeHash =
@@ -290,328 +618,12 @@ const publicClientAbi: any[] = [
   },
 ];
 
-const privCastAddress = "0x36103687E35704C1106A539eeea95f706F1b1D8f";
-
-const privCastAbi = [
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "pollId",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "creatorAddress",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "string",
-        name: "pollUri",
-        type: "string",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "createdTimestamp",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "validityDuration",
-        type: "uint256",
-      },
-    ],
-    name: "PollCreated",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "pollId",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "voterFarcasterId",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "voterAddress",
-        type: "address",
-      },
-    ],
-    name: "VoteCast",
-    type: "event",
-  },
-  {
-    inputs: [],
-    name: "anonAadhaarVerifierAddr",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "string",
-        name: "pollUri",
-        type: "string",
-      },
-      {
-        internalType: "uint256",
-        name: "validityDuration",
-        type: "uint256",
-      },
-    ],
-    name: "createPoll",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    name: "farcasterNullifiers",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bool",
-        name: "open",
-        type: "bool",
-      },
-    ],
-    name: "getAllPolls",
-    outputs: [
-      {
-        components: [
-          {
-            internalType: "uint256",
-            name: "id",
-            type: "uint256",
-          },
-          {
-            internalType: "string",
-            name: "pollUri",
-            type: "string",
-          },
-          {
-            internalType: "uint256",
-            name: "voteCount",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "startTimestamp",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "validityDuration",
-            type: "uint256",
-          },
-          {
-            internalType: "bytes[]",
-            name: "encryptedVotes",
-            type: "bytes[]",
-          },
-        ],
-        internalType: "struct PrivCast.PollInfo[]",
-        name: "",
-        type: "tuple[]",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "_pollId",
-        type: "uint256",
-      },
-    ],
-    name: "getPoll",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-      {
-        internalType: "string",
-        name: "",
-        type: "string",
-      },
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "pollId",
-        type: "uint256",
-      },
-    ],
-    name: "getVotes",
-    outputs: [
-      {
-        internalType: "bytes[]",
-        name: "",
-        type: "bytes[]",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "pollIdCounter",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    name: "polls",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "id",
-        type: "uint256",
-      },
-      {
-        internalType: "string",
-        name: "pollUri",
-        type: "string",
-      },
-      {
-        internalType: "uint256",
-        name: "voteCount",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "createdTimestamp",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "validityDuration",
-        type: "uint256",
-      },
-      {
-        internalType: "bool",
-        name: "isExists",
-        type: "bool",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "pollId",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "farcasterId",
-        type: "uint256",
-      },
-      {
-        internalType: "bytes",
-        name: "encryptedVote",
-        type: "bytes",
-      },
-    ],
-    name: "vote",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-];
-
 export {
   baseSepoliaPublicClientAddress,
   publicClientAbi,
   routingCodeHash,
   routingContract,
   gatewayPublicKey,
-  privCastAddress,
-  privCastAbi,
+  PRIV_CAST_ABI,
+  PRIV_CAST_ADDRESS,
 };
