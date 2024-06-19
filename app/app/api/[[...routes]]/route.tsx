@@ -103,15 +103,7 @@ app.frame("/test", (c) => {
 });
 app.frame("/createqn", (c) => {
   const { deriveState } = c;
-  const state = deriveState((prevState) => {
-    getCreatePollSignData({
-      callerAddress: "0x5A6B842891032d702517a4E52ec38eE561063539",
-      pollUri: "bafkreihhihxra5khijiexq3h6cggug6oof2qvssvzyhn4mlextqn322yoe",
-      validity: 1321413,
-    }).then((data) => {
-      console.log(data);
-    });
-  });
+  const state = deriveState();
 
   return c.res({
     action: "/createop1",
@@ -3434,6 +3426,10 @@ app.frame("/createpreview", (c) => {
     state.validity.hours * 60 * 60 +
     state.validity.minutes * 60
   ).toString();
+  console.log("POLL");
+  console.log(process.env.POLL);
+  console.log("VALIDITY");
+  console.log(process.env.VALIDITY);
   return c.res({
     action: "/createpoll",
     image: (
@@ -3786,7 +3782,7 @@ app.frame("/createpreview", (c) => {
     intents: [
       <Button action="/choosemins">Back ↩️</Button>,
       <Button action="/choosetheme/0">Theme 🖼️</Button>,
-      <Button action="/tx">Next ➡️</Button>,
+      <Button action="/create-poll">Next ➡️</Button>,
     ],
   });
 });

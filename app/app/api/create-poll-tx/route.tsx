@@ -5,15 +5,16 @@ import { encodeFunctionData } from "viem";
 import { sepolia } from "viem/chains";
 import pinataSDK from "@pinata/sdk";
 async function getResponse(req: NextRequest): Promise<NextResponse | Response> {
+  console.log("POLL");
+  console.log(process.env.POLL);
+  console.log("VALIDITY");
+  console.log(process.env.VALIDITY);
+
   const pinata = new pinataSDK(
     process.env.PINATA_API_KEY,
     process.env.PINATA_SECRET_API_KEY
   );
 
-  console.log("POLL");
-  console.log(process.env.POLL);
-  console.log("VALIDITY");
-  console.log(process.env.VALIDITY);
   const timestamp = Date.now();
   process.env.TIMESTAMP = JSON.stringify(timestamp);
 
