@@ -17,7 +17,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     getFrameHtmlResponse({
       buttons: [
         {
-          label: "Successssss Mission Passed",
+          label: "Vote success",
         },
       ],
       image: {
