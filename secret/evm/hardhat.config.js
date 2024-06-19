@@ -44,7 +44,7 @@ module.exports = {
   },
   etherscan: {
     apiKey: {
-      sepolia: networks.ethereumSepolia.verifyApiKey,
+      baseSepolia: networks.ethereumSepolia.verifyApiKey,
       optimismSepolia: networks.optimismSepolia.verifyApiKey,
     },
     customChains: [
@@ -52,8 +52,8 @@ module.exports = {
         network: "optimismSepolia",
         chainId: networks.optimismSepolia.chainId,
         urls: {
-          apiURL: "https://api-sepolia-optimistic.etherscan.io/api",
-          browserURL: "https://sepolia-optimism.etherscan.io",
+          apiURL: "https://api-baseSepolia-optimistic.etherscan.io/api",
+          browserURL: "https://baseSepolia-optimism.etherscan.io",
         },
       },
     ],

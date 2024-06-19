@@ -45,8 +45,18 @@ module.exports = {
   etherscan: {
     apiKey: {
       sepolia: networks.ethereumSepolia.verifyApiKey,
+      baseSepolia: networks.baseSepolia.verifyApiKey,
     },
-   
+    customChains: [
+      {
+        network: "baseSepolia",
+        chainId: networks.baseSepolia.chainId,
+        urls: {
+          apiURL: "https://api-baseSepolia.basescan.org/api/",
+          browserURL: "https://baseSepolia.basescan.org/",
+        },
+      },
+    ],
   },
   gasReporter: {
     enabled: REPORT_GAS,

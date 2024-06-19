@@ -4,7 +4,7 @@ import { useQuery } from "@airstack/airstack-react";
 import { useAccount, useWriteContract } from "wagmi";
 import axios from "axios";
 import { PRIV_CAST_ABI, PRIV_CAST_ADDRESS } from "@/utils/constants";
-import { sepolia } from "viem/chains";
+import { baseSepolia } from "viem/chains";
 import { createPublicClient, http } from "viem";
 import Navbar from "@/components/Navbar";
 import Confirmation from "@/components/Create/Confirmation";
@@ -74,7 +74,7 @@ export default function CreatePage() {
                 setStatus("Initiating transaction...");
 
                 const publicClient = createPublicClient({
-                  chain: sepolia,
+                  chain: baseSepolia,
                   transport: http(),
                 });
 
@@ -113,7 +113,7 @@ export default function CreatePage() {
                   functionName: "createPoll",
                   args: [res.data.IpfsHash, poll.duration],
                 });
-                setTxHash("https://sepolia.etherscan.io/tx/" + tx);
+                setTxHash("https://baseSepolia.etherscan.io/tx/" + tx);
                 setStatus("Waiting for Confirmation...");
               } catch (e) {
                 console.error(e);

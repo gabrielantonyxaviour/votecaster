@@ -4,7 +4,7 @@ import { ConnectKitProvider, getDefaultConfig } from "connectkit";
 
 import React, { useEffect, useState } from "react";
 
-import { sepolia } from "viem/chains";
+import { baseSepolia } from "viem/chains";
 import { WagmiProvider, createConfig, http } from "wagmi";
 
 import PollPageComponent from "./PollPageComponent";
@@ -17,10 +17,10 @@ const config = createConfig(
   getDefaultConfig({
     appName: "Priv Cast",
     walletConnectProjectId: projectId,
-    chains: [sepolia],
+    chains: [baseSepolia],
     ssr: true,
     transports: {
-      [sepolia.id]: http(sepoliaRpcUrl),
+      [baseSepolia.id]: http(sepoliaRpcUrl),
     },
     appDescription:
       "PRIVACY PRESERVED, SYBIL RESISTANT POLLS NOW IN FARCASTER.",

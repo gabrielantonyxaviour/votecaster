@@ -7,7 +7,7 @@ import "../styles/machina.css";
 import "@/styles/globals.css";
 import "../styles/monument.css";
 import { ReactNode, useEffect, useState } from "react";
-import { sepolia } from "viem/chains";
+import { baseSepolia } from "viem/chains";
 
 const airstackApiKey = process.env.NEXT_PUBLIC_AIRSTACK_API_KEY ?? "";
 
@@ -27,8 +27,8 @@ export default function RootLayout({ children }: { children: JSX.Element }) {
         {ready ? (
           <WagmiProvider
             config={createConfig({
-              chains: [sepolia],
-              transports: { [sepolia.id]: http() },
+              chains: [baseSepolia],
+              transports: { [baseSepolia.id]: http() },
             })}
           >
             <QueryClientProvider client={queryClient}>

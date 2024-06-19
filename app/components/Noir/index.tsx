@@ -20,7 +20,7 @@
 //   recoverPublicKey,
 //   toBytes,
 // } from "viem";
-// import { sepolia } from "viem/chains";
+// import { baseSepolia } from "viem/chains";
 // import { ConnectKitButton } from "connectkit";
 // import { useAccount } from "wagmi";
 // import { useQuery } from "@airstack/airstack-react";
@@ -75,7 +75,7 @@
 //     if ((window as any).ethereum != undefined) {
 //       setWalletClient(
 //         createWalletClient({
-//           chain: sepolia,
+//           chain: baseSepolia,
 //           transport: custom((window as any).ethereum),
 //         })
 //       );

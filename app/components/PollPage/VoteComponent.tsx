@@ -29,7 +29,7 @@
 //   recoverPublicKey,
 //   toBytes,
 // } from "viem";
-// import { sepolia } from "viem/chains";
+// import { baseSepolia } from "viem/chains";
 
 // import vote from "@/utils/supabase/vote";
 // import getVoted from "@/utils/supabase/getVoted";
@@ -69,7 +69,7 @@
 //     if ((window as any).ethereum != undefined) {
 //       setWalletClient(
 //         createWalletClient({
-//           chain: sepolia,
+//           chain: baseSepolia,
 //           transport: custom((window as any).ethereum),
 //         })
 //       );

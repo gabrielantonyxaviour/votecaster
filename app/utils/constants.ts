@@ -327,7 +327,7 @@ const PRIV_CAST_ABI: any = [
   },
 ];
 const PRIV_CAST_ADDRESS: `0x${string}` =
-  "0x3AcD5676656E608e1417F1C1bBCe841cD52d70cF";
+  "0xe5f254F465C3EDd0a651Bb14824FDbb2eb4ddE46";
 
 const routingContract = "secret17y4avu53kyujrcyd3zyx3t3g3cph5ama24287j";
 const routingCodeHash =

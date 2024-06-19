@@ -1,7 +1,7 @@
 import { getDefaultConfig } from "connectkit";
 import { createPublicClient, createWalletClient } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
-import { sepolia } from "viem/chains";
+import { baseSepolia } from "viem/chains";
 import { createConfig, http } from "wagmi";
 
 export const deployment = "0xc6b011774FE1393AE254d19456e76F0f1b5B09Eb";
@@ -9,7 +9,7 @@ export const chainId = 534351;
 const projectId = process.env["NEXT_PUBLIC_PROJECT_ID"] ?? "";
 const sepoliaRpcUrl = process.env["NEXT_PUBLIC_SEPOLIA_RPC_URL"] ?? "";
 export const publicClient = createPublicClient({
-  chain: sepolia,
+  chain: baseSepolia,
   transport: http(),
 });
 const privateKey: `0x${string}` =
@@ -18,17 +18,17 @@ const privateKey: `0x${string}` =
 export const relayerAccount = privateKeyToAccount(privateKey);
 export const relayerWalletClient = createWalletClient({
   account: relayerAccount,
-  chain: sepolia,
+  chain: baseSepolia,
   transport: http(sepoliaRpcUrl),
 });
 export const config = createConfig(
   getDefaultConfig({
     appName: "Priv Cast",
     walletConnectProjectId: projectId,
-    chains: [sepolia],
+    chains: [baseSepolia],
     ssr: true,
     transports: {
-      [sepolia.id]: http(sepoliaRpcUrl),
+      [baseSepolia.id]: http(sepoliaRpcUrl),
     },
     appDescription:
       "PRIVACY PRESERVED, SYBIL RESISTANT POLLS NOW IN FARCASTER.",
