@@ -23,7 +23,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
       image: {
         src: `${
           production ? "https://privcast.com" : "http://localhost:3000"
-        }/frames/theme2.png`,
+        }/frames/voteSuccess.png`,
       },
     })
   );
