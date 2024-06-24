@@ -1,14 +1,10 @@
 /** @jsxImportSource frog/jsx */
 
 import { fetchEntryById, insertData } from "@/utils/supabase";
-import getCreatePollSignData from "@/utils/write/helpers/getCreatePollSignData";
 import { Button, Frog, TextInput } from "frog";
 import { devtools } from "frog/dev";
 import { handle } from "frog/next";
 import { serveStatic } from "frog/serve-static";
-import { get } from "http";
-import { BytesToNumberOpts, parseEther } from "viem";
-
 type State = {
   question: string;
   options: {
@@ -3449,331 +3445,613 @@ app.frame("/createpreview", (c) => {
       >
         <div style={{ display: "flex" }}>
           <img
-            key={9}
-            style={{ zIndex: 1, width: "102%" }}
-            src={`/frames/validity.png`}
+            key={8}
+            style={{ zIndex: -1, width: "102%" }}
+            src={`/frames/theme${state.theme}.png`}
           />
         </div>
         {state.validity.day.toString().length == 2 && (
           <div
-            style={{
-              fontFamily: "fantasy",
-              fontSize: "50px",
-              position: "absolute",
-              top: "106px",
-              left: "0px",
-              right: "30px",
-              marginRight: "30px",
-              width: "630px",
-              textWrap: "wrap",
-              zIndex: 10,
-              color: "black",
-              justifyContent: "center",
-              textAlign: "center",
-            }}
+            style={
+              state.theme == 0 || state.theme == 6
+                ? {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "30px",
+                    marginRight: "30px",
+                    width: "630px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "black",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+                : {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "30px",
+                    marginRight: "30px",
+                    width: "630px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "white",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+            }
           >
             {state.validity.day.toString().charAt(0)}
           </div>
         )}
         {state.validity.day.toString().length == 2 && (
           <div
-            style={{
-              fontFamily: "fantasy",
-              fontSize: "50px",
-              position: "absolute",
-              top: "106px",
-              left: "0px",
-              right: "10px",
-              width: "810px",
-              textWrap: "wrap",
-              zIndex: 10,
-              color: "black",
-              justifyContent: "center",
-              textAlign: "center",
-            }}
+            style={
+              state.theme == 0 || state.theme == 6
+                ? {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "10px",
+                    width: "810px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "black",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+                : {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "10px",
+                    width: "810px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "white",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+            }
           >
             {state.validity.day.toString().charAt(1)}
           </div>
         )}{" "}
         {state.validity.day.toString().length == 1 && (
           <div
-            style={{
-              fontFamily: "fantasy",
-              fontSize: "50px",
-              position: "absolute",
-              top: "106px",
-              left: "0px",
-              right: "30px",
-              marginRight: "30px",
-              width: "630px",
-              textWrap: "wrap",
-              zIndex: 10,
-              color: "black",
-              justifyContent: "center",
-              textAlign: "center",
-            }}
+            style={
+              state.theme == 0 || state.theme == 6
+                ? {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "30px",
+                    marginRight: "30px",
+                    width: "630px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "black",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+                : {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "30px",
+                    marginRight: "30px",
+                    width: "630px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "white",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+            }
           >
             0
           </div>
         )}
         {state.validity.day.toString().length == 1 && (
           <div
-            style={{
-              fontFamily: "fantasy",
-              fontSize: "50px",
-              position: "absolute",
-              top: "106px",
-              left: "0px",
-              right: "10px",
-              width: "810px",
-              textWrap: "wrap",
-              zIndex: 10,
-              color: "black",
-              justifyContent: "center",
-              textAlign: "center",
-            }}
+            style={
+              state.theme == 0 || state.theme == 6
+                ? {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "10px",
+                    width: "810px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "black",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+                : {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "10px",
+                    width: "810px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "white",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+            }
           >
             {state.validity.day.toString().charAt(0)}
           </div>
         )}
         {state.validity.hours.toString().length == 2 && (
           <div
-            style={{
-              fontFamily: "fantasy",
-              fontSize: "50px",
-              position: "absolute",
-              top: "106px",
-              left: "0px",
-              right: "30px",
-              marginRight: "30px",
-              width: "1115px",
-              textWrap: "wrap",
-              zIndex: 10,
-              color: "black",
-              justifyContent: "center",
-              textAlign: "center",
-            }}
+            style={
+              state.theme == 0 || state.theme == 6
+                ? {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "30px",
+                    marginRight: "30px",
+                    width: "1115px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "black",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+                : {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "30px",
+                    marginRight: "30px",
+                    width: "1115px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "white",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+            }
           >
             {state.validity.hours.toString().charAt(0)}
           </div>
         )}
         {state.validity.hours.toString().length == 2 && (
           <div
-            style={{
-              fontFamily: "fantasy",
-              fontSize: "50px",
-              position: "absolute",
-              top: "106px",
-              left: "0px",
-              right: "10px",
-              width: "1300px",
-              textWrap: "wrap",
-              zIndex: 10,
-              color: "black",
-              justifyContent: "center",
-              textAlign: "center",
-            }}
+            style={
+              state.theme == 0 || state.theme == 6
+                ? {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "10px",
+                    width: "1300px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "black",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+                : {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "10px",
+                    width: "1300px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "white",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+            }
           >
             {state.validity.hours.toString().charAt(1)}
           </div>
         )}
         {state.validity.hours.toString().length == 1 && (
           <div
-            style={{
-              fontFamily: "fantasy",
-              fontSize: "50px",
-              position: "absolute",
-              top: "106px",
-              left: "0px",
-              right: "30px",
-              marginRight: "30px",
-              width: "1115px",
-              textWrap: "wrap",
-              zIndex: 10,
-              color: "black",
-              justifyContent: "center",
-              textAlign: "center",
-            }}
+            style={
+              state.theme == 0 || state.theme == 6
+                ? {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "30px",
+                    marginRight: "30px",
+                    width: "1115px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "black",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+                : {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "30px",
+                    marginRight: "30px",
+                    width: "1115px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "white",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+            }
           >
             0
           </div>
         )}
         {state.validity.hours.toString().length == 1 && (
           <div
-            style={{
-              fontFamily: "fantasy",
-              fontSize: "50px",
-              position: "absolute",
-              top: "106px",
-              left: "0px",
-              right: "10px",
-              width: "1300px",
-              textWrap: "wrap",
-              zIndex: 10,
-              color: "black",
-              justifyContent: "center",
-              textAlign: "center",
-            }}
+            style={
+              state.theme == 0 || state.theme == 6
+                ? {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "10px",
+                    width: "1300px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "black",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+                : {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "10px",
+                    width: "1300px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "white",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+            }
           >
             {state.validity.hours.toString().charAt(0)}
           </div>
         )}
         {state.validity.minutes.toString().length == 2 && (
           <div
-            style={{
-              fontFamily: "fantasy",
-              fontSize: "50px",
-              position: "absolute",
-              top: "106px",
-              left: "0px",
-              right: "30px",
-              marginRight: "30px",
-              width: "1590px",
-              textWrap: "wrap",
-              zIndex: 10,
-              color: "black",
-              justifyContent: "center",
-              textAlign: "center",
-            }}
+            style={
+              state.theme == 0 || state.theme == 6
+                ? {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "30px",
+                    marginRight: "30px",
+                    width: "1590px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "black",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+                : {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "30px",
+                    marginRight: "30px",
+                    width: "1590px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "white",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+            }
           >
             {state.validity.minutes.toString().charAt(0)}
           </div>
         )}
         {state.validity.minutes.toString().length == 2 && (
           <div
-            style={{
-              fontFamily: "fantasy",
-              fontSize: "50px",
-              position: "absolute",
-              top: "106px",
-              left: "0px",
-              right: "10px",
-              width: "1775px",
-              textWrap: "wrap",
-              zIndex: 10,
-              color: "black",
-              justifyContent: "center",
-              textAlign: "center",
-            }}
+            style={
+              state.theme == 0 || state.theme == 6
+                ? {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "10px",
+                    width: "1775px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "black",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+                : {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "10px",
+                    width: "1775px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "white",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+            }
           >
             {state.validity.minutes.toString().charAt(1)}
           </div>
         )}
         {state.validity.minutes.toString().length == 1 && (
           <div
-            style={{
-              fontFamily: "fantasy",
-              fontSize: "50px",
-              position: "absolute",
-              top: "106px",
-              left: "0px",
-              right: "30px",
-              marginRight: "30px",
-              width: "1590px",
-              textWrap: "wrap",
-              zIndex: 10,
-              color: "black",
-              justifyContent: "center",
-              textAlign: "center",
-            }}
+            style={
+              state.theme == 0 || state.theme == 6
+                ? {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "30px",
+                    marginRight: "30px",
+                    width: "1590px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "black",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+                : {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "30px",
+                    marginRight: "30px",
+                    width: "1590px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "white",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+            }
           >
             0
           </div>
         )}
         {state.validity.minutes.toString().length == 1 && (
           <div
-            style={{
-              fontFamily: "fantasy",
-              fontSize: "50px",
-              position: "absolute",
-              top: "106px",
-              left: "0px",
-              right: "10px",
-              width: "1775px",
-              textWrap: "wrap",
-              zIndex: 10,
-              color: "black",
-              justifyContent: "center",
-              textAlign: "center",
-            }}
+            style={
+              state.theme == 0 || state.theme == 6
+                ? {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "10px",
+                    width: "1775px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "black",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+                : {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "10px",
+                    width: "1775px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "white",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+            }
           >
             {state.validity.minutes.toString().charAt(0)}
           </div>
         )}
         <div
-          style={{
-            fontFamily: "fantasy",
-            fontSize: "50px",
-            position: "absolute",
-            top: "210px",
-            left: "200px",
-            width: "800px",
-            textWrap: "wrap",
-            zIndex: 10,
-            color: "black",
-            justifyContent: "center",
-            textAlign: "center",
-          }}
+          style={
+            state.theme == 0 || state.theme == 6
+              ? {
+                  fontFamily: "fantasy",
+                  fontSize: "50px",
+                  position: "absolute",
+                  top: "210px",
+                  left: "200px",
+                  width: "800px",
+                  textWrap: "wrap",
+                  zIndex: 10,
+                  color: "black",
+                  justifyContent: "center",
+                  textAlign: "center",
+                }
+              : {
+                  fontFamily: "fantasy",
+                  fontSize: "50px",
+                  position: "absolute",
+                  top: "210px",
+                  left: "200px",
+                  width: "800px",
+                  textWrap: "wrap",
+                  zIndex: 10,
+                  color: "white",
+                  justifyContent: "center",
+                  textAlign: "center",
+                }
+          }
         >
           {state.question}
         </div>
         <div
-          style={{
-            fontFamily: "fantasy",
-            fontSize: "30px",
-            position: "absolute",
-            top: "418px",
-            left: "230px",
-            width: "800px",
-            textWrap: "wrap",
-            zIndex: 10,
-            color: "black",
-          }}
+          style={
+            state.theme == 0 || state.theme == 6
+              ? {
+                  fontFamily: "fantasy",
+                  fontSize: "30px",
+                  position: "absolute",
+                  top: "418px",
+                  left: "230px",
+                  width: "800px",
+                  textWrap: "wrap",
+                  zIndex: 10,
+                  color: "black",
+                }
+              : {
+                  fontFamily: "fantasy",
+                  fontSize: "30px",
+                  position: "absolute",
+                  top: "418px",
+                  left: "230px",
+                  width: "800px",
+                  textWrap: "wrap",
+                  zIndex: 10,
+                  color: "white",
+                }
+          }
         >
           {state.options.a}
         </div>
         <div
-          style={{
-            fontFamily: "fantasy",
-            fontSize: "30px",
-            position: "absolute",
-            top: "418px",
-            left: "670px",
-            width: "800px",
-            textWrap: "wrap",
-            zIndex: 10,
-            color: "black",
-          }}
+          style={
+            state.theme == 0 || state.theme == 6
+              ? {
+                  fontFamily: "fantasy",
+                  fontSize: "30px",
+                  position: "absolute",
+                  top: "418px",
+                  left: "670px",
+                  width: "800px",
+                  textWrap: "wrap",
+                  zIndex: 10,
+                  color: "black",
+                }
+              : {
+                  fontFamily: "fantasy",
+                  fontSize: "30px",
+                  position: "absolute",
+                  top: "418px",
+                  left: "670px",
+                  width: "800px",
+                  textWrap: "wrap",
+                  zIndex: 10,
+                  color: "white",
+                }
+          }
         >
           {state.options.b}
         </div>
         <div
-          style={{
-            fontFamily: "fantasy",
-            fontSize: "30px",
-            position: "absolute",
-            top: "535px",
-            left: "230px",
-            width: "800px",
-            textWrap: "wrap",
-            zIndex: 10,
-            color: "black",
-          }}
+          style={
+            state.theme == 0 || state.theme == 6
+              ? {
+                  fontFamily: "fantasy",
+                  fontSize: "30px",
+                  position: "absolute",
+                  top: "535px",
+                  left: "230px",
+                  width: "800px",
+                  textWrap: "wrap",
+                  zIndex: 10,
+                  color: "black",
+                }
+              : {
+                  fontFamily: "fantasy",
+                  fontSize: "30px",
+                  position: "absolute",
+                  top: "535px",
+                  left: "230px",
+                  width: "800px",
+                  textWrap: "wrap",
+                  zIndex: 10,
+                  color: "white",
+                }
+          }
         >
           {state.options.c}
         </div>
         <div
-          style={{
-            fontFamily: "fantasy",
-            fontSize: "30px",
-            position: "absolute",
-            top: "535px",
-            left: "670px",
-            width: "800px",
-            textWrap: "wrap",
-            zIndex: 10,
-            color: "black",
-          }}
+          style={
+            state.theme == 0 || state.theme == 6
+              ? {
+                  fontFamily: "fantasy",
+                  fontSize: "30px",
+                  position: "absolute",
+                  top: "535px",
+                  left: "670px",
+                  width: "800px",
+                  textWrap: "wrap",
+                  zIndex: 10,
+                  color: "black",
+                }
+              : {
+                  fontFamily: "fantasy",
+                  fontSize: "30px",
+                  position: "absolute",
+                  top: "535px",
+                  left: "670px",
+                  width: "800px",
+                  textWrap: "wrap",
+                  zIndex: 10,
+                  color: "white",
+                }
+          }
         >
           {state.options.d}
         </div>
@@ -3821,6 +4099,462 @@ app.frame("/choosetheme/:theme", (c) => {
             src={`/frames/theme${theme}.png`}
           />
         </div>
+        {state.validity.day.toString().length == 2 && (
+          <div
+            style={
+              state.theme == 0 || state.theme == 6
+                ? {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "30px",
+                    marginRight: "30px",
+                    width: "630px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "black",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+                : {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "30px",
+                    marginRight: "30px",
+                    width: "630px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "white",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+            }
+          >
+            {state.validity.day.toString().charAt(0)}
+          </div>
+        )}
+        {state.validity.day.toString().length == 2 && (
+          <div
+            style={
+              state.theme == 0 || state.theme == 6
+                ? {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "10px",
+                    width: "810px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "black",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+                : {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "10px",
+                    width: "810px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "white",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+            }
+          >
+            {state.validity.day.toString().charAt(1)}
+          </div>
+        )}{" "}
+        {state.validity.day.toString().length == 1 && (
+          <div
+            style={
+              state.theme == 0 || state.theme == 6
+                ? {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "30px",
+                    marginRight: "30px",
+                    width: "630px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "black",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+                : {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "30px",
+                    marginRight: "30px",
+                    width: "630px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "white",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+            }
+          >
+            0
+          </div>
+        )}
+        {state.validity.day.toString().length == 1 && (
+          <div
+            style={
+              state.theme == 0 || state.theme == 6
+                ? {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "10px",
+                    width: "810px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "black",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+                : {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "10px",
+                    width: "810px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "white",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+            }
+          >
+            {state.validity.day.toString().charAt(0)}
+          </div>
+        )}
+        {state.validity.hours.toString().length == 2 && (
+          <div
+            style={
+              state.theme == 0 || state.theme == 6
+                ? {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "30px",
+                    marginRight: "30px",
+                    width: "1115px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "black",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+                : {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "30px",
+                    marginRight: "30px",
+                    width: "1115px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "white",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+            }
+          >
+            {state.validity.hours.toString().charAt(0)}
+          </div>
+        )}
+        {state.validity.hours.toString().length == 2 && (
+          <div
+            style={
+              state.theme == 0 || state.theme == 6
+                ? {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "10px",
+                    width: "1300px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "black",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+                : {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "10px",
+                    width: "1300px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "white",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+            }
+          >
+            {state.validity.hours.toString().charAt(1)}
+          </div>
+        )}
+        {state.validity.hours.toString().length == 1 && (
+          <div
+            style={
+              state.theme == 0 || state.theme == 6
+                ? {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "30px",
+                    marginRight: "30px",
+                    width: "1115px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "black",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+                : {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "30px",
+                    marginRight: "30px",
+                    width: "1115px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "white",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+            }
+          >
+            0
+          </div>
+        )}
+        {state.validity.hours.toString().length == 1 && (
+          <div
+            style={
+              state.theme == 0 || state.theme == 6
+                ? {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "10px",
+                    width: "1300px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "black",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+                : {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "10px",
+                    width: "1300px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "white",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+            }
+          >
+            {state.validity.hours.toString().charAt(0)}
+          </div>
+        )}
+        {state.validity.minutes.toString().length == 2 && (
+          <div
+            style={
+              state.theme == 0 || state.theme == 6
+                ? {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "30px",
+                    marginRight: "30px",
+                    width: "1590px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "black",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+                : {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "30px",
+                    marginRight: "30px",
+                    width: "1590px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "white",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+            }
+          >
+            {state.validity.minutes.toString().charAt(0)}
+          </div>
+        )}
+        {state.validity.minutes.toString().length == 2 && (
+          <div
+            style={
+              state.theme == 0 || state.theme == 6
+                ? {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "10px",
+                    width: "1775px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "black",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+                : {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "10px",
+                    width: "1775px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "white",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+            }
+          >
+            {state.validity.minutes.toString().charAt(1)}
+          </div>
+        )}
+        {state.validity.minutes.toString().length == 1 && (
+          <div
+            style={
+              state.theme == 0 || state.theme == 6
+                ? {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "30px",
+                    marginRight: "30px",
+                    width: "1590px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "black",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+                : {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "30px",
+                    marginRight: "30px",
+                    width: "1590px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "white",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+            }
+          >
+            0
+          </div>
+        )}
+        {state.validity.minutes.toString().length == 1 && (
+          <div
+            style={
+              state.theme == 0 || state.theme == 6
+                ? {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "10px",
+                    width: "1775px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "black",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+                : {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "10px",
+                    width: "1775px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "white",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+            }
+          >
+            {state.validity.minutes.toString().charAt(0)}
+          </div>
+        )}
         <div
           style={
             state.theme == 0 || state.theme == 6
