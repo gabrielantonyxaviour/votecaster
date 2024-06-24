@@ -3445,7 +3445,7 @@ app.frame("/createpreview", (c) => {
       >
         <div style={{ display: "flex" }}>
           <img
-            key={8}
+            key={9}
             style={{ zIndex: -1, width: "102%" }}
             src={`/frames/theme${state.theme}.png`}
           />
