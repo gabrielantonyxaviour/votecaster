@@ -54,8 +54,8 @@ app.composerAction(
   "/composer",
   (c) => {
     return c.res({
-      title: "My Composer Action",
-      url: "https://example.com",
+      title: "Create Private Poll",
+      url: "https://privcast.com",
     });
   },
   {
