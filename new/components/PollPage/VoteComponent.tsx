@@ -9,16 +9,6 @@ import { useQuery } from "@airstack/airstack-react";
 import { ConnectKitButton } from "connectkit";
 
 import {
-  BarretenbergBackend,
-  CompiledCircuit,
-} from "@noir-lang/backend_barretenberg";
-import {
-  ForeignCallHandler,
-  ForeignCallInput,
-  ForeignCallOutput,
-  Noir,
-} from "@noir-lang/noir_js";
-import {
   bytesToHex,
   createWalletClient,
   custom,
@@ -88,178 +78,6 @@ export default function VoteComponent({ poll }: HomeProps) {
       setHasProfile(false);
     }
   }, [data, loading, queryError]);
-
-  const foreignCallHandler: ForeignCallHandler = async (
-    name: string,
-    inputs: ForeignCallInput[]
-  ): Promise<ForeignCallOutput[]> => {
-    if (data != null) {
-      const fid = (data as any).Socials.Social[0].userId;
-      console.log(parseInt(fid));
-      console.log(parseInt(fid).toString(16));
-      console.log(["0x" + parseInt(fid).toString(16).padStart(64, "0")]);
-      return ["0x" + parseInt(fid).toString(16).padStart(64, "0")];
-    } else {
-      return [
-        "0x000000000000000000000000000000000000000000000000000000000003cee9",
-      ];
-    }
-  };
-  async function generateProof() {
-    try {
-      const pollId = poll.id;
-      const fid = (data as any).Socials.Social[0].userId;
-
-      const pollIdArray = new Uint8Array(32);
-      let pollIdTemp = pollId;
-      for (let i = 31; i >= 0; i--) {
-        pollIdArray[i] = pollIdTemp & 0xff; // Extract the least significant byte
-        pollIdTemp = pollIdTemp >> 8; // Shift the number to the right by 8 bits
-      }
-      const backend = new BarretenbergBackend(circuit as CompiledCircuit);
-      const noir = new Noir(circuit as CompiledCircuit, backend);
-      const hashData = toBytes(
-        keccak256(
-          encodePacked(
-            ["uint256", "uint256"],
-            [
-              BigInt(pollId != undefined ? pollId : 0),
-              BigInt(fid != undefined ? fid : 0),
-            ]
-          )
-        )
-      );
-
-      const sig = Buffer.from(
-        (
-          await walletClient.signMessage({
-            account: address,
-            message: {
-              raw: hashData,
-            },
-          })
-        ).slice(2),
-        "hex"
-      );
-
-      const publicKey = await recoverPublicKey({
-        hash: Buffer.from(hashMessage({ raw: hashData }).slice(2), "hex"),
-        signature: sig,
-      });
-      const publicKeyBuffer = Buffer.from(publicKey.slice(2), "hex");
-
-      const trimmedSig = new Uint8Array(sig.subarray(0, sig.length - 1));
-
-      // Extract x and y coordinates
-      const xCoordHex = Array.from(publicKeyBuffer.subarray(1, 33)).map(
-        (byte) => `${byte}`
-      );
-      const yCoordHex = Array.from(publicKeyBuffer.subarray(33)).map(
-        (byte) => `${byte}`
-      );
-      setLogs((prev) => [
-        ...prev,
-        "[" + Number(prev.length + 1) + "] " + "Fetching State... 👀",
-      ]);
-
-      const { response } = await getVoted({
-        pollId: pollId,
-        nullifier: hexToBigInt(keccak256(trimmedSig)).toString(),
-      });
-
-      if (response) {
-        setLogs((prev) => [
-          ...prev,
-          "[" + Number(prev.length + 1) + "] " + "Already voted... 👎",
-        ]);
-      } else {
-        setLogs((prev) => [
-          ...prev,
-          "[" + Number(prev.length + 1) + "] " + "Not voted... 👍",
-        ]);
-
-        setLogs((prev) => [
-          ...prev,
-          "[" + Number(prev.length + 1) + "] " + "Generating proof... ⏳",
-        ]);
-        console.log({
-          signer_pub_x_key: Array.from(xCoordHex).map((byte) => `${byte}`),
-          signer_pub_y_key: Array.from(yCoordHex).map((byte) => `${byte}`),
-          signature: Array.from(trimmedSig).map((byte) => `${byte}`),
-          hashed_message: Array.from(
-            Buffer.from(hashMessage({ raw: hashData }).slice(2), "hex")
-          ).map((byte) => `${byte}`),
-          farcaster_id: parseInt(fid),
-          vote_priv: selectedOption,
-          poll_id: Array.from(pollIdArray).map((byte) => `${byte}`),
-          vote: selectedOption,
-          nullifier: Array.from(
-            Buffer.from(keccak256(trimmedSig).slice(2), "hex")
-          ).map((byte) => `${byte}`),
-        });
-        const proof = await noir.generateFinalProof(
-          {
-            signer_pub_x_key: Array.from(xCoordHex).map((byte) => `${byte}`),
-            signer_pub_y_key: Array.from(yCoordHex).map((byte) => `${byte}`),
-            signature: Array.from(trimmedSig).map((byte) => `${byte}`),
-            hashed_message: Array.from(
-              Buffer.from(hashMessage({ raw: hashData }).slice(2), "hex")
-            ).map((byte) => `${byte}`),
-            farcaster_id: parseInt(fid),
-            vote_priv: 1,
-            poll_id: Array.from(pollIdArray).map((byte) => `${byte}`),
-            vote: 1,
-            nullifier: Array.from(
-              Buffer.from(keccak256(trimmedSig).slice(2), "hex")
-            ).map((byte) => `${byte}`),
-          },
-          foreignCallHandler
-        );
-        setProof(bytesToHex(proof.proof));
-        setLogs((prev) => [
-          ...prev,
-          "[" + Number(prev.length + 1) + "] " + "Proof: " + proof.proof,
-        ]);
-        setLogs((prev) => [
-          ...prev,
-          "[" + Number(prev.length + 1) + "] " + "Proof Generation Success 😏",
-        ]);
-        setLogs((prev) => [
-          ...prev,
-          "[" + Number(prev.length + 1) + "] " + "Verifying proof... ⏳",
-        ]);
-        const isValid = await noir.verifyFinalProof(proof);
-
-        if (isValid) {
-          setLogs((prev) => [
-            ...prev,
-            "[" + Number(prev.length + 1) + "] " + "Proof verified ✅",
-          ]);
-          try {
-            await vote({
-              pollId: pollId,
-              vote: selectedOption,
-              nullifier: hexToBigInt(keccak256(trimmedSig)).toString(),
-            });
-          } catch (e) {}
-        } else {
-          setLogs((prev) => [
-            ...prev,
-            "[" +
-              Number(prev.length + 1) +
-              "] " +
-              "Proof verification failed ❌",
-          ]);
-        }
-      }
-    } catch (err) {
-      console.log(err);
-      setLogs((prev) => [
-        ...prev,
-        "[" + Number(prev.length + 1) + "] " + "Wrong inputs 💔",
-      ]);
-    }
-  }
 
   return (
     <div className="max-w-[1200px] mx-auto h-screen py-8">
@@ -333,9 +151,7 @@ export default function VoteComponent({ poll }: HomeProps) {
                     text="🗳️ Cast Vote"
                     isSelected={false}
                     disabled={selectedOption == 4}
-                    click={async () => {
-                      await generateProof();
-                    }}
+                    click={async () => {}}
                   />
                 </div>
               ) : (

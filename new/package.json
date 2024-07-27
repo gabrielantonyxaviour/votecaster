@@ -10,11 +10,9 @@
   },
   "dependencies": {
     "@airstack/airstack-react": "^0.6.3",
-    "@blake.regalia/belt": "^0.36.2",
+    "@fortawesome/fontawesome-svg-core": "^6.6.0",
     "@fortawesome/free-solid-svg-icons": "^6.5.2",
     "@fortawesome/react-fontawesome": "^0.2.2",
-    "@noir-lang/backend_barretenberg": "^0.30.0",
-    "@noir-lang/noir_js": "^0.30.0",
     "@pinata/sdk": "^2.1.0",
     "@solar-republic/neutrino": "^1.4.5",
     "@supabase/supabase-js": "^2.43.1",
