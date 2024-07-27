@@ -8,21 +8,8 @@ import { useAccount } from "wagmi";
 import { useQuery } from "@airstack/airstack-react";
 import { ConnectKitButton } from "connectkit";
 
-import {
-  bytesToHex,
-  createWalletClient,
-  custom,
-  encodePacked,
-  hashMessage,
-  hexToBigInt,
-  keccak256,
-  recoverPublicKey,
-  toBytes,
-} from "viem";
+import { createWalletClient, custom } from "viem";
 import { scrollSepolia } from "viem/chains";
-
-import vote from "@/utils/supabase/vote";
-import getVoted from "@/utils/supabase/getVoted";
 
 type HomeProps = {
   poll: any;
