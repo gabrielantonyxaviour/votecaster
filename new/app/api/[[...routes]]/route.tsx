@@ -51,7 +51,7 @@ const app = new Frog<{ State: State }>({
 });
 
 app.composerAction(
-  "/composer",
+  "/",
   (c) => {
     return c.res({
       title: "Create Private Poll",
