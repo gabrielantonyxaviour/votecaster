@@ -67,7 +67,7 @@ app.composerAction(
 );
 app.frame("/", (c) => {
   return c.res({
-    action: "/createqn",
+    action: "/composer",
     image: (
       <div
         style={{
