@@ -49,25 +49,9 @@ const app = new Frog<{ State: State }>({
     fonts: [{ name: "Krona One", source: "google" }],
   },
 });
-
-app.composerAction(
-  "/install",
-  (c) => {
-    return c.res({
-      title: "Create Private Poll",
-      url: "https://privcast.com",
-    });
-  },
-  {
-    name: "PrivCast",
-    description: "Private polling on farcaster powered by Secret Network",
-    icon: "image",
-    imageUrl: "https://privcast.com/logo.png",
-  }
-);
 app.frame("/", (c) => {
   return c.res({
-    action: "/composer",
+    action: "/createqn",
     image: (
       <div
         style={{
