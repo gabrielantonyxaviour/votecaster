@@ -1,5 +1,4 @@
 "use client";
-import circuit from "@/utils/privCastCircuit.json";
 import React, { useEffect, useState } from "react";
 import FarcasterButton from "../FarcasterButton";
 import { Data, QueryResponse } from "@/utils/airstackInterface";

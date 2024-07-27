@@ -1,6 +1,7 @@
 import { Metadata, ResolvingMetadata } from "next";
 import PollPageWrapper from "@/components/PollPage/PollPageWrapper";
 import getPoll from "@/utils/supabase/getPoll";
+import { useSearchParams } from "next/navigation";
 
 type Props = {
   params: { id: string };
@@ -8,7 +9,7 @@ type Props = {
 };
 
 export async function generateMetadata(
-  { params, searchParams }: Props,
+  { params }: Props,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const id = params.id;
@@ -38,22 +39,15 @@ export async function generateMetadata(
   };
 }
 
-export default function PollPage({
-  params,
-  searchParams,
-}: {
-  params: { id: string };
-  searchParams: {
-    results: string;
-  };
-}) {
+export default function PollPage({ params }: { params: { id: string } }) {
+  const searchParams = useSearchParams();
+  const results = searchParams.get("results");
+
   return (
     process.env["HOST"] && (
       <PollPageWrapper
         id={params.id}
-        result={JSON.parse(
-          searchParams.results == "true" ? searchParams.results : "false"
-        )}
+        result={results != null ? results == "true" : false}
       />
     )
   );
