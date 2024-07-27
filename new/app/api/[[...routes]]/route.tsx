@@ -51,7 +51,7 @@ const app = new Frog<{ State: State }>({
 });
 
 app.composerAction(
-  "/",
+  "/install",
   (c) => {
     return c.res({
       title: "Create Private Poll",
@@ -59,10 +59,10 @@ app.composerAction(
     });
   },
   {
-    name: "Some Composer Action",
-    description: "Cool Composer Action",
+    name: "PrivCast",
+    description: "Private polling on farcaster powered by Secret Network",
     icon: "image",
-    imageUrl: "https://frog.fm/logo-light.svg",
+    imageUrl: "https://privcast.com/logo.png",
   }
 );
 app.frame("/", (c) => {
