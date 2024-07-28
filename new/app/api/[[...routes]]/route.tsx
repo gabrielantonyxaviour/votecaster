@@ -26,7 +26,7 @@ type State = {
 };
 
 const app = new Frog<{ State: State }>({
-  title: "Private ",
+  title: "Private Poll",
   assetsPath: "/",
   basePath: "/api",
   initialState: {
@@ -76,6 +76,7 @@ app.frame("/", (c) => {
     ],
   });
 });
+
 app.frame("/createqn", (c) => {
   const { deriveState } = c;
   const state = deriveState((prevState) => {
@@ -3045,13 +3046,13 @@ app.frame("/createpoll", async (c) => {
     option_c: state.options.c,
     option_d: state.options.d,
     is_anon: true,
-    validity: 1,
+    validity: state.validity.day,
     farcaster_username: "test",
     theme: state.theme,
   });
   console.log(id);
   return c.res({
-    action: "/createpoll",
+    action: "/confirm",
     image: (
       <div
         style={{
@@ -3073,9 +3074,58 @@ app.frame("/createpoll", async (c) => {
       </div>
     ),
     intents: [
-      <Button value="op2">Create</Button>,
+      <Button.Signature target="/sign">Create</Button.Signature>,
       <Button.Reset>Start Over</Button.Reset>,
     ],
+  });
+});
+
+app.frame("/confirm", (c) => {
+  const { transactionId } = c;
+  return c.res({
+    image: (
+      <div style={{ color: "white", display: "flex", fontSize: 60 }}>
+        Signature: {transactionId}
+      </div>
+    ),
+  });
+});
+
+app.signature("/sign", (c) => {
+  return c.signTypedData({
+    chainId: "eip155:84532",
+    domain: {
+      name: "Ether Mail",
+      version: "1",
+      chainId: 1,
+      verifyingContract: "0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC",
+    },
+    types: {
+      Person: [
+        { name: "name", type: "string" },
+        { name: "wallet", type: "address" },
+        { name: "balance", type: "uint256" },
+      ],
+      Mail: [
+        { name: "from", type: "Person" },
+        { name: "to", type: "Person" },
+        { name: "contents", type: "string" },
+      ],
+    },
+    primaryType: "Mail",
+    message: {
+      from: {
+        name: "Cow",
+        wallet: "0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826",
+        balance: BigInt("0"),
+      },
+      to: {
+        name: "Bob",
+        wallet: "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
+        balance: BigInt("1"),
+      },
+      contents: "Hello, Bob!",
+    },
   });
 });
 
