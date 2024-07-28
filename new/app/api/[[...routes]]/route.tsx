@@ -2664,7 +2664,7 @@ app.frame("/createpreview", (c) => {
     });
   } else
     return c.res({
-      action: "/createpoll",
+      action: "/confirm",
       image: (
         <div
           style={
@@ -3099,7 +3099,7 @@ app.frame("/createpoll", async (c) => {
       </div>
     ),
     intents: [
-      <Button.Transaction target="/sign">Create</Button.Transaction>,
+      // <Button.Transaction target="/sign">Create</Button.Transaction>,
       <Button.Reset>Start Over</Button.Reset>,
     ],
   });
