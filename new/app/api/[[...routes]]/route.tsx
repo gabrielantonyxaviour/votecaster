@@ -28,7 +28,7 @@ type State = {
 const app = new Frog<{ State: State }>({
   title: "Private Poll",
   assetsPath: "/",
-  basePath: "/api",
+  basePath: "/",
   initialState: {
     question: "",
     options: {
@@ -51,7 +51,6 @@ const app = new Frog<{ State: State }>({
 });
 app.frame("/", (c) => {
   return c.res({
-    action: "/createqn",
     image: (
       <div
         style={{
@@ -71,7 +70,7 @@ app.frame("/", (c) => {
       </div>
     ),
     intents: [
-      <Button value="apples">Create 🪄</Button>,
+      <Button action="/createqn">Create 🪄</Button>,
       <Button.Link href="http://privcast.com/">Visit PrivCast</Button.Link>,
     ],
   });
@@ -133,6 +132,7 @@ app.frame("/createqn", (c) => {
     ],
   });
 });
+
 app.frame("/createop1", (c) => {
   const { frameData, deriveState } = c;
   const question = frameData?.inputText;
