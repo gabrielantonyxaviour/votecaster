@@ -28,7 +28,7 @@ type State = {
 const app = new Frog<{ State: State }>({
   title: "Private Poll",
   assetsPath: "/",
-  basePath: "/",
+  basePath: "/api",
   initialState: {
     question: "",
     options: {
@@ -78,15 +78,7 @@ app.frame("/", (c) => {
 
 app.frame("/createqn", (c) => {
   const { deriveState } = c;
-  const state = deriveState((prevState) => {
-    getCreatePollSignData({
-      callerAddress: "0x5A6B842891032d702517a4E52ec38eE561063539",
-      pollUri: "bafkreihhihxra5khijiexq3h6cggug6oof2qvssvzyhn4mlextqn322yoe",
-      validity: 1321413,
-    }).then((data) => {
-      console.log(data);
-    });
-  });
+  const state = deriveState((prevState) => {});
 
   return c.res({
     action: "/createop1",
@@ -1271,7 +1263,6 @@ app.frame("/chooseday", (c) => {
         <Button action="/createop4">Back ↩️</Button>,
 
         <Button action="/choosehours">Next ➡️</Button>,
-        <Button action="/createpreview">Preview</Button>,
       ],
     });
 });
@@ -1699,7 +1690,6 @@ app.frame("/choosehours", (c) => {
         <Button action="/chooseday">Back ↩️</Button>,
 
         <Button action="/choosemins">Next ➡️</Button>,
-        <Button action="/createpreview">Preview</Button>,
       ],
     });
 });
@@ -2172,9 +2162,391 @@ app.frame("/choosemins", (c) => {
         <Button action="/choosehours">Back ↩️</Button>,
 
         <Button action="/createpreview">Next ➡️</Button>,
-        <Button action="/createpreview">Preview</Button>,
       ],
     });
+});
+app.frame("/choosetheme/:theme", (c) => {
+  const params = c.req.param();
+  const theme = params["theme"];
+  const { deriveState } = c;
+  const state = deriveState((previousState) => {
+    if (theme !== undefined) {
+      previousState.theme = parseInt(theme);
+    }
+  });
+  return c.res({
+    // action: "/createpoll",
+    action: "/createpoll",
+    image: (
+      <div
+        style={
+          state.theme == 0 || state.theme == 6
+            ? {
+                alignItems: "center",
+                background: "white",
+                backgroundSize: "100% 100%",
+                display: "flex",
+                flexDirection: "column",
+                flexWrap: "nowrap",
+                height: "100%",
+                justifyContent: "center",
+                textAlign: "center",
+                width: "100%",
+                color: "black",
+              }
+            : {
+                alignItems: "center",
+                background: "white",
+                backgroundSize: "100% 100%",
+                display: "flex",
+                flexDirection: "column",
+                flexWrap: "nowrap",
+                height: "100%",
+                justifyContent: "center",
+                textAlign: "center",
+                width: "100%",
+                color: "white",
+              }
+        }
+      >
+        <div style={{ display: "flex" }}>
+          <img
+            key={10}
+            style={{ zIndex: 1, width: "102%" }}
+            src={
+              state.theme == 0
+                ? `/frames/validity.png`
+                : `/frames/theme${state.theme}.png`
+            }
+          />
+        </div>
+        {state.validity.day.toString().length == 2 && (
+          <div
+            style={{
+              fontFamily: "fantasy",
+              fontSize: "50px",
+              position: "absolute",
+              top: "105px",
+              left: "0px",
+              right: "30px",
+              marginRight: "30px",
+              width: "620px",
+              textWrap: "wrap",
+              zIndex: 10,
+              justifyContent: "center",
+              textAlign: "center",
+            }}
+          >
+            {state.validity.day.toString().charAt(0)}
+          </div>
+        )}
+        {state.validity.day.toString().length == 2 && (
+          <div
+            style={{
+              fontFamily: "fantasy",
+              fontSize: "50px",
+              position: "absolute",
+              top: "105px",
+              left: "0px",
+              right: "10px",
+              width: "810px",
+              textWrap: "wrap",
+              zIndex: 10,
+              justifyContent: "center",
+              textAlign: "center",
+            }}
+          >
+            {state.validity.day.toString().charAt(1)}
+          </div>
+        )}{" "}
+        {state.validity.day.toString().length == 1 && (
+          <div
+            style={{
+              fontFamily: "fantasy",
+              fontSize: "50px",
+              position: "absolute",
+              top: "105px",
+              left: "0px",
+              right: "30px",
+              marginRight: "30px",
+              width: "620px",
+              textWrap: "wrap",
+              zIndex: 10,
+              justifyContent: "center",
+              textAlign: "center",
+            }}
+          >
+            0
+          </div>
+        )}
+        {state.validity.day.toString().length == 1 && (
+          <div
+            style={{
+              fontFamily: "fantasy",
+              fontSize: "50px",
+              position: "absolute",
+              top: "105px",
+              left: "0px",
+              right: "10px",
+              width: "810px",
+              textWrap: "wrap",
+              zIndex: 10,
+              justifyContent: "center",
+              textAlign: "center",
+            }}
+          >
+            {state.validity.day.toString().charAt(0)}
+          </div>
+        )}
+        {state.validity.hours.toString().length == 2 && (
+          <div
+            style={{
+              fontFamily: "fantasy",
+              fontSize: "50px",
+              position: "absolute",
+              top: "105px",
+              left: "0px",
+              right: "30px",
+              marginRight: "30px",
+              width: "1115px",
+              textWrap: "wrap",
+              zIndex: 10,
+              justifyContent: "center",
+              textAlign: "center",
+            }}
+          >
+            {state.validity.hours.toString().charAt(0)}
+          </div>
+        )}
+        {state.validity.hours.toString().length == 2 && (
+          <div
+            style={{
+              fontFamily: "fantasy",
+              fontSize: "50px",
+              position: "absolute",
+              top: "105px",
+              left: "0px",
+              right: "10px",
+              width: "1300px",
+              textWrap: "wrap",
+              zIndex: 10,
+              justifyContent: "center",
+              textAlign: "center",
+            }}
+          >
+            {state.validity.hours.toString().charAt(1)}
+          </div>
+        )}
+        {state.validity.hours.toString().length == 1 && (
+          <div
+            style={{
+              fontFamily: "fantasy",
+              fontSize: "50px",
+              position: "absolute",
+              top: "105px",
+              left: "0px",
+              right: "30px",
+              marginRight: "30px",
+              width: "1115px",
+              textWrap: "wrap",
+              zIndex: 10,
+              justifyContent: "center",
+              textAlign: "center",
+            }}
+          >
+            0
+          </div>
+        )}
+        {state.validity.hours.toString().length == 1 && (
+          <div
+            style={{
+              fontFamily: "fantasy",
+              fontSize: "50px",
+              position: "absolute",
+              top: "105px",
+              left: "0px",
+              right: "10px",
+              width: "1300px",
+              textWrap: "wrap",
+              zIndex: 10,
+              justifyContent: "center",
+              textAlign: "center",
+            }}
+          >
+            {state.validity.hours.toString().charAt(0)}
+          </div>
+        )}
+        {state.validity.minutes.toString().length == 2 && (
+          <div
+            style={{
+              fontFamily: "fantasy",
+              fontSize: "50px",
+              position: "absolute",
+              top: "105px",
+              left: "0px",
+              right: "30px",
+              marginRight: "30px",
+              width: "1590px",
+              textWrap: "wrap",
+              zIndex: 10,
+              justifyContent: "center",
+              textAlign: "center",
+            }}
+          >
+            {state.validity.minutes.toString().charAt(0)}
+          </div>
+        )}
+        {state.validity.minutes.toString().length == 2 && (
+          <div
+            style={{
+              fontFamily: "fantasy",
+              fontSize: "50px",
+              position: "absolute",
+              top: "105px",
+              left: "0px",
+              right: "10px",
+              width: "1775px",
+              textWrap: "wrap",
+              zIndex: 10,
+              justifyContent: "center",
+              textAlign: "center",
+            }}
+          >
+            {state.validity.minutes.toString().charAt(1)}
+          </div>
+        )}
+        {state.validity.minutes.toString().length == 1 && (
+          <div
+            style={{
+              fontFamily: "fantasy",
+              fontSize: "50px",
+              position: "absolute",
+              top: "105px",
+              left: "0px",
+              right: "30px",
+              marginRight: "30px",
+              width: "1590px",
+              textWrap: "wrap",
+              zIndex: 10,
+              justifyContent: "center",
+              textAlign: "center",
+            }}
+          >
+            0
+          </div>
+        )}
+        {state.validity.minutes.toString().length == 1 && (
+          <div
+            style={{
+              fontFamily: "fantasy",
+              fontSize: "50px",
+              position: "absolute",
+              top: "105px",
+              left: "0px",
+              right: "10px",
+              width: "1775px",
+              textWrap: "wrap",
+              zIndex: 10,
+              justifyContent: "center",
+              textAlign: "center",
+            }}
+          >
+            {state.validity.minutes.toString().charAt(0)}
+          </div>
+        )}
+        <div
+          style={{
+            fontFamily: "fantasy",
+            fontSize: "50px",
+            position: "absolute",
+            top: "210px",
+            left: "200px",
+            width: "800px",
+            textWrap: "wrap",
+            zIndex: 10,
+            justifyContent: "center",
+            textAlign: "center",
+          }}
+        >
+          {state.question}
+        </div>
+        <div
+          style={{
+            fontFamily: "fantasy",
+            fontSize: "30px",
+            position: "absolute",
+            top: "418px",
+            left: "230px",
+            width: "800px",
+            textWrap: "wrap",
+            zIndex: 10,
+          }}
+        >
+          {state.options.a}
+        </div>
+        <div
+          style={{
+            fontFamily: "fantasy",
+            fontSize: "30px",
+            position: "absolute",
+            top: "418px",
+            left: "670px",
+            width: "800px",
+            textWrap: "wrap",
+            zIndex: 10,
+          }}
+        >
+          {state.options.b}
+        </div>
+        <div
+          style={{
+            fontFamily: "fantasy",
+            fontSize: "30px",
+            position: "absolute",
+            top: "535px",
+            left: "230px",
+            width: "800px",
+            textWrap: "wrap",
+            zIndex: 10,
+          }}
+        >
+          {state.options.c}
+        </div>
+        <div
+          style={{
+            fontFamily: "fantasy",
+            fontSize: "30px",
+            position: "absolute",
+            top: "535px",
+            left: "670px",
+            width: "800px",
+            textWrap: "wrap",
+            zIndex: 10,
+          }}
+        >
+          {state.options.d}
+        </div>
+      </div>
+    ),
+    intents: [
+      <Button.Reset>Back ↩️</Button.Reset>,
+      <Button
+        action={`/choosetheme/${
+          parseInt(theme) == 0 ? 6 : parseInt(theme) - 1
+        }`}
+      >
+        ⬅️
+      </Button>,
+      <Button
+        action={`/choosetheme/${
+          parseInt(theme) == 6 ? 0 : parseInt(theme) + 1
+        }`}
+      >
+        ➡️
+      </Button>,
+      <Button action="/createpreview">Select ✅</Button>,
+    ],
+  });
 });
 app.frame("/createpreview", (c) => {
   const { frameData, deriveState } = c;
@@ -2647,391 +3019,44 @@ app.frame("/createpreview", (c) => {
       intents: [
         <Button action="/choosemins">Back ↩️</Button>,
         <Button action="/choosetheme/0">Theme 🖼️</Button>,
-        <Button value="op2">Create 🪄</Button>,
+        <Button.Signature target="/sign">Create 🪄</Button.Signature>,
       ],
     });
 });
-app.frame("/choosetheme/:theme", (c) => {
-  const params = c.req.param();
-  const theme = params["theme"];
-  const { deriveState } = c;
-  const state = deriveState((previousState) => {
-    if (theme !== undefined) {
-      previousState.theme = parseInt(theme);
-    }
+app.signature("/sign", async (c) => {
+  const { address, previousState } = c;
+  const validity =
+    previousState.validity.day * 24 * 60 * 60 +
+    previousState.validity.hours * 60 * 60 +
+    previousState.validity.minutes * 60;
+  const poll = {
+    question: previousState.question,
+    options: previousState.options,
+    validity: validity,
+    theme: previousState.theme,
+  };
+  console.log("VALIDITY");
+  console.log(validity);
+  console.log("POLL");
+  console.log(poll);
+  const data = await getCreatePollSignData({
+    callerAddress: address as `0x${string}`,
+    poll: poll,
+    validity: validity,
   });
-  return c.res({
-    // action: "/createpoll",
-    action: "/createpoll",
-    image: (
-      <div
-        style={
-          state.theme == 0 || state.theme == 6
-            ? {
-                alignItems: "center",
-                background: "white",
-                backgroundSize: "100% 100%",
-                display: "flex",
-                flexDirection: "column",
-                flexWrap: "nowrap",
-                height: "100%",
-                justifyContent: "center",
-                textAlign: "center",
-                width: "100%",
-                color: "black",
-              }
-            : {
-                alignItems: "center",
-                background: "white",
-                backgroundSize: "100% 100%",
-                display: "flex",
-                flexDirection: "column",
-                flexWrap: "nowrap",
-                height: "100%",
-                justifyContent: "center",
-                textAlign: "center",
-                width: "100%",
-                color: "white",
-              }
-        }
-      >
-        <div style={{ display: "flex" }}>
-          <img
-            key={10}
-            style={{ zIndex: 1, width: "102%" }}
-            src={
-              state.theme == 0
-                ? `/frames/validity.png`
-                : `/frames/theme${state.theme}.png`
-            }
-          />
-        </div>
-        {state.validity.day.toString().length == 2 && (
-          <div
-            style={{
-              fontFamily: "fantasy",
-              fontSize: "50px",
-              position: "absolute",
-              top: "105px",
-              left: "0px",
-              right: "30px",
-              marginRight: "30px",
-              width: "620px",
-              textWrap: "wrap",
-              zIndex: 10,
-              justifyContent: "center",
-              textAlign: "center",
-            }}
-          >
-            {state.validity.day.toString().charAt(0)}
-          </div>
-        )}
-        {state.validity.day.toString().length == 2 && (
-          <div
-            style={{
-              fontFamily: "fantasy",
-              fontSize: "50px",
-              position: "absolute",
-              top: "105px",
-              left: "0px",
-              right: "10px",
-              width: "810px",
-              textWrap: "wrap",
-              zIndex: 10,
-              justifyContent: "center",
-              textAlign: "center",
-            }}
-          >
-            {state.validity.day.toString().charAt(1)}
-          </div>
-        )}{" "}
-        {state.validity.day.toString().length == 1 && (
-          <div
-            style={{
-              fontFamily: "fantasy",
-              fontSize: "50px",
-              position: "absolute",
-              top: "105px",
-              left: "0px",
-              right: "30px",
-              marginRight: "30px",
-              width: "620px",
-              textWrap: "wrap",
-              zIndex: 10,
-              justifyContent: "center",
-              textAlign: "center",
-            }}
-          >
-            0
-          </div>
-        )}
-        {state.validity.day.toString().length == 1 && (
-          <div
-            style={{
-              fontFamily: "fantasy",
-              fontSize: "50px",
-              position: "absolute",
-              top: "105px",
-              left: "0px",
-              right: "10px",
-              width: "810px",
-              textWrap: "wrap",
-              zIndex: 10,
-              justifyContent: "center",
-              textAlign: "center",
-            }}
-          >
-            {state.validity.day.toString().charAt(0)}
-          </div>
-        )}
-        {state.validity.hours.toString().length == 2 && (
-          <div
-            style={{
-              fontFamily: "fantasy",
-              fontSize: "50px",
-              position: "absolute",
-              top: "105px",
-              left: "0px",
-              right: "30px",
-              marginRight: "30px",
-              width: "1115px",
-              textWrap: "wrap",
-              zIndex: 10,
-              justifyContent: "center",
-              textAlign: "center",
-            }}
-          >
-            {state.validity.hours.toString().charAt(0)}
-          </div>
-        )}
-        {state.validity.hours.toString().length == 2 && (
-          <div
-            style={{
-              fontFamily: "fantasy",
-              fontSize: "50px",
-              position: "absolute",
-              top: "105px",
-              left: "0px",
-              right: "10px",
-              width: "1300px",
-              textWrap: "wrap",
-              zIndex: 10,
-              justifyContent: "center",
-              textAlign: "center",
-            }}
-          >
-            {state.validity.hours.toString().charAt(1)}
-          </div>
-        )}
-        {state.validity.hours.toString().length == 1 && (
-          <div
-            style={{
-              fontFamily: "fantasy",
-              fontSize: "50px",
-              position: "absolute",
-              top: "105px",
-              left: "0px",
-              right: "30px",
-              marginRight: "30px",
-              width: "1115px",
-              textWrap: "wrap",
-              zIndex: 10,
-              justifyContent: "center",
-              textAlign: "center",
-            }}
-          >
-            0
-          </div>
-        )}
-        {state.validity.hours.toString().length == 1 && (
-          <div
-            style={{
-              fontFamily: "fantasy",
-              fontSize: "50px",
-              position: "absolute",
-              top: "105px",
-              left: "0px",
-              right: "10px",
-              width: "1300px",
-              textWrap: "wrap",
-              zIndex: 10,
-              justifyContent: "center",
-              textAlign: "center",
-            }}
-          >
-            {state.validity.hours.toString().charAt(0)}
-          </div>
-        )}
-        {state.validity.minutes.toString().length == 2 && (
-          <div
-            style={{
-              fontFamily: "fantasy",
-              fontSize: "50px",
-              position: "absolute",
-              top: "105px",
-              left: "0px",
-              right: "30px",
-              marginRight: "30px",
-              width: "1590px",
-              textWrap: "wrap",
-              zIndex: 10,
-              justifyContent: "center",
-              textAlign: "center",
-            }}
-          >
-            {state.validity.minutes.toString().charAt(0)}
-          </div>
-        )}
-        {state.validity.minutes.toString().length == 2 && (
-          <div
-            style={{
-              fontFamily: "fantasy",
-              fontSize: "50px",
-              position: "absolute",
-              top: "105px",
-              left: "0px",
-              right: "10px",
-              width: "1775px",
-              textWrap: "wrap",
-              zIndex: 10,
-              justifyContent: "center",
-              textAlign: "center",
-            }}
-          >
-            {state.validity.minutes.toString().charAt(1)}
-          </div>
-        )}
-        {state.validity.minutes.toString().length == 1 && (
-          <div
-            style={{
-              fontFamily: "fantasy",
-              fontSize: "50px",
-              position: "absolute",
-              top: "105px",
-              left: "0px",
-              right: "30px",
-              marginRight: "30px",
-              width: "1590px",
-              textWrap: "wrap",
-              zIndex: 10,
-              justifyContent: "center",
-              textAlign: "center",
-            }}
-          >
-            0
-          </div>
-        )}
-        {state.validity.minutes.toString().length == 1 && (
-          <div
-            style={{
-              fontFamily: "fantasy",
-              fontSize: "50px",
-              position: "absolute",
-              top: "105px",
-              left: "0px",
-              right: "10px",
-              width: "1775px",
-              textWrap: "wrap",
-              zIndex: 10,
-              justifyContent: "center",
-              textAlign: "center",
-            }}
-          >
-            {state.validity.minutes.toString().charAt(0)}
-          </div>
-        )}
-        <div
-          style={{
-            fontFamily: "fantasy",
-            fontSize: "50px",
-            position: "absolute",
-            top: "210px",
-            left: "200px",
-            width: "800px",
-            textWrap: "wrap",
-            zIndex: 10,
-            justifyContent: "center",
-            textAlign: "center",
-          }}
-        >
-          {state.question}
-        </div>
-        <div
-          style={{
-            fontFamily: "fantasy",
-            fontSize: "30px",
-            position: "absolute",
-            top: "418px",
-            left: "230px",
-            width: "800px",
-            textWrap: "wrap",
-            zIndex: 10,
-          }}
-        >
-          {state.options.a}
-        </div>
-        <div
-          style={{
-            fontFamily: "fantasy",
-            fontSize: "30px",
-            position: "absolute",
-            top: "418px",
-            left: "670px",
-            width: "800px",
-            textWrap: "wrap",
-            zIndex: 10,
-          }}
-        >
-          {state.options.b}
-        </div>
-        <div
-          style={{
-            fontFamily: "fantasy",
-            fontSize: "30px",
-            position: "absolute",
-            top: "535px",
-            left: "230px",
-            width: "800px",
-            textWrap: "wrap",
-            zIndex: 10,
-          }}
-        >
-          {state.options.c}
-        </div>
-        <div
-          style={{
-            fontFamily: "fantasy",
-            fontSize: "30px",
-            position: "absolute",
-            top: "535px",
-            left: "670px",
-            width: "800px",
-            textWrap: "wrap",
-            zIndex: 10,
-          }}
-        >
-          {state.options.d}
-        </div>
-      </div>
-    ),
-    intents: [
-      <Button.Reset>Back ↩️</Button.Reset>,
-      <Button
-        action={`/choosetheme/${
-          parseInt(theme) == 0 ? 6 : parseInt(theme) - 1
-        }`}
-      >
-        ⬅️
-      </Button>,
-      <Button
-        action={`/choosetheme/${
-          parseInt(theme) == 6 ? 0 : parseInt(theme) + 1
-        }`}
-      >
-        ➡️
-      </Button>,
-      <Button action="/createpreview">Select ✅</Button>,
-    ],
+  return c.signTypedData({
+    chainId: "eip155:84532",
+    types: {
+      CreatePoll: [
+        { name: "caller", type: "address" },
+        { name: "poll", type: "bytes" },
+      ],
+    },
+    primaryType: "CreatePoll",
+    message: {
+      caller: address as `0x${string}`,
+      poll: data.signData,
+    },
   });
 });
 
@@ -3074,7 +3099,7 @@ app.frame("/createpoll", async (c) => {
       </div>
     ),
     intents: [
-      <Button.Signature target="/sign">Create</Button.Signature>,
+      <Button.Transaction target="/sign">Create</Button.Transaction>,
       <Button.Reset>Start Over</Button.Reset>,
     ],
   });
@@ -3088,44 +3113,6 @@ app.frame("/confirm", (c) => {
         Signature: {transactionId}
       </div>
     ),
-  });
-});
-
-app.signature("/sign", (c) => {
-  return c.signTypedData({
-    chainId: "eip155:84532",
-    domain: {
-      name: "Ether Mail",
-      version: "1",
-      chainId: 1,
-      verifyingContract: "0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC",
-    },
-    types: {
-      Person: [
-        { name: "name", type: "string" },
-        { name: "wallet", type: "address" },
-        { name: "balance", type: "uint256" },
-      ],
-      Mail: [
-        { name: "from", type: "Person" },
-        { name: "to", type: "Person" },
-        { name: "contents", type: "string" },
-      ],
-    },
-    primaryType: "Mail",
-    message: {
-      from: {
-        name: "Cow",
-        wallet: "0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826",
-        balance: BigInt("0"),
-      },
-      to: {
-        name: "Bob",
-        wallet: "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
-        balance: BigInt("1"),
-      },
-      contents: "Hello, Bob!",
-    },
   });
 });
 

@@ -6,6 +6,7 @@ import {
   sha256,
   text_to_bytes,
 } from "@blake.regalia/belt";
+import pinataSDK from "@pinata/sdk";
 import { concat, keccak256, toBytes, toFunctionSelector } from "viem";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import {
@@ -18,11 +19,11 @@ import { chacha20_poly1305_seal, ecdh } from "@solar-republic/neutrino";
 
 export default async function getCreatePollSignData({
   callerAddress,
-  pollUri,
+  poll,
   validity,
 }: {
   callerAddress: `0x${string}`;
-  pollUri: string;
+  poll: any;
   validity: number;
 }): Promise<{
   nonce: Uint8Array;
@@ -30,88 +31,129 @@ export default async function getCreatePollSignData({
   payloadHash: `0x${string}`;
   signData: `0x${string}`;
 }> {
-  const privateKey = generatePrivateKey();
-  console.log("PRIVATE KEY");
-  console.log(privateKey);
-  const privateKeyBytes = toBytes(privateKey);
-  console.log("IN BYTES");
-  console.log(privateKeyBytes);
-  const userPublicKey = privateKeyToAccount(privateKey).publicKey;
-  console.log("USER PUBLIC KEY");
-  console.log(userPublicKey);
-  const userPublicKeyBytes = toBytes(userPublicKey);
-  console.log("USER PUBLIC KEY BYTES");
-  console.log(userPublicKeyBytes);
+  try {
+    const privateKey = generatePrivateKey();
+    console.log("PRIVATE KEY");
+    console.log(privateKey);
+    const privateKeyBytes = toBytes(privateKey);
+    console.log("IN BYTES");
+    console.log(privateKeyBytes);
+    const userPublicKey = privateKeyToAccount(privateKey).publicKey;
+    console.log("USER PUBLIC KEY");
+    console.log(userPublicKey);
+    const userPublicKeyBytes = toBytes(userPublicKey);
+    console.log("USER PUBLIC KEY BYTES");
+    console.log(userPublicKeyBytes);
 
-  const gatewayPublicKeyBytes = base64_to_bytes(gatewayPublicKey);
-  console.log("GATEWAY PUBLIC KEY BYTES");
-  console.log(gatewayPublicKeyBytes);
+    const gatewayPublicKeyBytes = base64_to_bytes(gatewayPublicKey);
+    console.log("GATEWAY PUBLIC KEY BYTES");
+    console.log(gatewayPublicKeyBytes);
 
-  const sharedKey = await sha256(ecdh(privateKeyBytes, gatewayPublicKeyBytes));
-  console.log("SHARED KEY");
-  console.log(sharedKey);
+    const sharedKey = await sha256(
+      ecdh(privateKeyBytes, gatewayPublicKeyBytes)
+    );
+    console.log("SHARED KEY");
+    console.log(sharedKey);
 
-  const callbackGasLimit = 300000;
-  const callParams = JSON.stringify({
-    poll_uri: pollUri,
-    validity: validity,
-  });
+    const callbackGasLimit = 300000;
 
-  const callbackAddress = baseSepoliaPublicClientAddress.toLowerCase();
-  const callbackSelector = toFunctionSelector("upgradeHandler()");
-  console.log("CALLBACK SELECTOR");
-  console.log(callbackSelector);
-  const payload = {
-    data: callParams,
-    routing_info: routingContract,
-    routing_code_hash: routingCodeHash,
-    user_address: callerAddress,
-    user_key: bytes_to_base64(userPublicKeyBytes),
-    callback_address: bytes_to_base64(toBytes(callbackAddress)),
-    callback_selector: bytes_to_base64(toBytes(callbackSelector)),
-    callback_gas_limit: callbackGasLimit.toString(),
-  };
-  console.log("PAYLOAD");
-  console.log(payload);
-  const plaintext = json_to_bytes(payload);
-  console.log("PLAIN TEXT");
-  console.log(plaintext);
-  const nonce = crypto.getRandomValues(bytes(12));
-  console.log("NONCE");
-  console.log(nonce);
+    const pinata = new pinataSDK(
+      process.env.PINATA_API_KEY,
+      process.env.PINATA_SECRET_API_KEY
+    );
 
-  const [ciphertextClient, tagClient] = chacha20_poly1305_seal(
-    sharedKey,
-    nonce,
-    plaintext
-  );
+    const body = JSON.stringify(poll);
+    const options: any = {
+      pinataMetadata: {
+        name:
+          "PRIV CAST POLL " + Math.floor(Math.random() * 10000001).toString(),
+      },
+      pinataOptions: {
+        cidVersion: 1,
+      },
+    };
+    const res = await pinata.pinJSONToIPFS(body, options);
+    console.log("IPFS RESPONSE");
+    console.log(
+      "https://amethyst-impossible-ptarmigan-368.mypinata.cloud/ipfs/" +
+        res.IpfsHash +
+        "?pinataGatewayToken=" +
+        process.env.GATEWAY_KEY
+    );
+    const callParams = JSON.stringify({
+      poll_uri:
+        "https://amethyst-impossible-ptarmigan-368.mypinata.cloud/ipfs/" +
+        res.IpfsHash +
+        "?pinataGatewayToken=" +
+        process.env.GATEWAY_KEY,
+      validity: validity,
+    });
 
-  console.log("CIPHERTEXT CLIENT");
-  console.log(ciphertextClient);
-  console.log("TAG CLIENT");
-  console.log(tagClient);
+    const callbackAddress = baseSepoliaPublicClientAddress.toLowerCase();
+    const callbackSelector = toFunctionSelector("upgradeHandler()");
+    console.log("CALLBACK SELECTOR");
+    console.log(callbackSelector);
+    const payload = {
+      data: callParams,
+      routing_info: routingContract,
+      routing_code_hash: routingCodeHash,
+      user_address: callerAddress,
+      user_key: bytes_to_base64(userPublicKeyBytes),
+      callback_address: bytes_to_base64(toBytes(callbackAddress)),
+      callback_selector: bytes_to_base64(toBytes(callbackSelector)),
+      callback_gas_limit: callbackGasLimit.toString(),
+    };
+    console.log("PAYLOAD");
+    console.log(payload);
+    const plaintext = json_to_bytes(payload);
+    console.log("PLAIN TEXT");
+    console.log(plaintext);
+    const nonce = crypto.getRandomValues(bytes(12));
+    console.log("NONCE");
+    console.log(nonce);
 
-  const ciphertext = concat([ciphertextClient, tagClient]);
-  const ciphertextHash = keccak256(ciphertext);
+    const [ciphertextClient, tagClient] = chacha20_poly1305_seal(
+      sharedKey,
+      nonce,
+      plaintext
+    );
 
-  console.log("CIPHERTEXT");
-  console.log(ciphertext);
-  console.log("CIPHERTEXT HASH");
-  console.log(ciphertextHash);
+    console.log("CIPHERTEXT CLIENT");
+    console.log(ciphertextClient);
+    console.log("TAG CLIENT");
+    console.log(tagClient);
 
-  const payloadHash = keccak256(
-    concat([
-      text_to_bytes("\x19Ethereum Signed Message:\n32"),
-      toBytes(ciphertextHash),
-    ])
-  );
-  console.log("PAYLOAD HASH");
-  console.log(payloadHash);
+    const ciphertext = concat([ciphertextClient, tagClient]);
+    const ciphertextHash = keccak256(ciphertext);
 
-  return {
-    nonce,
-    ciphertext,
-    payloadHash,
-    signData: concat([callerAddress, ciphertextHash]),
-  };
+    console.log("CIPHERTEXT");
+    console.log(ciphertext);
+    console.log("CIPHERTEXT HASH");
+    console.log(ciphertextHash);
+
+    const payloadHash = keccak256(
+      concat([
+        text_to_bytes("\x19Ethereum Signed Message:\n32"),
+        toBytes(ciphertextHash),
+      ])
+    );
+    console.log("PAYLOAD HASH");
+    console.log(payloadHash);
+
+    return {
+      nonce,
+      ciphertext,
+      payloadHash,
+      signData: ciphertextHash,
+    };
+  } catch (e) {
+    console.log("ERROR");
+    console.log(e);
+    return {
+      nonce: new Uint8Array(),
+      ciphertext: new Uint8Array(),
+      payloadHash: "0x",
+      signData: "0x",
+    };
+  }
 }
