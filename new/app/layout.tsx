@@ -28,7 +28,9 @@ export default function RootLayout({ children }: { children: JSX.Element }) {
           <WagmiProvider
             config={createConfig({
               chains: [baseSepolia],
-              transports: { [baseSepolia.id]: http() },
+              transports: {
+                [baseSepolia.id]: http(process.env.BASE_ALCHEMY_URL),
+              },
             })}
           >
             <QueryClientProvider client={queryClient}>
