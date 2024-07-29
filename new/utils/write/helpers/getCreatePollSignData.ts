@@ -62,7 +62,7 @@ export default async function getCreatePollSignData({
       process.env.PINATA_SECRET_API_KEY
     );
 
-    const body = JSON.stringify(poll);
+    const body = poll;
     const options: any = {
       pinataMetadata: {
         name:
