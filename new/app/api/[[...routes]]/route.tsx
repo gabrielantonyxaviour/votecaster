@@ -4629,39 +4629,51 @@ app.frame("/createpreview", (c) => {
   });
 });
 
-app.signature("/sign", async (c) => {
-  const { address, previousState } = c;
-  const validity =
-    previousState.validity.day * 24 * 60 * 60 +
-    previousState.validity.hours * 60 * 60 +
-    previousState.validity.minutes * 60;
-  const poll = {
-    question: previousState.question,
-    options: previousState.options,
-    validity: validity,
-    theme: previousState.theme,
-  };
-  console.log("VALIDITY");
-  console.log(validity);
-  console.log("POLL");
-  console.log(poll);
-  const data = await getCreatePollSignData({
-    callerAddress: address as `0x${string}`,
-    poll: poll,
-    validity: validity,
+app.frame("/confirm", (c) => {
+  const { transactionId } = c;
+  return c.res({
+    image: (
+      <div style={{ color: "white", display: "flex", fontSize: 60 }}>
+        Signature: {transactionId}
+      </div>
+    ),
   });
+});
+
+app.signature("/sign", async (c) => {
   return c.signTypedData({
     chainId: "eip155:84532",
+    domain: {
+      name: "Ether Mail",
+      version: "1",
+      chainId: 1,
+      verifyingContract: "0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC",
+    },
     types: {
-      CreatePoll: [
-        { name: "caller", type: "address" },
-        { name: "poll", type: "bytes" },
+      Person: [
+        { name: "name", type: "string" },
+        { name: "wallet", type: "address" },
+        { name: "balance", type: "uint256" },
+      ],
+      Mail: [
+        { name: "from", type: "Person" },
+        { name: "to", type: "Person" },
+        { name: "contents", type: "string" },
       ],
     },
-    primaryType: "CreatePoll",
+    primaryType: "Mail",
     message: {
-      caller: address as `0x${string}`,
-      poll: data.signData,
+      from: {
+        name: "Cow",
+        wallet: "0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826",
+        balance: BigInt("0"),
+      },
+      to: {
+        name: "Bob",
+        wallet: "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
+        balance: BigInt("9"),
+      },
+      contents: "Hello, Bob!",
     },
   });
 });
@@ -4708,17 +4720,6 @@ app.frame("/createpoll", async (c) => {
       // <Button.Transaction target="/sign">Create</Button.Transaction>,
       <Button.Reset>Start Over</Button.Reset>,
     ],
-  });
-});
-
-app.frame("/confirm", (c) => {
-  const { transactionId } = c;
-  return c.res({
-    image: (
-      <div style={{ color: "white", display: "flex", fontSize: 60 }}>
-        Signature: {transactionId}
-      </div>
-    ),
   });
 });
 
