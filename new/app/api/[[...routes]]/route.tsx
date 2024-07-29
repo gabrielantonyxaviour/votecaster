@@ -1260,7 +1260,6 @@ app.frame("/chooseday", (c) => {
       intents: [
         <TextInput placeholder="Enter Days in DD format" />,
         <Button action="/createop4">Back ↩️</Button>,
-
         <Button action="/choosehours">Next ➡️</Button>,
       ],
     });
@@ -2279,10 +2278,9 @@ app.frame("/choosemins", (c) => {
         </div>
       ),
       intents: [
-        <TextInput placeholder="Enter Hours in proper HH format" />,
-        <Button action="/chooseday">Back ↩️</Button>,
-
-        <Button action="/choosemins">Next ➡️</Button>,
+        <TextInput placeholder="Enter Minutes in proper MM format" />,
+        <Button action="/choosehours">Back ↩️</Button>,
+        <Button action="/createpreview">Next ➡️</Button>,
       ],
     });
   } else
@@ -3672,8 +3670,8 @@ app.frame("/createpreview", (c) => {
     ),
     intents: [
       <Button action="/choosemins">Back ↩️</Button>,
-      <Button action="/choosetheme/0">Theme 🖼️</Button>,
-      <Button action="/create-poll">Next ➡️</Button>,
+      <Button action={"/choosetheme/" + state.theme}>Theme 🖼️</Button>,
+      <Button.Signature target="/sign">Next ➡️</Button.Signature>,
     ],
   });
 });
