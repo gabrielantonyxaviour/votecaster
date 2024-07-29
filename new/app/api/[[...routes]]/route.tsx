@@ -6,7 +6,6 @@ import { Button, Frog, TextInput } from "frog";
 import { devtools } from "frog/dev";
 import { handle } from "frog/next";
 import { serveStatic } from "frog/serve-static";
-import { BytesToNumberOpts } from "viem";
 
 type State = {
   question: string;
@@ -798,7 +797,7 @@ app.frame("/chooseday", (c) => {
   const op4 = frameData?.inputText;
   console.log(op4);
   const state = deriveState((previousState) => {
-    if (op4 !== undefined) {
+    if (op4 != undefined) {
       previousState.options.d = op4;
       if (previousState.optionsCreated == 3) previousState.optionsCreated = 4;
     }
@@ -930,7 +929,7 @@ app.frame("/chooseday", (c) => {
             <img
               key={9}
               style={{ zIndex: 1, width: "102%" }}
-              src={`/frames/validity.png`}
+              src={`/frames/chooseday.png`}
             />
           </div>
           {state.validity.day.toString().length == 2 && (
@@ -939,11 +938,11 @@ app.frame("/chooseday", (c) => {
                 fontFamily: "fantasy",
                 fontSize: "50px",
                 position: "absolute",
-                top: "105px",
+                top: "106px",
                 left: "0px",
                 right: "30px",
                 marginRight: "30px",
-                width: "620px",
+                width: "630px",
                 textWrap: "wrap",
                 zIndex: 10,
                 color: "black",
@@ -960,7 +959,7 @@ app.frame("/chooseday", (c) => {
                 fontFamily: "fantasy",
                 fontSize: "50px",
                 position: "absolute",
-                top: "105px",
+                top: "106px",
                 left: "0px",
                 right: "10px",
                 width: "810px",
@@ -980,11 +979,11 @@ app.frame("/chooseday", (c) => {
                 fontFamily: "fantasy",
                 fontSize: "50px",
                 position: "absolute",
-                top: "105px",
+                top: "106px",
                 left: "0px",
                 right: "30px",
                 marginRight: "30px",
-                width: "620px",
+                width: "630px",
                 textWrap: "wrap",
                 zIndex: 10,
                 color: "black",
@@ -1001,7 +1000,7 @@ app.frame("/chooseday", (c) => {
                 fontFamily: "fantasy",
                 fontSize: "50px",
                 position: "absolute",
-                top: "105px",
+                top: "106px",
                 left: "0px",
                 right: "10px",
                 width: "810px",
@@ -1021,7 +1020,7 @@ app.frame("/chooseday", (c) => {
                 fontFamily: "fantasy",
                 fontSize: "50px",
                 position: "absolute",
-                top: "105px",
+                top: "106px",
                 left: "0px",
                 right: "30px",
                 marginRight: "30px",
@@ -1042,7 +1041,7 @@ app.frame("/chooseday", (c) => {
                 fontFamily: "fantasy",
                 fontSize: "50px",
                 position: "absolute",
-                top: "105px",
+                top: "106px",
                 left: "0px",
                 right: "10px",
                 width: "1300px",
@@ -1062,7 +1061,7 @@ app.frame("/chooseday", (c) => {
                 fontFamily: "fantasy",
                 fontSize: "50px",
                 position: "absolute",
-                top: "105px",
+                top: "106px",
                 left: "0px",
                 right: "30px",
                 marginRight: "30px",
@@ -1083,7 +1082,7 @@ app.frame("/chooseday", (c) => {
                 fontFamily: "fantasy",
                 fontSize: "50px",
                 position: "absolute",
-                top: "105px",
+                top: "106px",
                 left: "0px",
                 right: "10px",
                 width: "1300px",
@@ -1103,7 +1102,7 @@ app.frame("/chooseday", (c) => {
                 fontFamily: "fantasy",
                 fontSize: "50px",
                 position: "absolute",
-                top: "105px",
+                top: "106px",
                 left: "0px",
                 right: "30px",
                 marginRight: "30px",
@@ -1124,7 +1123,7 @@ app.frame("/chooseday", (c) => {
                 fontFamily: "fantasy",
                 fontSize: "50px",
                 position: "absolute",
-                top: "105px",
+                top: "106px",
                 left: "0px",
                 right: "10px",
                 width: "1775px",
@@ -1144,7 +1143,7 @@ app.frame("/chooseday", (c) => {
                 fontFamily: "fantasy",
                 fontSize: "50px",
                 position: "absolute",
-                top: "105px",
+                top: "106px",
                 left: "0px",
                 right: "30px",
                 marginRight: "30px",
@@ -1165,7 +1164,7 @@ app.frame("/chooseday", (c) => {
                 fontFamily: "fantasy",
                 fontSize: "50px",
                 position: "absolute",
-                top: "105px",
+                top: "106px",
                 left: "0px",
                 right: "10px",
                 width: "1775px",
@@ -1269,15 +1268,23 @@ app.frame("/chooseday", (c) => {
 app.frame("/choosehours", (c) => {
   const { frameData, deriveState } = c;
   const days = frameData?.inputText;
-  console.log(frameData);
-  console.log("days:", days);
+  const parsedDays = parseInt(days != undefined ? days : "0");
   const state = deriveState((previousState) => {
     if (days !== undefined) {
-      previousState.validity.day = parseInt(days);
+      if (!isNaN(parsedDays) && days.length < 3 && days.length > 0) {
+        previousState.validity.day = parsedDays;
+      }
     }
   });
-  if (state.options.d == "") {
+  if (
+    frameData?.buttonIndex != 1 &&
+    (days == undefined ||
+      isNaN(parsedDays) ||
+      days!.length > 2 ||
+      days!.length < 0)
+  ) {
     return c.res({
+      action: "/choosehours",
       image: (
         <div
           style={{
@@ -1295,11 +1302,257 @@ app.frame("/choosehours", (c) => {
         >
           <div style={{ display: "flex" }}>
             <img
-              key={11}
+              key={9}
               style={{ zIndex: 1, width: "102%" }}
-              src={`/frames/create5E.png`}
+              src={`/frames/choosedayE.png`}
             />
           </div>
+          {state.validity.day.toString().length == 2 && (
+            <div
+              style={{
+                fontFamily: "fantasy",
+                fontSize: "50px",
+                position: "absolute",
+                top: "106px",
+                left: "0px",
+                right: "30px",
+                marginRight: "30px",
+                width: "630px",
+                textWrap: "wrap",
+                zIndex: 10,
+                color: "black",
+                justifyContent: "center",
+                textAlign: "center",
+              }}
+            >
+              {state.validity.day.toString().charAt(0)}
+            </div>
+          )}
+          {state.validity.day.toString().length == 2 && (
+            <div
+              style={{
+                fontFamily: "fantasy",
+                fontSize: "50px",
+                position: "absolute",
+                top: "106px",
+                left: "0px",
+                right: "10px",
+                width: "810px",
+                textWrap: "wrap",
+                zIndex: 10,
+                color: "black",
+                justifyContent: "center",
+                textAlign: "center",
+              }}
+            >
+              {state.validity.day.toString().charAt(1)}
+            </div>
+          )}{" "}
+          {state.validity.day.toString().length == 1 && (
+            <div
+              style={{
+                fontFamily: "fantasy",
+                fontSize: "50px",
+                position: "absolute",
+                top: "106px",
+                left: "0px",
+                right: "30px",
+                marginRight: "30px",
+                width: "630px",
+                textWrap: "wrap",
+                zIndex: 10,
+                color: "black",
+                justifyContent: "center",
+                textAlign: "center",
+              }}
+            >
+              0
+            </div>
+          )}
+          {state.validity.day.toString().length == 1 && (
+            <div
+              style={{
+                fontFamily: "fantasy",
+                fontSize: "50px",
+                position: "absolute",
+                top: "106px",
+                left: "0px",
+                right: "10px",
+                width: "810px",
+                textWrap: "wrap",
+                zIndex: 10,
+                color: "black",
+                justifyContent: "center",
+                textAlign: "center",
+              }}
+            >
+              {state.validity.day.toString().charAt(0)}
+            </div>
+          )}
+          {state.validity.hours.toString().length == 2 && (
+            <div
+              style={{
+                fontFamily: "fantasy",
+                fontSize: "50px",
+                position: "absolute",
+                top: "106px",
+                left: "0px",
+                right: "30px",
+                marginRight: "30px",
+                width: "1115px",
+                textWrap: "wrap",
+                zIndex: 10,
+                color: "black",
+                justifyContent: "center",
+                textAlign: "center",
+              }}
+            >
+              {state.validity.hours.toString().charAt(0)}
+            </div>
+          )}
+          {state.validity.hours.toString().length == 2 && (
+            <div
+              style={{
+                fontFamily: "fantasy",
+                fontSize: "50px",
+                position: "absolute",
+                top: "106px",
+                left: "0px",
+                right: "10px",
+                width: "1300px",
+                textWrap: "wrap",
+                zIndex: 10,
+                color: "black",
+                justifyContent: "center",
+                textAlign: "center",
+              }}
+            >
+              {state.validity.hours.toString().charAt(1)}
+            </div>
+          )}
+          {state.validity.hours.toString().length == 1 && (
+            <div
+              style={{
+                fontFamily: "fantasy",
+                fontSize: "50px",
+                position: "absolute",
+                top: "106px",
+                left: "0px",
+                right: "30px",
+                marginRight: "30px",
+                width: "1115px",
+                textWrap: "wrap",
+                zIndex: 10,
+                color: "black",
+                justifyContent: "center",
+                textAlign: "center",
+              }}
+            >
+              0
+            </div>
+          )}
+          {state.validity.hours.toString().length == 1 && (
+            <div
+              style={{
+                fontFamily: "fantasy",
+                fontSize: "50px",
+                position: "absolute",
+                top: "106px",
+                left: "0px",
+                right: "10px",
+                width: "1300px",
+                textWrap: "wrap",
+                zIndex: 10,
+                color: "black",
+                justifyContent: "center",
+                textAlign: "center",
+              }}
+            >
+              {state.validity.hours.toString().charAt(0)}
+            </div>
+          )}
+          {state.validity.minutes.toString().length == 2 && (
+            <div
+              style={{
+                fontFamily: "fantasy",
+                fontSize: "50px",
+                position: "absolute",
+                top: "106px",
+                left: "0px",
+                right: "30px",
+                marginRight: "30px",
+                width: "1590px",
+                textWrap: "wrap",
+                zIndex: 10,
+                color: "black",
+                justifyContent: "center",
+                textAlign: "center",
+              }}
+            >
+              {state.validity.minutes.toString().charAt(0)}
+            </div>
+          )}
+          {state.validity.minutes.toString().length == 2 && (
+            <div
+              style={{
+                fontFamily: "fantasy",
+                fontSize: "50px",
+                position: "absolute",
+                top: "106px",
+                left: "0px",
+                right: "10px",
+                width: "1775px",
+                textWrap: "wrap",
+                zIndex: 10,
+                color: "black",
+                justifyContent: "center",
+                textAlign: "center",
+              }}
+            >
+              {state.validity.minutes.toString().charAt(1)}
+            </div>
+          )}
+          {state.validity.minutes.toString().length == 1 && (
+            <div
+              style={{
+                fontFamily: "fantasy",
+                fontSize: "50px",
+                position: "absolute",
+                top: "106px",
+                left: "0px",
+                right: "30px",
+                marginRight: "30px",
+                width: "1590px",
+                textWrap: "wrap",
+                zIndex: 10,
+                color: "black",
+                justifyContent: "center",
+                textAlign: "center",
+              }}
+            >
+              0
+            </div>
+          )}
+          {state.validity.minutes.toString().length == 1 && (
+            <div
+              style={{
+                fontFamily: "fantasy",
+                fontSize: "50px",
+                position: "absolute",
+                top: "106px",
+                left: "0px",
+                right: "10px",
+                width: "1775px",
+                textWrap: "wrap",
+                zIndex: 10,
+                color: "black",
+                justifyContent: "center",
+                textAlign: "center",
+              }}
+            >
+              {state.validity.minutes.toString().charAt(0)}
+            </div>
+          )}
           <div
             style={{
               fontFamily: "fantasy",
@@ -1372,14 +1625,19 @@ app.frame("/choosehours", (c) => {
               width: "800px",
               textWrap: "wrap",
               zIndex: 10,
-              color: "red",
+              color: "black",
             }}
           >
-            Enter Option
+            {state.options.d}
           </div>
         </div>
       ),
-      intents: [<Button action="/createop4">Back ↩️</Button>],
+      intents: [
+        <TextInput placeholder="Enter Days in proper DD format" />,
+        <Button action="/createop4">Back ↩️</Button>,
+
+        <Button action="/choosehours">Next ➡️</Button>,
+      ],
     });
   } else
     return c.res({
@@ -1402,7 +1660,7 @@ app.frame("/choosehours", (c) => {
             <img
               key={9}
               style={{ zIndex: 1, width: "102%" }}
-              src={`/frames/validity.png`}
+              src={`/frames/choosehr.png`}
             />
           </div>
           {state.validity.day.toString().length == 2 && (
@@ -1411,11 +1669,11 @@ app.frame("/choosehours", (c) => {
                 fontFamily: "fantasy",
                 fontSize: "50px",
                 position: "absolute",
-                top: "105px",
+                top: "106px",
                 left: "0px",
                 right: "30px",
                 marginRight: "30px",
-                width: "620px",
+                width: "630px",
                 textWrap: "wrap",
                 zIndex: 10,
                 color: "black",
@@ -1432,7 +1690,7 @@ app.frame("/choosehours", (c) => {
                 fontFamily: "fantasy",
                 fontSize: "50px",
                 position: "absolute",
-                top: "105px",
+                top: "106px",
                 left: "0px",
                 right: "10px",
                 width: "810px",
@@ -1452,11 +1710,11 @@ app.frame("/choosehours", (c) => {
                 fontFamily: "fantasy",
                 fontSize: "50px",
                 position: "absolute",
-                top: "105px",
+                top: "106px",
                 left: "0px",
                 right: "30px",
                 marginRight: "30px",
-                width: "620px",
+                width: "630px",
                 textWrap: "wrap",
                 zIndex: 10,
                 color: "black",
@@ -1473,7 +1731,7 @@ app.frame("/choosehours", (c) => {
                 fontFamily: "fantasy",
                 fontSize: "50px",
                 position: "absolute",
-                top: "105px",
+                top: "106px",
                 left: "0px",
                 right: "10px",
                 width: "810px",
@@ -1493,7 +1751,7 @@ app.frame("/choosehours", (c) => {
                 fontFamily: "fantasy",
                 fontSize: "50px",
                 position: "absolute",
-                top: "105px",
+                top: "106px",
                 left: "0px",
                 right: "30px",
                 marginRight: "30px",
@@ -1514,7 +1772,7 @@ app.frame("/choosehours", (c) => {
                 fontFamily: "fantasy",
                 fontSize: "50px",
                 position: "absolute",
-                top: "105px",
+                top: "106px",
                 left: "0px",
                 right: "10px",
                 width: "1300px",
@@ -1534,7 +1792,7 @@ app.frame("/choosehours", (c) => {
                 fontFamily: "fantasy",
                 fontSize: "50px",
                 position: "absolute",
-                top: "105px",
+                top: "106px",
                 left: "0px",
                 right: "30px",
                 marginRight: "30px",
@@ -1555,7 +1813,7 @@ app.frame("/choosehours", (c) => {
                 fontFamily: "fantasy",
                 fontSize: "50px",
                 position: "absolute",
-                top: "105px",
+                top: "106px",
                 left: "0px",
                 right: "10px",
                 width: "1300px",
@@ -1574,7 +1832,7 @@ app.frame("/choosehours", (c) => {
               fontFamily: "fantasy",
               fontSize: "50px",
               position: "absolute",
-              top: "105px",
+              top: "106px",
               left: "0px",
               right: "30px",
               marginRight: "30px",
@@ -1593,7 +1851,7 @@ app.frame("/choosehours", (c) => {
               fontFamily: "fantasy",
               fontSize: "50px",
               position: "absolute",
-              top: "105px",
+              top: "106px",
               left: "0px",
               right: "10px",
               width: "1775px",
@@ -1696,13 +1954,27 @@ app.frame("/choosehours", (c) => {
 app.frame("/choosemins", (c) => {
   const { frameData, deriveState } = c;
   const hours = frameData?.inputText;
-  console.log(hours);
+  const parsedhours = parseInt(hours != undefined ? hours : "0");
+  console.log("Frame data");
+  console.log(frameData);
   const state = deriveState((previousState) => {
     if (hours !== undefined) {
-      previousState.validity.hours = parseInt(hours);
+      if (!isNaN(parsedhours) && hours.length < 3 && hours.length > 0) {
+        if (parsedhours < 24) previousState.validity.hours = parseInt(hours);
+        else {
+          previousState.validity.hours = parsedhours % 24;
+          previousState.validity.day += parseInt((parsedhours / 24).toFixed(0));
+        }
+      }
     }
   });
-  if (state.options.d == "") {
+  if (
+    frameData?.buttonIndex != 1 &&
+    (hours == undefined ||
+      isNaN(parsedhours) ||
+      hours!.length > 2 ||
+      hours!.length < 0)
+  ) {
     return c.res({
       image: (
         <div
@@ -1721,10 +1993,211 @@ app.frame("/choosemins", (c) => {
         >
           <div style={{ display: "flex" }}>
             <img
-              key={11}
+              key={9}
               style={{ zIndex: 1, width: "102%" }}
-              src={`/frames/create5E.png`}
+              src={`/frames/choosehrE.png`}
             />
+          </div>
+          {state.validity.day.toString().length == 2 && (
+            <div
+              style={{
+                fontFamily: "fantasy",
+                fontSize: "50px",
+                position: "absolute",
+                top: "106px",
+                left: "0px",
+                right: "30px",
+                marginRight: "30px",
+                width: "630px",
+                textWrap: "wrap",
+                zIndex: 10,
+                color: "black",
+                justifyContent: "center",
+                textAlign: "center",
+              }}
+            >
+              {state.validity.day.toString().charAt(0)}
+            </div>
+          )}
+          {state.validity.day.toString().length == 2 && (
+            <div
+              style={{
+                fontFamily: "fantasy",
+                fontSize: "50px",
+                position: "absolute",
+                top: "106px",
+                left: "0px",
+                right: "10px",
+                width: "810px",
+                textWrap: "wrap",
+                zIndex: 10,
+                color: "black",
+                justifyContent: "center",
+                textAlign: "center",
+              }}
+            >
+              {state.validity.day.toString().charAt(1)}
+            </div>
+          )}{" "}
+          {state.validity.day.toString().length == 1 && (
+            <div
+              style={{
+                fontFamily: "fantasy",
+                fontSize: "50px",
+                position: "absolute",
+                top: "106px",
+                left: "0px",
+                right: "30px",
+                marginRight: "30px",
+                width: "630px",
+                textWrap: "wrap",
+                zIndex: 10,
+                color: "black",
+                justifyContent: "center",
+                textAlign: "center",
+              }}
+            >
+              0
+            </div>
+          )}
+          {state.validity.day.toString().length == 1 && (
+            <div
+              style={{
+                fontFamily: "fantasy",
+                fontSize: "50px",
+                position: "absolute",
+                top: "106px",
+                left: "0px",
+                right: "10px",
+                width: "810px",
+                textWrap: "wrap",
+                zIndex: 10,
+                color: "black",
+                justifyContent: "center",
+                textAlign: "center",
+              }}
+            >
+              {state.validity.day.toString().charAt(0)}
+            </div>
+          )}
+          {state.validity.hours.toString().length == 2 && (
+            <div
+              style={{
+                fontFamily: "fantasy",
+                fontSize: "50px",
+                position: "absolute",
+                top: "106px",
+                left: "0px",
+                right: "30px",
+                marginRight: "30px",
+                width: "1115px",
+                textWrap: "wrap",
+                zIndex: 10,
+                color: "black",
+                justifyContent: "center",
+                textAlign: "center",
+              }}
+            >
+              {state.validity.hours.toString().charAt(0)}
+            </div>
+          )}
+          {state.validity.hours.toString().length == 2 && (
+            <div
+              style={{
+                fontFamily: "fantasy",
+                fontSize: "50px",
+                position: "absolute",
+                top: "106px",
+                left: "0px",
+                right: "10px",
+                width: "1300px",
+                textWrap: "wrap",
+                zIndex: 10,
+                color: "black",
+                justifyContent: "center",
+                textAlign: "center",
+              }}
+            >
+              {state.validity.hours.toString().charAt(1)}
+            </div>
+          )}
+          {state.validity.hours.toString().length == 1 && (
+            <div
+              style={{
+                fontFamily: "fantasy",
+                fontSize: "50px",
+                position: "absolute",
+                top: "106px",
+                left: "0px",
+                right: "30px",
+                marginRight: "30px",
+                width: "1115px",
+                textWrap: "wrap",
+                zIndex: 10,
+                color: "black",
+                justifyContent: "center",
+                textAlign: "center",
+              }}
+            >
+              0
+            </div>
+          )}
+          {state.validity.hours.toString().length == 1 && (
+            <div
+              style={{
+                fontFamily: "fantasy",
+                fontSize: "50px",
+                position: "absolute",
+                top: "106px",
+                left: "0px",
+                right: "10px",
+                width: "1300px",
+                textWrap: "wrap",
+                zIndex: 10,
+                color: "black",
+                justifyContent: "center",
+                textAlign: "center",
+              }}
+            >
+              {state.validity.hours.toString().charAt(0)}
+            </div>
+          )}
+          <div
+            style={{
+              fontFamily: "fantasy",
+              fontSize: "50px",
+              position: "absolute",
+              top: "106px",
+              left: "0px",
+              right: "30px",
+              marginRight: "30px",
+              width: "1590px",
+              textWrap: "wrap",
+              zIndex: 10,
+              color: "black",
+              justifyContent: "center",
+              textAlign: "center",
+            }}
+          >
+            0
+          </div>
+          <div
+            style={{
+              fontFamily: "fantasy",
+              fontSize: "50px",
+              position: "absolute",
+              top: "106px",
+              left: "0px",
+              right: "10px",
+              width: "1775px",
+              textWrap: "wrap",
+              zIndex: 10,
+              color: "black",
+              justifyContent: "center",
+              textAlign: "center",
+            }}
+          >
+            0
           </div>
           <div
             style={{
@@ -1798,14 +2271,19 @@ app.frame("/choosemins", (c) => {
               width: "800px",
               textWrap: "wrap",
               zIndex: 10,
-              color: "red",
+              color: "black",
             }}
           >
-            Enter Option
+            {state.options.d}
           </div>
         </div>
       ),
-      intents: [<Button action="/createop4">Back ↩️</Button>],
+      intents: [
+        <TextInput placeholder="Enter Hours in proper HH format" />,
+        <Button action="/chooseday">Back ↩️</Button>,
+
+        <Button action="/choosemins">Next ➡️</Button>,
+      ],
     });
   } else
     return c.res({
@@ -1829,7 +2307,7 @@ app.frame("/choosemins", (c) => {
             <img
               key={9}
               style={{ zIndex: 1, width: "102%" }}
-              src={`/frames/validity.png`}
+              src={`/frames/choosemin.png`}
             />
           </div>
           {state.validity.day.toString().length == 2 && (
@@ -1838,11 +2316,11 @@ app.frame("/choosemins", (c) => {
                 fontFamily: "fantasy",
                 fontSize: "50px",
                 position: "absolute",
-                top: "105px",
+                top: "106px",
                 left: "0px",
                 right: "30px",
                 marginRight: "30px",
-                width: "620px",
+                width: "630px",
                 textWrap: "wrap",
                 zIndex: 10,
                 color: "black",
@@ -1859,7 +2337,7 @@ app.frame("/choosemins", (c) => {
                 fontFamily: "fantasy",
                 fontSize: "50px",
                 position: "absolute",
-                top: "105px",
+                top: "106px",
                 left: "0px",
                 right: "10px",
                 width: "810px",
@@ -1879,11 +2357,11 @@ app.frame("/choosemins", (c) => {
                 fontFamily: "fantasy",
                 fontSize: "50px",
                 position: "absolute",
-                top: "105px",
+                top: "106px",
                 left: "0px",
                 right: "30px",
                 marginRight: "30px",
-                width: "620px",
+                width: "630px",
                 textWrap: "wrap",
                 zIndex: 10,
                 color: "black",
@@ -1900,7 +2378,7 @@ app.frame("/choosemins", (c) => {
                 fontFamily: "fantasy",
                 fontSize: "50px",
                 position: "absolute",
-                top: "105px",
+                top: "106px",
                 left: "0px",
                 right: "10px",
                 width: "810px",
@@ -1920,7 +2398,7 @@ app.frame("/choosemins", (c) => {
                 fontFamily: "fantasy",
                 fontSize: "50px",
                 position: "absolute",
-                top: "105px",
+                top: "106px",
                 left: "0px",
                 right: "30px",
                 marginRight: "30px",
@@ -1941,7 +2419,7 @@ app.frame("/choosemins", (c) => {
                 fontFamily: "fantasy",
                 fontSize: "50px",
                 position: "absolute",
-                top: "105px",
+                top: "106px",
                 left: "0px",
                 right: "10px",
                 width: "1300px",
@@ -1961,7 +2439,7 @@ app.frame("/choosemins", (c) => {
                 fontFamily: "fantasy",
                 fontSize: "50px",
                 position: "absolute",
-                top: "105px",
+                top: "106px",
                 left: "0px",
                 right: "30px",
                 marginRight: "30px",
@@ -1982,7 +2460,7 @@ app.frame("/choosemins", (c) => {
                 fontFamily: "fantasy",
                 fontSize: "50px",
                 position: "absolute",
-                top: "105px",
+                top: "106px",
                 left: "0px",
                 right: "10px",
                 width: "1300px",
@@ -2002,7 +2480,7 @@ app.frame("/choosemins", (c) => {
                 fontFamily: "fantasy",
                 fontSize: "50px",
                 position: "absolute",
-                top: "105px",
+                top: "106px",
                 left: "0px",
                 right: "30px",
                 marginRight: "30px",
@@ -2023,7 +2501,7 @@ app.frame("/choosemins", (c) => {
                 fontFamily: "fantasy",
                 fontSize: "50px",
                 position: "absolute",
-                top: "105px",
+                top: "106px",
                 left: "0px",
                 right: "10px",
                 width: "1775px",
@@ -2043,7 +2521,7 @@ app.frame("/choosemins", (c) => {
                 fontFamily: "fantasy",
                 fontSize: "50px",
                 position: "absolute",
-                top: "105px",
+                top: "106px",
                 left: "0px",
                 right: "30px",
                 marginRight: "30px",
@@ -2064,7 +2542,7 @@ app.frame("/choosemins", (c) => {
                 fontFamily: "fantasy",
                 fontSize: "50px",
                 position: "absolute",
-                top: "105px",
+                top: "106px",
                 left: "0px",
                 right: "10px",
                 width: "1775px",
@@ -2161,7 +2639,7 @@ app.frame("/choosemins", (c) => {
         <TextInput placeholder="Enter Minutes in MM format" />,
         <Button action="/choosehours">Back ↩️</Button>,
 
-        <Button action="/createpreview">Next ➡️</Button>,
+        <Button action="/create">Next ➡️</Button>,
       ],
     });
 });
@@ -2549,479 +3027,657 @@ app.frame("/choosetheme/:theme", (c) => {
   });
 });
 app.frame("/createpreview", (c) => {
-  const { frameData, deriveState } = c;
-  const mins = frameData?.inputText;
-  const state = deriveState((previousState) => {
-    if (mins !== undefined) {
-      previousState.validity.minutes = parseInt(mins);
-    }
-  });
-  if (state.options.d == "") {
-    return c.res({
-      image: (
-        <div
-          style={{
-            alignItems: "center",
-            background: "white",
-            backgroundSize: "100% 100%",
-            display: "flex",
-            flexDirection: "column",
-            flexWrap: "nowrap",
-            height: "100%",
-            justifyContent: "center",
-            textAlign: "center",
-            width: "100%",
-          }}
-        >
-          <div style={{ display: "flex" }}>
-            <img
-              key={11}
-              style={{ zIndex: 1, width: "102%" }}
-              src={`/frames/create5E.png`}
-            />
-          </div>
-          <div
-            style={{
-              fontFamily: "fantasy",
-              fontSize: "50px",
-              position: "absolute",
-              top: "210px",
-              left: "200px",
-              width: "800px",
-              textWrap: "wrap",
-              zIndex: 10,
-              color: "black",
-              justifyContent: "center",
-              textAlign: "center",
-            }}
-          >
-            {state.question}
-          </div>
-          <div
-            style={{
-              fontFamily: "fantasy",
-              fontSize: "30px",
-              position: "absolute",
-              top: "418px",
-              left: "230px",
-              width: "800px",
-              textWrap: "wrap",
-              zIndex: 10,
-              color: "black",
-            }}
-          >
-            {state.options.a}
-          </div>
-          <div
-            style={{
-              fontFamily: "fantasy",
-              fontSize: "30px",
-              position: "absolute",
-              top: "418px",
-              left: "670px",
-              width: "800px",
-              textWrap: "wrap",
-              zIndex: 10,
-              color: "black",
-            }}
-          >
-            {state.options.b}
-          </div>
-          <div
-            style={{
-              fontFamily: "fantasy",
-              fontSize: "30px",
-              position: "absolute",
-              top: "535px",
-              left: "230px",
-              width: "800px",
-              textWrap: "wrap",
-              zIndex: 10,
-              color: "black",
-            }}
-          >
-            {state.options.c}
-          </div>
-          <div
-            style={{
-              fontFamily: "fantasy",
-              fontSize: "30px",
-              position: "absolute",
-              top: "535px",
-              left: "670px",
-              width: "800px",
-              textWrap: "wrap",
-              zIndex: 10,
-              color: "red",
-            }}
-          >
-            Enter Option
-          </div>
+  const { deriveState } = c;
+  const state = deriveState();
+  process.env.POLL = JSON.stringify(state);
+  process.env.VALIDITY = (
+    state.validity.day * 24 * 60 * 60 +
+    state.validity.hours * 60 * 60 +
+    state.validity.minutes * 60
+  ).toString();
+  console.log("POLL");
+  console.log(process.env.POLL);
+  console.log("VALIDITY");
+  console.log(process.env.VALIDITY);
+  return c.res({
+    action: "/confirm",
+    image: (
+      <div
+        style={{
+          alignItems: "center",
+          background: "white",
+          backgroundSize: "100% 100%",
+          display: "flex",
+          flexDirection: "column",
+          flexWrap: "nowrap",
+          height: "100%",
+          justifyContent: "center",
+          textAlign: "center",
+          width: "100%",
+        }}
+      >
+        <div style={{ display: "flex" }}>
+          <img
+            key={9}
+            style={{ zIndex: -1, width: "102%" }}
+            src={`/frames/theme${state.theme}.png`}
+          />
         </div>
-      ),
-      intents: [<Button action="/createop4">Back ↩️</Button>],
-    });
-  } else
-    return c.res({
-      action: "/confirm",
-      image: (
+        {state.validity.day.toString().length == 2 && (
+          <div
+            style={
+              state.theme == 0 || state.theme == 6
+                ? {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "30px",
+                    marginRight: "30px",
+                    width: "630px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "black",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+                : {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "30px",
+                    marginRight: "30px",
+                    width: "630px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "white",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+            }
+          >
+            {state.validity.day.toString().charAt(0)}
+          </div>
+        )}
+        {state.validity.day.toString().length == 2 && (
+          <div
+            style={
+              state.theme == 0 || state.theme == 6
+                ? {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "10px",
+                    width: "810px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "black",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+                : {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "10px",
+                    width: "810px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "white",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+            }
+          >
+            {state.validity.day.toString().charAt(1)}
+          </div>
+        )}{" "}
+        {state.validity.day.toString().length == 1 && (
+          <div
+            style={
+              state.theme == 0 || state.theme == 6
+                ? {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "30px",
+                    marginRight: "30px",
+                    width: "630px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "black",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+                : {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "30px",
+                    marginRight: "30px",
+                    width: "630px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "white",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+            }
+          >
+            0
+          </div>
+        )}
+        {state.validity.day.toString().length == 1 && (
+          <div
+            style={
+              state.theme == 0 || state.theme == 6
+                ? {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "10px",
+                    width: "810px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "black",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+                : {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "10px",
+                    width: "810px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "white",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+            }
+          >
+            {state.validity.day.toString().charAt(0)}
+          </div>
+        )}
+        {state.validity.hours.toString().length == 2 && (
+          <div
+            style={
+              state.theme == 0 || state.theme == 6
+                ? {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "30px",
+                    marginRight: "30px",
+                    width: "1115px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "black",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+                : {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "30px",
+                    marginRight: "30px",
+                    width: "1115px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "white",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+            }
+          >
+            {state.validity.hours.toString().charAt(0)}
+          </div>
+        )}
+        {state.validity.hours.toString().length == 2 && (
+          <div
+            style={
+              state.theme == 0 || state.theme == 6
+                ? {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "10px",
+                    width: "1300px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "black",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+                : {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "10px",
+                    width: "1300px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "white",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+            }
+          >
+            {state.validity.hours.toString().charAt(1)}
+          </div>
+        )}
+        {state.validity.hours.toString().length == 1 && (
+          <div
+            style={
+              state.theme == 0 || state.theme == 6
+                ? {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "30px",
+                    marginRight: "30px",
+                    width: "1115px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "black",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+                : {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "30px",
+                    marginRight: "30px",
+                    width: "1115px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "white",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+            }
+          >
+            0
+          </div>
+        )}
+        {state.validity.hours.toString().length == 1 && (
+          <div
+            style={
+              state.theme == 0 || state.theme == 6
+                ? {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "10px",
+                    width: "1300px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "black",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+                : {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "10px",
+                    width: "1300px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "white",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+            }
+          >
+            {state.validity.hours.toString().charAt(0)}
+          </div>
+        )}
+        {state.validity.minutes.toString().length == 2 && (
+          <div
+            style={
+              state.theme == 0 || state.theme == 6
+                ? {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "30px",
+                    marginRight: "30px",
+                    width: "1590px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "black",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+                : {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "30px",
+                    marginRight: "30px",
+                    width: "1590px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "white",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+            }
+          >
+            {state.validity.minutes.toString().charAt(0)}
+          </div>
+        )}
+        {state.validity.minutes.toString().length == 2 && (
+          <div
+            style={
+              state.theme == 0 || state.theme == 6
+                ? {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "10px",
+                    width: "1775px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "black",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+                : {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "10px",
+                    width: "1775px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "white",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+            }
+          >
+            {state.validity.minutes.toString().charAt(1)}
+          </div>
+        )}
+        {state.validity.minutes.toString().length == 1 && (
+          <div
+            style={
+              state.theme == 0 || state.theme == 6
+                ? {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "30px",
+                    marginRight: "30px",
+                    width: "1590px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "black",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+                : {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "30px",
+                    marginRight: "30px",
+                    width: "1590px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "white",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+            }
+          >
+            0
+          </div>
+        )}
+        {state.validity.minutes.toString().length == 1 && (
+          <div
+            style={
+              state.theme == 0 || state.theme == 6
+                ? {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "10px",
+                    width: "1775px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "black",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+                : {
+                    fontFamily: "fantasy",
+                    fontSize: "50px",
+                    position: "absolute",
+                    top: "106px",
+                    left: "0px",
+                    right: "10px",
+                    width: "1775px",
+                    textWrap: "wrap",
+                    zIndex: 10,
+                    color: "white",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }
+            }
+          >
+            {state.validity.minutes.toString().charAt(0)}
+          </div>
+        )}
         <div
           style={
             state.theme == 0 || state.theme == 6
               ? {
-                  alignItems: "center",
-                  background: "white",
-                  backgroundSize: "100% 100%",
-                  display: "flex",
-                  flexDirection: "column",
-                  flexWrap: "nowrap",
-                  height: "100%",
+                  fontFamily: "fantasy",
+                  fontSize: "50px",
+                  position: "absolute",
+                  top: "210px",
+                  left: "200px",
+                  width: "800px",
+                  textWrap: "wrap",
+                  zIndex: 10,
+                  color: "black",
                   justifyContent: "center",
                   textAlign: "center",
-                  width: "100%",
+                }
+              : {
+                  fontFamily: "fantasy",
+                  fontSize: "50px",
+                  position: "absolute",
+                  top: "210px",
+                  left: "200px",
+                  width: "800px",
+                  textWrap: "wrap",
+                  zIndex: 10,
+                  color: "white",
+                  justifyContent: "center",
+                  textAlign: "center",
+                }
+          }
+        >
+          {state.question}
+        </div>
+        <div
+          style={
+            state.theme == 0 || state.theme == 6
+              ? {
+                  fontFamily: "fantasy",
+                  fontSize: "30px",
+                  position: "absolute",
+                  top: "418px",
+                  left: "230px",
+                  width: "800px",
+                  textWrap: "wrap",
+                  zIndex: 10,
                   color: "black",
                 }
               : {
-                  alignItems: "center",
-                  background: "white",
-                  backgroundSize: "100% 100%",
-                  display: "flex",
-                  flexDirection: "column",
-                  flexWrap: "nowrap",
-                  height: "100%",
-                  justifyContent: "center",
-                  textAlign: "center",
-                  width: "100%",
+                  fontFamily: "fantasy",
+                  fontSize: "30px",
+                  position: "absolute",
+                  top: "418px",
+                  left: "230px",
+                  width: "800px",
+                  textWrap: "wrap",
+                  zIndex: 10,
                   color: "white",
                 }
           }
         >
-          <div style={{ display: "flex" }}>
-            <img
-              key={9}
-              style={{ zIndex: 1, width: "102%" }}
-              src={
-                state.theme == 0
-                  ? `/frames/validity.png`
-                  : `/frames/theme${state.theme}.png`
-              }
-            />
-          </div>
-          {state.validity.day.toString().length == 2 && (
-            <div
-              style={{
-                fontFamily: "fantasy",
-                fontSize: "50px",
-                position: "absolute",
-                top: "105px",
-                left: "0px",
-                right: "30px",
-                marginRight: "30px",
-                width: "620px",
-                textWrap: "wrap",
-                zIndex: 10,
-                justifyContent: "center",
-                textAlign: "center",
-              }}
-            >
-              {state.validity.day.toString().charAt(0)}
-            </div>
-          )}
-          {state.validity.day.toString().length == 2 && (
-            <div
-              style={{
-                fontFamily: "fantasy",
-                fontSize: "50px",
-                position: "absolute",
-                top: "105px",
-                left: "0px",
-                right: "10px",
-                width: "810px",
-                textWrap: "wrap",
-                zIndex: 10,
-                justifyContent: "center",
-                textAlign: "center",
-              }}
-            >
-              {state.validity.day.toString().charAt(1)}
-            </div>
-          )}{" "}
-          {state.validity.day.toString().length == 1 && (
-            <div
-              style={{
-                fontFamily: "fantasy",
-                fontSize: "50px",
-                position: "absolute",
-                top: "105px",
-                left: "0px",
-                right: "30px",
-                marginRight: "30px",
-                width: "620px",
-                textWrap: "wrap",
-                zIndex: 10,
-                justifyContent: "center",
-                textAlign: "center",
-              }}
-            >
-              0
-            </div>
-          )}
-          {state.validity.day.toString().length == 1 && (
-            <div
-              style={{
-                fontFamily: "fantasy",
-                fontSize: "50px",
-                position: "absolute",
-                top: "105px",
-                left: "0px",
-                right: "10px",
-                width: "810px",
-                textWrap: "wrap",
-                zIndex: 10,
-                justifyContent: "center",
-                textAlign: "center",
-              }}
-            >
-              {state.validity.day.toString().charAt(0)}
-            </div>
-          )}
-          {state.validity.hours.toString().length == 2 && (
-            <div
-              style={{
-                fontFamily: "fantasy",
-                fontSize: "50px",
-                position: "absolute",
-                top: "105px",
-                left: "0px",
-                right: "30px",
-                marginRight: "30px",
-                width: "1115px",
-                textWrap: "wrap",
-                zIndex: 10,
-                justifyContent: "center",
-                textAlign: "center",
-              }}
-            >
-              {state.validity.hours.toString().charAt(0)}
-            </div>
-          )}
-          {state.validity.hours.toString().length == 2 && (
-            <div
-              style={{
-                fontFamily: "fantasy",
-                fontSize: "50px",
-                position: "absolute",
-                top: "105px",
-                left: "0px",
-                right: "10px",
-                width: "1300px",
-                textWrap: "wrap",
-                zIndex: 10,
-                justifyContent: "center",
-                textAlign: "center",
-              }}
-            >
-              {state.validity.hours.toString().charAt(1)}
-            </div>
-          )}
-          {state.validity.hours.toString().length == 1 && (
-            <div
-              style={{
-                fontFamily: "fantasy",
-                fontSize: "50px",
-                position: "absolute",
-                top: "105px",
-                left: "0px",
-                right: "30px",
-                marginRight: "30px",
-                width: "1115px",
-                textWrap: "wrap",
-                zIndex: 10,
-                justifyContent: "center",
-                textAlign: "center",
-              }}
-            >
-              0
-            </div>
-          )}
-          {state.validity.hours.toString().length == 1 && (
-            <div
-              style={{
-                fontFamily: "fantasy",
-                fontSize: "50px",
-                position: "absolute",
-                top: "105px",
-                left: "0px",
-                right: "10px",
-                width: "1300px",
-                textWrap: "wrap",
-                zIndex: 10,
-                justifyContent: "center",
-                textAlign: "center",
-              }}
-            >
-              {state.validity.hours.toString().charAt(0)}
-            </div>
-          )}
-          {state.validity.minutes.toString().length == 2 && (
-            <div
-              style={{
-                fontFamily: "fantasy",
-                fontSize: "50px",
-                position: "absolute",
-                top: "105px",
-                left: "0px",
-                right: "30px",
-                marginRight: "30px",
-                width: "1590px",
-                textWrap: "wrap",
-                zIndex: 10,
-                justifyContent: "center",
-                textAlign: "center",
-              }}
-            >
-              {state.validity.minutes.toString().charAt(0)}
-            </div>
-          )}
-          {state.validity.minutes.toString().length == 2 && (
-            <div
-              style={{
-                fontFamily: "fantasy",
-                fontSize: "50px",
-                position: "absolute",
-                top: "105px",
-                left: "0px",
-                right: "10px",
-                width: "1775px",
-                textWrap: "wrap",
-                zIndex: 10,
-                justifyContent: "center",
-                textAlign: "center",
-              }}
-            >
-              {state.validity.minutes.toString().charAt(1)}
-            </div>
-          )}
-          {state.validity.minutes.toString().length == 1 && (
-            <div
-              style={{
-                fontFamily: "fantasy",
-                fontSize: "50px",
-                position: "absolute",
-                top: "105px",
-                left: "0px",
-                right: "30px",
-                marginRight: "30px",
-                width: "1590px",
-                textWrap: "wrap",
-                zIndex: 10,
-                justifyContent: "center",
-                textAlign: "center",
-              }}
-            >
-              0
-            </div>
-          )}
-          {state.validity.minutes.toString().length == 1 && (
-            <div
-              style={{
-                fontFamily: "fantasy",
-                fontSize: "50px",
-                position: "absolute",
-                top: "105px",
-                left: "0px",
-                right: "10px",
-                width: "1775px",
-                textWrap: "wrap",
-                zIndex: 10,
-                justifyContent: "center",
-                textAlign: "center",
-              }}
-            >
-              {state.validity.minutes.toString().charAt(0)}
-            </div>
-          )}
-          <div
-            style={{
-              fontFamily: "fantasy",
-              fontSize: "50px",
-              position: "absolute",
-              top: "210px",
-              left: "200px",
-              width: "800px",
-              textWrap: "wrap",
-              zIndex: 10,
-              justifyContent: "center",
-              textAlign: "center",
-            }}
-          >
-            {state.question}
-          </div>
-          <div
-            style={{
-              fontFamily: "fantasy",
-              fontSize: "30px",
-              position: "absolute",
-              top: "418px",
-              left: "230px",
-              width: "800px",
-              textWrap: "wrap",
-              zIndex: 10,
-            }}
-          >
-            {state.options.a}
-          </div>
-          <div
-            style={{
-              fontFamily: "fantasy",
-              fontSize: "30px",
-              position: "absolute",
-              top: "418px",
-              left: "670px",
-              width: "800px",
-              textWrap: "wrap",
-              zIndex: 10,
-            }}
-          >
-            {state.options.b}
-          </div>
-          <div
-            style={{
-              fontFamily: "fantasy",
-              fontSize: "30px",
-              position: "absolute",
-              top: "535px",
-              left: "230px",
-              width: "800px",
-              textWrap: "wrap",
-              zIndex: 10,
-            }}
-          >
-            {state.options.c}
-          </div>
-          <div
-            style={{
-              fontFamily: "fantasy",
-              fontSize: "30px",
-              position: "absolute",
-              top: "535px",
-              left: "670px",
-              width: "800px",
-              textWrap: "wrap",
-              zIndex: 10,
-            }}
-          >
-            {state.options.d}
-          </div>
+          {state.options.a}
         </div>
-      ),
-      intents: [
-        <Button action="/choosemins">Back ↩️</Button>,
-        <Button action="/choosetheme/0">Theme 🖼️</Button>,
-        <Button.Signature target="/sign">Create</Button.Signature>,
-      ],
-    });
+        <div
+          style={
+            state.theme == 0 || state.theme == 6
+              ? {
+                  fontFamily: "fantasy",
+                  fontSize: "30px",
+                  position: "absolute",
+                  top: "418px",
+                  left: "670px",
+                  width: "800px",
+                  textWrap: "wrap",
+                  zIndex: 10,
+                  color: "black",
+                }
+              : {
+                  fontFamily: "fantasy",
+                  fontSize: "30px",
+                  position: "absolute",
+                  top: "418px",
+                  left: "670px",
+                  width: "800px",
+                  textWrap: "wrap",
+                  zIndex: 10,
+                  color: "white",
+                }
+          }
+        >
+          {state.options.b}
+        </div>
+        <div
+          style={
+            state.theme == 0 || state.theme == 6
+              ? {
+                  fontFamily: "fantasy",
+                  fontSize: "30px",
+                  position: "absolute",
+                  top: "535px",
+                  left: "230px",
+                  width: "800px",
+                  textWrap: "wrap",
+                  zIndex: 10,
+                  color: "black",
+                }
+              : {
+                  fontFamily: "fantasy",
+                  fontSize: "30px",
+                  position: "absolute",
+                  top: "535px",
+                  left: "230px",
+                  width: "800px",
+                  textWrap: "wrap",
+                  zIndex: 10,
+                  color: "white",
+                }
+          }
+        >
+          {state.options.c}
+        </div>
+        <div
+          style={
+            state.theme == 0 || state.theme == 6
+              ? {
+                  fontFamily: "fantasy",
+                  fontSize: "30px",
+                  position: "absolute",
+                  top: "535px",
+                  left: "670px",
+                  width: "800px",
+                  textWrap: "wrap",
+                  zIndex: 10,
+                  color: "black",
+                }
+              : {
+                  fontFamily: "fantasy",
+                  fontSize: "30px",
+                  position: "absolute",
+                  top: "535px",
+                  left: "670px",
+                  width: "800px",
+                  textWrap: "wrap",
+                  zIndex: 10,
+                  color: "white",
+                }
+          }
+        >
+          {state.options.d}
+        </div>
+      </div>
+    ),
+    intents: [
+      <Button action="/choosemins">Back ↩️</Button>,
+      <Button action="/choosetheme/0">Theme 🖼️</Button>,
+      <Button action="/create-poll">Next ➡️</Button>,
+    ],
+  });
 });
+
 app.signature("/sign", async (c) => {
   const { address, previousState } = c;
   const validity =
