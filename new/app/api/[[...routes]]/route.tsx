@@ -2551,7 +2551,6 @@ app.frame("/choosetheme/:theme", (c) => {
 app.frame("/createpreview", (c) => {
   const { frameData, deriveState } = c;
   const mins = frameData?.inputText;
-  console.log(mins);
   const state = deriveState((previousState) => {
     if (mins !== undefined) {
       previousState.validity.minutes = parseInt(mins);
@@ -3019,7 +3018,7 @@ app.frame("/createpreview", (c) => {
       intents: [
         <Button action="/choosemins">Back ↩️</Button>,
         <Button action="/choosetheme/0">Theme 🖼️</Button>,
-        <Button.Signature target="/sign">Create 🪄</Button.Signature>,
+        <Button.Signature target="/sign">Create</Button.Signature>,
       ],
     });
 });
