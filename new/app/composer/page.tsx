@@ -1,7 +1,6 @@
 "use client";
 import Head from "next/head";
-import Navbar from "@/components/WebPage/Navbar";
-import Landing from "@/components/WebPage/Landing";
+import Landing from "@/components/Composer/Landing";
 
 export default function HomePage() {
   return (
