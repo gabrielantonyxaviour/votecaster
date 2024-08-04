@@ -1,5 +1,5 @@
 import { Metadata, ResolvingMetadata } from "next";
-import PollPageWrapper from "@/components/PollPage/PollPageWrapper";
+import PollPageWrapper from "@/components/WebPage/PollPage/PollPageWrapper";
 import getPoll from "@/utils/supabase/getPoll";
 import { useSearchParams } from "next/navigation";
 

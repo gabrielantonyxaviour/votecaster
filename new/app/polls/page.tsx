@@ -1,5 +1,5 @@
-import Navbar from "@/components/Navbar";
-import YourPolls from "@/components/YourPolls";
+import Navbar from "@/components/WebPage/Navbar";
+import YourPolls from "@/components/WebPage/YourPolls";
 
 export default function PollsPage() {
   return (

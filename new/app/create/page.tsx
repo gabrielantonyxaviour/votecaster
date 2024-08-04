@@ -5,10 +5,10 @@ import { useAccount, useWriteContract } from "wagmi";
 import axios from "axios";
 import { scrollSepolia } from "viem/chains";
 import { createPublicClient, http } from "viem";
-import Navbar from "@/components/Navbar";
-import Confirmation from "@/components/Create/Confirmation";
-import CreateQuestion from "@/components/Create/CreateQuestion";
-import CreatedModal from "@/components/CreatedModal";
+import Navbar from "@/components/WebPage/Navbar";
+import Confirmation from "@/components/WebPage/Create/Confirmation";
+import CreateQuestion from "@/components/WebPage/Create/CreateQuestion";
+import CreatedModal from "@/components/WebPage/CreatedModal";
 import createPoll from "@/utils/supabase/createPoll";
 import { Data, QueryResponse } from "@/utils/airstackInterface";
 
