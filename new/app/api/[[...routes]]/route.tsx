@@ -4641,26 +4641,27 @@ app.frame("/finish", (c) => {
 });
 
 app.signature("/sign", async (c) => {
-  const { address, previousState } = c;
-  const validity =
-    previousState.validity.day * 24 * 60 * 60 +
-    previousState.validity.hours * 60 * 60 +
-    previousState.validity.minutes * 60;
-  const poll = {
-    question: previousState.question,
-    options: previousState.options,
-    validity: validity,
-    theme: previousState.theme,
-  };
-  console.log("VALIDITY");
-  console.log(validity);
-  console.log("POLL");
-  console.log(poll);
-  const { signData } = await getCreatePollSignData({
-    callerAddress: address as `0x${string}`,
-    poll: poll,
-    validity: validity,
-  });
+  // const { address, previousState } = c;
+  // const validity =
+  //   previousState.validity.day * 24 * 60 * 60 +
+  //   previousState.validity.hours * 60 * 60 +
+  //   previousState.validity.minutes * 60;
+  // const poll = {
+  //   question: previousState.question,
+  //   options: previousState.options,
+  //   validity: validity,
+  //   theme: previousState.theme,
+  // };
+  // console.log("VALIDITY");
+  // console.log(validity);
+  // console.log("POLL");
+  // console.log(poll);
+  // const { signData } = await getCreatePollSignData({
+  //   callerAddress: address as `0x${string}`,
+  //   poll: poll,
+  //   validity: validity,
+  // });
+  // console.log(signData)
   return c.signTypedData({
     chainId: "eip155:84532",
     domain: {
