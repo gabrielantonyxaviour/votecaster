@@ -53,7 +53,7 @@ app.composerAction(
   (c) => {
     return c.res({
       title: "Priv Cast",
-      url: "https://privcast.com/api/composer",
+      url: "https://privcast.com/",
     });
   },
   {
