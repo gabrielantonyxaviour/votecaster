@@ -1,43 +1,22 @@
-// import { PRIV_CAST_ABI, PRIV_CAST_ADDRESS } from "@/utils/constants";
 import {
-  baseSepoliaPublicClientAddress,
-  publicClientAbi,
-} from "@/utils/constants";
-import { FrameTransactionResponse } from "@coinbase/onchainkit/frame";
+  FrameTransactionResponse,
+  FrameRequest,
+  getFrameMessage,
+} from "@coinbase/onchainkit/frame";
 import { NextRequest, NextResponse } from "next/server";
+import { toHex } from "viem";
+
 async function getResponse(req: NextRequest): Promise<NextResponse | Response> {
-  const txData = {
-    method: "eth_signTypedData_v4",
+  const body: FrameRequest = await req.json();
+
+  const txData: FrameTransactionResponse = {
+    method: "eth_personalSign",
+    chainId: "eip155:84532",
     params: {
-      domain: {
-        name: "Ether Mail",
-        version: "1",
-        chainId: 1,
-        verifyingContract: "0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC",
-      },
-      types: {
-        Person: [
-          { name: "name", type: "string" },
-          { name: "wallet", type: "address" },
-        ],
-        Mail: [
-          { name: "from", type: "Person" },
-          { name: "to", type: "Person" },
-          { name: "contents", type: "string" },
-        ],
-      },
-      primaryType: "Mail",
-      message: {
-        from: {
-          name: "Cow",
-          wallet: "0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826",
-        },
-        to: {
-          name: "Bob",
-          wallet: "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
-        },
-        contents: "Hello, Bob!",
-      },
+      abi: [],
+      to: "0x5A6B842891032d702517a4E52ec38eE561063539",
+      data: toHex("Sign this message"),
+      value: "0",
     },
   };
 

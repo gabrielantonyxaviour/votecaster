@@ -3,6 +3,7 @@ import { WagmiProvider, createConfig, http } from "wagmi";
 import { ConnectKitProvider } from "connectkit";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AirstackProvider } from "@airstack/airstack-react";
+import { OnchainKitProvider } from "@coinbase/onchainkit";
 import "../styles/machina.css";
 import "@/styles/globals.css";
 import "../styles/monument.css";
@@ -35,9 +36,14 @@ export default function RootLayout({ children }: { children: JSX.Element }) {
           >
             <QueryClientProvider client={queryClient}>
               <ConnectKitProvider>
-                <AirstackProvider apiKey={airstackApiKey}>
-                  {children}
-                </AirstackProvider>
+                <OnchainKitProvider
+                  apiKey={process.env.PUBLIC_ONCHAINKIT_API_KEY}
+                  chain={baseSepolia}
+                >
+                  <AirstackProvider apiKey={airstackApiKey}>
+                    {children}
+                  </AirstackProvider>
+                </OnchainKitProvider>
               </ConnectKitProvider>
             </QueryClientProvider>
           </WagmiProvider>

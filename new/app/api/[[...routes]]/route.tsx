@@ -2994,7 +2994,7 @@ app.frame("/choosetheme/:theme", (c) => {
       </div>
     ),
     intents: [
-      <Button.Reset>Back ↩️</Button.Reset>,
+      <Button action="/createpreview">Back ↩️</Button>,
       <Button
         action={`/choosetheme/${
           parseInt(theme) == 0 ? 6 : parseInt(theme) - 1
@@ -3350,7 +3350,7 @@ app.frame("/create", (c) => {
     });
   } else
     return c.res({
-      action: "/confirm",
+      action: "/finish",
       image: (
         <div
           style={{
@@ -3983,7 +3983,7 @@ app.frame("/create", (c) => {
       intents: [
         <Button action="/choosemins">Back ↩️</Button>,
         <Button action={"/choosetheme/" + state.theme}>Theme 🖼️</Button>,
-        <Button action="/create-poll">Next ➡️</Button>,
+        <Button.Signature target="/sign">Sign</Button.Signature>,
       ],
     });
 });
@@ -3991,7 +3991,7 @@ app.frame("/createpreview", (c) => {
   const { frameData, deriveState } = c;
   const state = deriveState();
   return c.res({
-    action: "/confirm",
+    action: "/finish",
     image: (
       <div
         style={{
@@ -4629,7 +4629,7 @@ app.frame("/createpreview", (c) => {
   });
 });
 
-app.frame("/confirm", (c) => {
+app.frame("/finish", (c) => {
   const { transactionId } = c;
   return c.res({
     image: (
@@ -4663,16 +4663,37 @@ app.signature("/sign", async (c) => {
   });
   return c.signTypedData({
     chainId: "eip155:84532",
+    domain: {
+      name: "Ether Mail",
+      version: "1",
+      chainId: 1,
+      verifyingContract: "0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC",
+    },
     types: {
-      CreatePoll: [
-        { name: "caller", type: "address" },
-        { name: "poll", type: "bytes" },
+      Person: [
+        { name: "name", type: "string" },
+        { name: "wallet", type: "address" },
+        { name: "balance", type: "uint256" },
+      ],
+      Mail: [
+        { name: "from", type: "Person" },
+        { name: "to", type: "Person" },
+        { name: "contents", type: "string" },
       ],
     },
-    primaryType: "CreatePoll",
+    primaryType: "Mail",
     message: {
-      caller: address as `0x${string}`,
-      poll: signData,
+      from: {
+        name: "Cow",
+        wallet: "0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826",
+        balance: BigInt("1"),
+      },
+      to: {
+        name: "Bob",
+        wallet: "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
+        balance: BigInt("1"),
+      },
+      contents: "Hello, Bob!",
     },
   });
 });
