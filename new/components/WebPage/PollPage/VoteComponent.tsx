@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import FarcasterButton from "../FarcasterButton";
 import { Data, QueryResponse } from "@/utils/airstackInterface";
-import SelectableButton from "@/components/SelectableButton";
+import SelectableButton from "@/components/WebPage/SelectableButton";
 import { useAccount } from "wagmi";
 import { useQuery } from "@airstack/airstack-react";
 import { ConnectKitButton } from "connectkit";
