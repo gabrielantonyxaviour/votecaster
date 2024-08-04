@@ -48,6 +48,22 @@ const app = new Frog<{ State: State }>({
     fonts: [{ name: "Krona One", source: "google" }],
   },
 });
+app.composerAction(
+  "/composer",
+  (c) => {
+    return c.res({
+      title: "Priv Cast",
+      url: "https://privcast.com/api/composer",
+    });
+  },
+  {
+    name: "Priv Cast Composer action",
+    description: "Create public polls and vote privately",
+    icon: "image",
+    imageUrl: "https://privcast.com/logo.png",
+  }
+);
+
 app.frame("/", (c) => {
   return c.res({
     image: (
