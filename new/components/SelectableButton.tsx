@@ -32,7 +32,7 @@ export default function SelectableButton({
           click();
         }}
       >
-        <p className=" text-sm font-semibold mx-4 my-2">{text}</p>
+        <p className=" text-xs font-semibold mx-4 my-2">{text}</p>
       </div>
     </div>
   );
