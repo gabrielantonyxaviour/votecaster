@@ -8,6 +8,7 @@ export default function FarcasterButton() {
   const [fetched, setFetched] = useState(false);
   const [profileImage, setProfileImage] = useState("");
   const [userId, setUserId] = useState("");
+  const fid = process.env.FARCASTER_ID || "1"; // TODO: Use this fid to fetch the profile
   const {
     data,
     loading,
@@ -42,6 +43,7 @@ export default function FarcasterButton() {
     } else {
     }
   }, [data, loading, queryError]);
+
   return (
     fetched && (
       <div className={`bg-[#4A0C63] rounded-sm my-auto`}>

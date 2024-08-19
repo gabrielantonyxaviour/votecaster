@@ -51,6 +51,7 @@ const app = new Frog<{ State: State }>({
 app.composerAction(
   "/composer",
   (c) => {
+    process.env.FARCASTER_ID = c.actionData.fid.toString();
     return c.res({
       title: "Priv Cast",
       url: "https://privcast.com/composer",
