@@ -1,7 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["i.imgur.com", "priv-cast-frames.vercel.app"],
+    domains: [
+      "i.imgur.com",
+      "priv-cast-frames.vercel.app",
+      "imagedelivery.net",
+    ],
   },
   reactStrictMode: false,
   webpack: (config) => {
