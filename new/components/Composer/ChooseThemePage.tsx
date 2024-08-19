@@ -28,7 +28,7 @@ export default function ChooseThemePage({ poll }: { poll: Poll }) {
           <HoverButton text="👉" disabled={false} click={() => {}} />
         </div>
       </div>
-      <div className="grid grid-cols-2">
+      <div className="grid grid-cols-2 px-4">
         <div>
           {" "}
           <p className="text-center font-semibold text-md ">
