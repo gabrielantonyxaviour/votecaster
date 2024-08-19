@@ -8,10 +8,10 @@ import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
 
 export default function ChooseThemePage({ poll }: { poll: Poll }) {
   const [worldcoinEnable, setWorldcoinEnable] = useState(false);
-  const [signTxStatus, setSignTxStatus] = useState(2);
-  const [sendTxStatus, setSendTxStatus] = useState(2);
+  const [signTxStatus, setSignTxStatus] = useState(0);
+  const [sendTxStatus, setSendTxStatus] = useState(0);
   const [signTxHash, setSignTxHash] = useState("");
-  const [sendTxHash, setSendTxHash] = useState("svddsv");
+  const [sendTxHash, setSendTxHash] = useState("");
   return (
     <div className="h-full w-full flex flex-col justify-center ">
       <p className="text-center font-bold text-md ">POLL PREVIEW</p>
@@ -55,10 +55,10 @@ export default function ChooseThemePage({ poll }: { poll: Poll }) {
               <SelectableButton
                 text={
                   signTxStatus == 0
-                    ? "✏️ Sign"
+                    ? "✏️ Sign Message"
                     : signTxStatus == 1
-                    ? "⌛ Pending"
-                    : "✅ Signed"
+                    ? "⌛ Tx Pending"
+                    : "✅ Signed Data"
                 }
                 isSelected={false}
                 click={() => {
@@ -69,7 +69,9 @@ export default function ChooseThemePage({ poll }: { poll: Poll }) {
               {signTxHash != "" && (
                 <FontAwesomeIcon
                   icon={faArrowUpRightFromSquare}
-                  onClick={() => {}}
+                  onClick={() => {
+                    // TODO: Send Transaction
+                  }}
                   className="cursor-pointer"
                 />
               )}
@@ -78,10 +80,10 @@ export default function ChooseThemePage({ poll }: { poll: Poll }) {
               <SelectableButton
                 text={
                   sendTxStatus == 0
-                    ? "🖼️ Create"
+                    ? "🖼️ Create Poll"
                     : sendTxStatus == 1
-                    ? "⌛ Pending"
-                    : "✅ Created"
+                    ? "⌛ Tx Pending"
+                    : "✅ Created Poll"
                 }
                 isSelected={false}
                 click={() => {
@@ -92,7 +94,9 @@ export default function ChooseThemePage({ poll }: { poll: Poll }) {
               {sendTxHash != "" && (
                 <FontAwesomeIcon
                   icon={faArrowUpRightFromSquare}
-                  onClick={() => {}}
+                  onClick={() => {
+                    // TODO: Send Transaction
+                  }}
                   className="cursor-pointer"
                 />
               )}
