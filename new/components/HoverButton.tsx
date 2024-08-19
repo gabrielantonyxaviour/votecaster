@@ -1,31 +1,27 @@
-"use client";
-import React from "react";
-export default function SelectableButton({
-  text,
-  isSelected,
+export default function HoverButton({
   disabled,
   click,
+  text,
 }: {
-  text: string;
-  isSelected: boolean;
   disabled: boolean;
   click: () => void;
+  text: string;
 }) {
   return (
     <div
       className={`${
-        disabled ? "bg-[#828282]" : "bg-[#4A0C63] "
+        disabled ? "bg-[#828282]" : "bg-[#4A0C63] hover:bg-[#8A08BF] "
       } rounded-sm text-center select-none`}
     >
       <div
         className={`${
           disabled
             ? "bg-[#545454] text-white"
-            : isSelected
-            ? "bg-white text-[#450C63]"
-            : "bg-[#8A08BF] text-white"
+            : "hover:bg-white hover:text-[#450C63] bg-[#8A08BF] text-white"
         } -translate-y-1 -translate-x-1 rounded-sm border-2 ${
-          disabled ? "border-[#545454]" : "border-[#4A0C63]"
+          disabled
+            ? "border-[#545454]"
+            : "border-[#4A0C63] hover:border-[#8A08BF]"
         } cursor-pointer`}
         onClick={() => {
           console.log("clicked");

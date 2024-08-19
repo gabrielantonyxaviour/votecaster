@@ -9,7 +9,7 @@ export default function HomePage() {
         <title>priv.cast | Home</title>
       </Head>
       <main style={{ fontFamily: "Inter, sans-serif" }}>
-        <div className="max-w-screen mx-auto max-h-screen ">
+        <div className="max-w-screen mx-auto h-screen ">
           <ComposerAction />
         </div>
       </main>

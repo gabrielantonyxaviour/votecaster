@@ -2,11 +2,7 @@ import InputButton from "./InputButton";
 import DurationDropdown from "./DurationDropdown";
 import SelectableButton from "../SelectableButton";
 import { useState } from "react";
-interface Poll {
-  question: string;
-  options: string[];
-  duration: number;
-}
+import { Poll } from "@/utils/types";
 
 interface QuestionPageProps {
   poll: Poll;
@@ -29,14 +25,14 @@ export default function QuestionPage({
   return (
     <>
       <textarea
-        className="w-full h-[25%] text-3xl font-bold placeholder:text-[#DCAFFF] text-[#450C63] bg-transparent border-none focus:outline-none resize-none leading-tight"
+        className="w-full h-[25%] text-3xl font-bold placeholder:text-[#DCAFFF] text-[#450C63] bg-transparent border-none focus:outline-none resize-none leading-tight px-6"
         placeholder="ENTER YOUR QUESTION EX. WHICH TEAM IS WINNING LA LIGA?"
         onChange={(e) => {
           setPoll({ ...poll, question: e.target.value.toUpperCase() });
         }}
         value={poll.question}
       ></textarea>
-      <div className="w-full">
+      <div className="w-full px-6">
         <div className="flex justify-between space-x-4">
           <div className="flex-1">
             <InputButton
@@ -108,7 +104,7 @@ export default function QuestionPage({
           </div>
         </div>
       </div>
-      <div className=" w-full pb-6">
+      <div className=" w-full pb-6 px-6">
         <p className="font-semibold text-[#450C63] text-lg">Duration</p>
         <div className="flex w-full space-x-4 mt-2">
           <div className="bg-[#4A0C63] rounded-sm">
@@ -144,7 +140,7 @@ export default function QuestionPage({
               isSelected={false}
               disabled={poll.question.length == 0 || poll.duration == 0}
               click={() => {
-                setStep(1);
+                setStep(2);
               }}
             />
           </div>
