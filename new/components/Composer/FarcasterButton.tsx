@@ -16,12 +16,11 @@ export default function FarcasterButton() {
   }: QueryResponse = useQuery<Data>(
     `  query MyQuery {
   Socials(
-    input: {blockchain: ethereum, filter: {dappName: {_eq: farcaster}, identity: {_eq: "0x5A6B842891032d702517a4E52ec38eE561063539"}}}
+    input: {filter: {dappName: {_eq: farcaster}, userId: {_eq: "${fid}"}}, blockchain: ethereum}
   ) {
     Social {
       profileImage
-      fnames
-      userId
+      profileHandle
     }
   }
 }`,
@@ -37,7 +36,7 @@ export default function FarcasterButton() {
       (data as any).Socials.Social.length > 0
     ) {
       setProfileImage((data as any).Socials.Social[0].profileImage);
-      setUserId((data as any).Socials.Social[0].fnames[0]);
+      setUserId((data as any).Socials.Social[0].profileHandle);
       console.log(data);
       setFetched(true);
     } else {
