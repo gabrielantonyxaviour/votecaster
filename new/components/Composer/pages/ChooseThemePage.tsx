@@ -21,7 +21,7 @@ import {
 import { baseSepolia } from "viem/chains";
 import { sendTransaction } from "@wagmi/core";
 import Image from "next/image";
-import "@/styles/spinner.css";
+import styles from "@/styles/spinner.module.css";
 
 interface Transaction {
   gas: bigint;
@@ -108,17 +108,19 @@ export default function ChooseThemePage({
           />
         </div>
 
-        <div className="w-[60%] h-[240px] relative border-2 border-[#450C63] mx-auto rounded-lg flex flex-col items-center justify-center">
-          {pollImage != "" ? (
-            <Image
-              src={pollImage}
-              layout="fill"
-              objectFit="cover"
-              alt=""
-              className="rounded-lg"
-            />
+        <div className="relative border-2 border-[#450C63] mx-auto rounded-lg flex items-center justify-center w-full max-w-[70%] aspect-[1.91/1]">
+          {pollImage ? (
+            <div className="relative w-full h-full">
+              <Image
+                src={pollImage}
+                layout="fill"
+                objectFit="cover"
+                alt=""
+                className="rounded-lg"
+              />
+            </div>
           ) : (
-            <div className="loading-spinner"></div>
+            <div className={styles.spinner}></div>
           )}
         </div>
         <div className="mx-auto">

@@ -17,6 +17,7 @@
     "@pinata/sdk": "^2.1.0",
     "@solar-republic/neutrino": "^1.4.5",
     "@supabase/supabase-js": "^2.43.1",
+    "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tanstack/react-query": "^5.51.15",
     "autoprefixer": "^10.4.19",
     "connectkit": "^1.8.1",
