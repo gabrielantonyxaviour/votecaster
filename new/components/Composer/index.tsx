@@ -93,11 +93,11 @@ export default function ComposerAction() {
               setStep={setStep}
               setProofOfHumanity={setProofOfHumanity}
               setPollId={setPollId}
-              setTheme={(theme: boolean) => {
+              setTheme={(t: boolean) => {
                 setPollImage("");
                 setPoll({
                   ...poll,
-                  theme: theme ? (poll.theme + 1) % 7 : (poll.theme + 6) % 7,
+                  theme: t ? (poll.theme + 1) % 7 : (poll.theme + 6) % 7,
                 });
               }}
               proofOfHumanity={proofOfHumanity}
@@ -116,6 +116,8 @@ export default function ComposerAction() {
                   optionB: poll.options[1],
                   optionC: poll.options[2],
                   optionD: poll.options[3],
+                  fid: "123",
+                  theme: poll.theme.toString(),
                   isAnon: proofOfHumanity,
                   validity: durationInput ? parseInt(durationInput) : 0,
                 });

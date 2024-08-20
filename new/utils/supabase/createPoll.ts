@@ -9,6 +9,8 @@ export default async function createPollSupabase(req: {
   pollId: string;
   question: string;
   creator: string;
+  fid: string;
+  theme: string;
   farcaster_username: string;
   optionA: string;
   optionB: string;
@@ -23,6 +25,8 @@ export default async function createPollSupabase(req: {
     creator,
     farcaster_username,
     optionA,
+    fid,
+    theme,
     optionB,
     optionC,
     optionD,
@@ -51,6 +55,8 @@ export default async function createPollSupabase(req: {
                 option_c: optionC,
                 option_d: optionD,
                 is_anon: isAnon,
+                fid,
+                theme,
                 farcaster_username,
                 validity,
               },
