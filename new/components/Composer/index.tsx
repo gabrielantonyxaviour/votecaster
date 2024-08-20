@@ -53,13 +53,17 @@ export default function ComposerAction() {
         if (match) {
           const metaTagContent = match[1];
           console.log(metaTagContent);
-          const metaRegex = /\/api\/visualize\/.*/;
-          const metaMatch = metaTagContent.match(metaRegex);
-          if (metaMatch) {
-            console.log(metaMatch[0]);
-            setPollImage(metaMatch[0]);
+          if (process.env.NEXT_PUBLIC_PRODUCTION) {
+            setPollImage(metaTagContent);
           } else {
-            console.log("No match found");
+            const metaRegex = /\/api\/visualize\/.*/;
+            const metaMatch = metaTagContent.match(metaRegex);
+            if (metaMatch) {
+              console.log(metaMatch[0]);
+              setPollImage(metaMatch[0]);
+            } else {
+              console.log("No match found");
+            }
           }
         } else {
           console.log("Meta tag not found");
