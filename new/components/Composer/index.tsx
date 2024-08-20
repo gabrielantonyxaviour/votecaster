@@ -16,6 +16,7 @@ export default function ComposerAction() {
     options: ["Option 1", "Option 2", "Option 3", "Option 4"],
     duration: 0,
     theme: 0,
+    proofOfHumanity: false,
   });
 
   const [durationInput, setDurationInput] = useState("");
@@ -35,7 +36,13 @@ export default function ComposerAction() {
               setDurationInput={setDurationInput}
             />
           ) : (
-            <ChooseThemePage poll={poll} />
+            <ChooseThemePage
+              poll={poll}
+              setStep={setStep}
+              setProofOfHumanity={(value: boolean) => {
+                setPoll({ ...poll, proofOfHumanity: value });
+              }}
+            />
           )}
         </div>
       </div>

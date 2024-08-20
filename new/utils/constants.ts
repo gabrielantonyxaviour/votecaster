@@ -1,3 +1,13 @@
+import { baseSepolia } from "viem/chains";
+import { createConfig, http } from "wagmi";
+
+export const config = createConfig({
+  chains: [baseSepolia],
+  transports: {
+    [baseSepolia.id]: http(process.env.BASE_ALCHEMY_URL),
+  },
+});
+
 const baseSepoliaPublicClientAddress =
   "0xfaFCfceC4e29e9b4ECc8C0a3f7df1011580EEEf2";
 

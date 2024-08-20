@@ -5,13 +5,26 @@ import HoverButton from "../HoverButton";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
+import { simulateContract, writeContract } from "@wagmi/core";
+import { config } from "@/utils/constants";
+import getCreatePollSignData from "@/utils/write/helpers/getCreatePollSignData";
+import { useAccount } from "wagmi";
 
-export default function ChooseThemePage({ poll }: { poll: Poll }) {
+export default function ChooseThemePage({
+  poll,
+  setStep,
+  setProofOfHumanity,
+}: {
+  poll: Poll;
+  setStep: (step: number) => void;
+  setProofOfHumanity: (value: boolean) => void;
+}) {
   const [worldcoinEnable, setWorldcoinEnable] = useState(false);
   const [signTxStatus, setSignTxStatus] = useState(0);
   const [sendTxStatus, setSendTxStatus] = useState(0);
   const [signTxHash, setSignTxHash] = useState("");
   const [sendTxHash, setSendTxHash] = useState("");
+  const { address } = useAccount();
   return (
     <div className="h-full w-full flex flex-col justify-center ">
       <p className="text-center font-bold text-md ">POLL PREVIEW</p>
@@ -30,7 +43,6 @@ export default function ChooseThemePage({ poll }: { poll: Poll }) {
       </div>
       <div className="grid grid-cols-2 px-4">
         <div>
-          {" "}
           <p className="text-center font-semibold text-md ">
             PROOF OF HUMANITY
           </p>
@@ -43,12 +55,13 @@ export default function ChooseThemePage({ poll }: { poll: Poll }) {
               isSelected={worldcoinEnable}
               click={() => {
                 setWorldcoinEnable(!worldcoinEnable);
+                setProofOfHumanity(!worldcoinEnable);
               }}
               disabled={false}
             />
           </div>
         </div>
-        <p>
+        <div>
           <p className="text-center font-semibold text-md pb-2">CONFIRMATION</p>
           <div className="flex flex-col space-y-4 pt-2 items-center justify-center pb-4">
             <div className="flex items-center space-x-2">
@@ -61,8 +74,27 @@ export default function ChooseThemePage({ poll }: { poll: Poll }) {
                     : "✅ Signed Data"
                 }
                 isSelected={false}
-                click={() => {
-                  setSignTxStatus(1);
+                click={async () => {
+                  // setSignTxStatus(1);
+                  const signData = await getCreatePollSignData({
+                    callerAddress: address as `0x${string}`,
+                    poll: poll,
+                    validity: poll.duration,
+                  });
+                  console.log("SIGN DATA");
+                  console.log(signData);
+                  // TODO: Send transactoin
+                  // const { request } = await simulateContract(config, {
+                  //   abi:[],
+                  //   address: '0x6b175474e89094c44da98b954eedeac495271d0f',
+                  //   functionName: 'transferFrom',
+                  //   args: [
+                  //     '0xd2135CfB216b74109775236E36d4b433F1DF507B',
+                  //     '0xA0Cf798816D4b9b9866b5330EEa46a18382f251e',
+                  //     123n,
+                  //   ],
+                  // })
+                  // const hash = await writeContract(config, request)
                 }}
                 disabled={signTxStatus != 0}
               />
@@ -70,7 +102,7 @@ export default function ChooseThemePage({ poll }: { poll: Poll }) {
                 <FontAwesomeIcon
                   icon={faArrowUpRightFromSquare}
                   onClick={() => {
-                    // TODO: Send Transaction
+                    // TODO: Redirect to transaction Hash
                   }}
                   className="cursor-pointer"
                 />
@@ -88,6 +120,7 @@ export default function ChooseThemePage({ poll }: { poll: Poll }) {
                 isSelected={false}
                 click={() => {
                   setSendTxStatus(1);
+                  // TODO: Send Transaction
                 }}
                 disabled={signTxStatus != 2 || sendTxStatus != 0}
               />
@@ -95,14 +128,24 @@ export default function ChooseThemePage({ poll }: { poll: Poll }) {
                 <FontAwesomeIcon
                   icon={faArrowUpRightFromSquare}
                   onClick={() => {
-                    // TODO: Send Transaction
+                    // TODO: Redirect to transaction Hash
                   }}
                   className="cursor-pointer"
                 />
               )}
             </div>
           </div>
-        </p>
+        </div>
+      </div>
+      <div className="mx-auto pt-4">
+        <SelectableButton
+          text="Go Back"
+          isSelected={false}
+          click={() => {
+            setStep(1);
+          }}
+          disabled={false}
+        />
       </div>
     </div>
   );
