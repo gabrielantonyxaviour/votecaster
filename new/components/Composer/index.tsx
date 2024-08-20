@@ -94,6 +94,7 @@ export default function ComposerAction() {
               setProofOfHumanity={setProofOfHumanity}
               setPollId={setPollId}
               setTheme={(theme: boolean) => {
+                setPollImage("");
                 setPoll({
                   ...poll,
                   theme: theme ? (poll.theme + 1) % 7 : (poll.theme + 6) % 7,
