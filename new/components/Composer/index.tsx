@@ -9,6 +9,7 @@ import { Poll } from "@/utils/types";
 import ChooseThemePage from "./ChooseThemePage";
 import { useAccount } from "wagmi";
 import ConnectPage from "./ConnectPage";
+import PollCreatedPage from "./PollCreatedPage";
 
 export default function ComposerAction() {
   const [pollId, setPollId] = useState("");

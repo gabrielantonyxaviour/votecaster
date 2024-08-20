@@ -174,22 +174,11 @@ export default function ChooseThemePage({
                     ...transaction,
                   });
                   setSendTxHash(txHash);
+                  // TODO: Create poll in the backend and set the poll id
+                  setStep(3);
                 }}
                 disabled={signTxStatus != 2 || sendTxStatus != 0}
               />
-              {sendTxHash != "" && (
-                <FontAwesomeIcon
-                  icon={faArrowUpRightFromSquare}
-                  onClick={() => {
-                    // TODO: Redirect to transaction Hash
-                    window.open(
-                      "https://base-sepolia.blockscout.com/tx/" + sendTxHash,
-                      "_blank"
-                    );
-                  }}
-                  className="cursor-pointer"
-                />
-              )}
             </div>
           </div>
         </div>
