@@ -59,8 +59,8 @@ export default function ComposerAction() {
             const metaRegex = /\/api\/visualize\/.*/;
             const metaMatch = metaTagContent.match(metaRegex);
             if (metaMatch) {
-              console.log("https://privcast.com" + metaMatch[0]);
-              setPollImage("https://privcast.com" + metaMatch[0]);
+              console.log(metaMatch[0]);
+              setPollImage(metaMatch[0]);
             } else {
               console.log("No match found");
             }
