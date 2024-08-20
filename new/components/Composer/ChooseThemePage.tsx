@@ -8,23 +8,51 @@ import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
 import { simulateContract, writeContract } from "@wagmi/core";
 import { config } from "@/utils/constants";
 import getCreatePollSignData from "@/utils/write/helpers/getCreatePollSignData";
-import { useAccount } from "wagmi";
+import { useAccount, useSwitchChain } from "wagmi";
+import createPollSupabase from "@/utils/supabase/createPoll";
+import createPoll from "@/utils/write/createPoll";
+import {
+  concat,
+  createWalletClient,
+  custom,
+  hexToBigInt,
+  recoverPublicKey,
+} from "viem";
+import { baseSepolia } from "viem/chains";
+import { sendTransaction } from "@wagmi/core";
+
+interface Transaction {
+  gas: bigint;
+  to: `0x${string}`;
+  account: `0x${string}`;
+  value: bigint;
+  data: `0x${string}`;
+}
 
 export default function ChooseThemePage({
   poll,
   setStep,
   setProofOfHumanity,
+  setPollId,
 }: {
   poll: Poll;
   setStep: (step: number) => void;
   setProofOfHumanity: (value: boolean) => void;
+  setPollId: (pollId: string) => void;
 }) {
   const [worldcoinEnable, setWorldcoinEnable] = useState(false);
   const [signTxStatus, setSignTxStatus] = useState(0);
   const [sendTxStatus, setSendTxStatus] = useState(0);
-  const [signTxHash, setSignTxHash] = useState("");
   const [sendTxHash, setSendTxHash] = useState("");
-  const { address } = useAccount();
+  const { address, chainId } = useAccount();
+  const { switchChainAsync } = useSwitchChain();
+  const [transaction, setTransaction] = useState<Transaction>({
+    account: "0x",
+    data: "0x",
+    gas: BigInt(0),
+    to: "0x",
+    value: BigInt(0),
+  });
   return (
     <div className="h-full w-full flex flex-col justify-center ">
       <p className="text-center font-bold text-md ">POLL PREVIEW</p>
@@ -75,38 +103,56 @@ export default function ChooseThemePage({
                 }
                 isSelected={false}
                 click={async () => {
-                  // setSignTxStatus(1);
-                  const signData = await getCreatePollSignData({
+                  setSignTxStatus(1);
+
+                  const {
+                    ciphertext,
+                    nonce,
+                    payloadHash,
+                    signData,
+                    userPublicKeyBytes,
+                  } = await getCreatePollSignData({
                     callerAddress: address as `0x${string}`,
                     poll: poll,
                     validity: poll.duration,
                   });
-                  console.log("SIGN DATA");
-                  console.log(signData);
-                  // TODO: Send transactoin
-                  // const { request } = await simulateContract(config, {
-                  //   abi:[],
-                  //   address: '0x6b175474e89094c44da98b954eedeac495271d0f',
-                  //   functionName: 'transferFrom',
-                  //   args: [
-                  //     '0xd2135CfB216b74109775236E36d4b433F1DF507B',
-                  //     '0xA0Cf798816D4b9b9866b5330EEa46a18382f251e',
-                  //     123n,
-                  //   ],
-                  // })
-                  // const hash = await writeContract(config, request)
+                  const params = [address as `0x${string}`, signData];
+                  const client = createWalletClient({
+                    account: address as `0x${string}`,
+                    chain: baseSepolia,
+                    transport: custom(window.ethereum),
+                  });
+
+                  const payloadSignature = await client.signMessage({
+                    message: concat(params),
+                  });
+                  const user_pubkey = await recoverPublicKey({
+                    hash: payloadHash,
+                    signature: payloadSignature,
+                  });
+                  console.log(user_pubkey);
+                  const { gas, to, from, value, data } = await createPoll({
+                    nonce,
+                    payloadHash,
+                    ciphertext,
+                    signature: signData,
+                    userAddress: address as `0x${string}`,
+                    userPublicKey: user_pubkey,
+                    userPublicKeyBytes,
+                  });
+                  console.log({ gas, to, from, value, data });
+
+                  setTransaction({
+                    to,
+                    account: address as `0x${string}`,
+                    value: hexToBigInt(value),
+                    data,
+                    gas: hexToBigInt(gas),
+                  });
+                  setSignTxStatus(2);
                 }}
                 disabled={signTxStatus != 0}
               />
-              {signTxHash != "" && (
-                <FontAwesomeIcon
-                  icon={faArrowUpRightFromSquare}
-                  onClick={() => {
-                    // TODO: Redirect to transaction Hash
-                  }}
-                  className="cursor-pointer"
-                />
-              )}
             </div>
             <div className="flex items-center space-x-2">
               <SelectableButton
@@ -118,9 +164,16 @@ export default function ChooseThemePage({
                     : "✅ Created Poll"
                 }
                 isSelected={false}
-                click={() => {
+                click={async () => {
                   setSendTxStatus(1);
-                  // TODO: Send Transaction
+                  if (chainId != baseSepolia.id)
+                    await switchChainAsync({
+                      chainId: baseSepolia.id,
+                    });
+                  const txHash = await sendTransaction(config, {
+                    ...transaction,
+                  });
+                  setSendTxHash(txHash);
                 }}
                 disabled={signTxStatus != 2 || sendTxStatus != 0}
               />
@@ -129,6 +182,10 @@ export default function ChooseThemePage({
                   icon={faArrowUpRightFromSquare}
                   onClick={() => {
                     // TODO: Redirect to transaction Hash
+                    window.open(
+                      "https://base-sepolia.blockscout.com/tx/" + sendTxHash,
+                      "_blank"
+                    );
                   }}
                   className="cursor-pointer"
                 />

@@ -5,7 +5,7 @@ const supabaseUrl =
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY ?? "";
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-export default async function createPoll(req: {
+export default async function createPollSupabase(req: {
   pollId: string;
   question: string;
   creator: string;

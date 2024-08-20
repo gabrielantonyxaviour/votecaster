@@ -30,6 +30,7 @@ export default async function getCreatePollSignData({
   ciphertext: Uint8Array;
   payloadHash: `0x${string}`;
   signData: `0x${string}`;
+  userPublicKeyBytes: Uint8Array;
 }> {
   try {
     const privateKey = generatePrivateKey();
@@ -58,8 +59,8 @@ export default async function getCreatePollSignData({
     const callbackGasLimit = 300000;
 
     const pinata = new pinataSDK(
-      process.env.PINATA_API_KEY,
-      process.env.PINATA_SECRET_API_KEY
+      process.env.NEXT_PUBLIC_PINATA_API_KEY,
+      process.env.NEXT_PUBLIC_PINATA_SECRET_API_KEY
     );
 
     const body = poll;
@@ -78,14 +79,14 @@ export default async function getCreatePollSignData({
       "https://amethyst-impossible-ptarmigan-368.mypinata.cloud/ipfs/" +
         res.IpfsHash +
         "?pinataGatewayToken=" +
-        process.env.GATEWAY_KEY
+        process.env.NEXT_PUBLIC_GATEWAY_KEY
     );
     const callParams = JSON.stringify({
       poll_uri:
         "https://amethyst-impossible-ptarmigan-368.mypinata.cloud/ipfs/" +
         res.IpfsHash +
         "?pinataGatewayToken=" +
-        process.env.GATEWAY_KEY,
+        process.env.NEXT_PUBLIC_GATEWAY_KEY,
       validity: validity,
     });
 
@@ -103,14 +104,8 @@ export default async function getCreatePollSignData({
       callback_selector: bytes_to_base64(toBytes(callbackSelector)),
       callback_gas_limit: callbackGasLimit.toString(),
     };
-    console.log("PAYLOAD");
-    console.log(payload);
     const plaintext = json_to_bytes(payload);
-    console.log("PLAIN TEXT");
-    console.log(plaintext);
     const nonce = crypto.getRandomValues(bytes(12));
-    console.log("NONCE");
-    console.log(nonce);
 
     const [ciphertextClient, tagClient] = chacha20_poly1305_seal(
       sharedKey,
@@ -118,18 +113,8 @@ export default async function getCreatePollSignData({
       plaintext
     );
 
-    console.log("CIPHERTEXT CLIENT");
-    console.log(ciphertextClient);
-    console.log("TAG CLIENT");
-    console.log(tagClient);
-
     const ciphertext = concat([ciphertextClient, tagClient]);
     const ciphertextHash = keccak256(ciphertext);
-
-    console.log("CIPHERTEXT");
-    console.log(ciphertext);
-    console.log("CIPHERTEXT HASH");
-    console.log(ciphertextHash);
 
     const payloadHash = keccak256(
       concat([
@@ -137,14 +122,13 @@ export default async function getCreatePollSignData({
         toBytes(ciphertextHash),
       ])
     );
-    console.log("PAYLOAD HASH");
-    console.log(payloadHash);
 
     return {
       nonce,
       ciphertext,
       payloadHash,
       signData: ciphertextHash,
+      userPublicKeyBytes,
     };
   } catch (e) {
     console.log("ERROR");
@@ -154,6 +138,7 @@ export default async function getCreatePollSignData({
       ciphertext: new Uint8Array(),
       payloadHash: "0x",
       signData: "0x",
+      userPublicKeyBytes: new Uint8Array(),
     };
   }
 }

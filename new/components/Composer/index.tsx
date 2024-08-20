@@ -11,6 +11,7 @@ import { useAccount } from "wagmi";
 import ConnectPage from "./ConnectPage";
 
 export default function ComposerAction() {
+  const [pollId, setPollId] = useState("");
   const [step, setStep] = useState(1);
   const [error, setError] = useState(false);
   const [poll, setPoll] = useState<Poll>({
@@ -44,14 +45,17 @@ export default function ComposerAction() {
               durationInput={durationInput}
               setDurationInput={setDurationInput}
             />
-          ) : (
+          ) : step == 2 ? (
             <ChooseThemePage
               poll={poll}
               setStep={setStep}
               setProofOfHumanity={(value: boolean) => {
                 setPoll({ ...poll, proofOfHumanity: value });
               }}
+              setPollId={setPollId}
             />
+          ) : (
+            <PollCreatedPage pollId={pollId} poll={poll} setStep={setStep} />
           )}
         </div>
       </div>
