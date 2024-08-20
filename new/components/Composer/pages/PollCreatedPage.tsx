@@ -28,12 +28,10 @@ export default function PollCreatedPage({
       <div className="relative border-2 border-[#450C63] mx-auto rounded-lg flex items-center justify-center w-full max-w-[70%] aspect-[1.91/1]">
         {pollImage ? (
           <div className="relative w-full h-full">
-            <Image
+            <img
               src={pollImage}
-              layout="fill"
-              objectFit="cover"
-              alt=""
-              className="rounded-lg"
+              alt="poll image"
+              className="absolute inset-0 object-cover rounded-lg w-full h-full"
             />
           </div>
         ) : (
