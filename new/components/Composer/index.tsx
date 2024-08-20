@@ -10,6 +10,7 @@ import ChooseThemePage from "./pages/ChooseThemePage";
 import { useAccount } from "wagmi";
 import ConnectPage from "./pages/ConnectPage";
 import PollCreatedPage from "@/components/Composer/pages/PollCreatedPage";
+import createPollSupabase from "@/utils/supabase/createPoll";
 
 export default function ComposerAction() {
   const [pollId, setPollId] = useState("");
@@ -26,7 +27,8 @@ export default function ComposerAction() {
 
   const [durationInput, setDurationInput] = useState("");
   const [sendTxHash, setSendTxHash] = useState("");
-  const { status } = useAccount();
+  const { status, address } = useAccount();
+  const [fName, setFName] = useState("");
   useEffect(() => {
     if (status != "connected") setStep(0);
     else if (status == "connected" && step == 0) setStep(1);
@@ -70,7 +72,7 @@ export default function ComposerAction() {
       <div className="w-full bg-[#FBF6FF] text-[#450C63] h-full">
         <Steps step={step} />
         <div className="flex flex-col h-full justify-between items-center  pt-6">
-          <TopBar />
+          <TopBar setFName={setFName} fName={fName} />
           {step == 0 ? (
             <ConnectPage />
           ) : step == 1 ? (
@@ -96,6 +98,26 @@ export default function ComposerAction() {
               proofOfHumanity={proofOfHumanity}
               pollImage={pollImage}
               setSendTxHash={setSendTxHash}
+              updateSupabase={async () => {
+                const pId = (
+                  Math.floor(Math.random() * 9999999951) + 50
+                ).toString();
+                const { message } = await createPollSupabase({
+                  pollId: pId,
+                  question: poll.question,
+                  creator: address as string,
+                  farcaster_username: fName,
+                  optionA: poll.options[0],
+                  optionB: poll.options[1],
+                  optionC: poll.options[2],
+                  optionD: poll.options[3],
+                  isAnon: proofOfHumanity,
+                  validity: durationInput ? parseInt(durationInput) : 0,
+                });
+                if (message == "Poll created") {
+                  setPollId(pId);
+                }
+              }}
             />
           ) : (
             <PollCreatedPage

@@ -6,11 +6,16 @@ import { useAccount } from "wagmi";
 import { ConnectKitButton } from "connectkit";
 import { useQuery } from "@airstack/airstack-react";
 import { Data, QueryResponse } from "@/utils/airstackInterface";
-export default function TopBar() {
+export default function TopBar({
+  fName,
+  setFName,
+}: {
+  fName: string;
+  setFName: (name: string) => void;
+}) {
   const { address, status } = useAccount();
   const [fetched, setFetched] = useState(false);
   const [profileImage, setProfileImage] = useState("");
-  const [userId, setUserId] = useState("");
   const fid = process.env.FARCASTER_ID || "1"; // TODO: Use this fid to fetch the profile
   const {
     data,
@@ -39,7 +44,7 @@ export default function TopBar() {
       (data as any).Socials.Social.length > 0
     ) {
       setProfileImage((data as any).Socials.Social[0].profileImage);
-      setUserId((data as any).Socials.Social[0].profileHandle);
+      setFName((data as any).Socials.Social[0].profileHandle);
       console.log(data);
       setFetched(true);
     } else {
@@ -52,7 +57,7 @@ export default function TopBar() {
         <FarcasterButton
           fetched={fetched}
           profileImage={profileImage}
-          userId={userId}
+          userId={fName}
         />
         {status == "connected" && <ConnectKitButton theme="retro" />}
       </div>

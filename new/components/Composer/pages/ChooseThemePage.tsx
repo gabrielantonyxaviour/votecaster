@@ -40,6 +40,7 @@ export default function ChooseThemePage({
   setTheme,
   pollImage,
   setSendTxHash,
+  updateSupabase,
 }: {
   poll: Poll;
   setStep: (step: number) => void;
@@ -49,6 +50,7 @@ export default function ChooseThemePage({
   setTheme: (theme: boolean) => void;
   pollImage: string;
   setSendTxHash: (txHash: string) => void;
+  updateSupabase: () => Promise<void>;
 }) {
   const [signTxStatus, setSignTxStatus] = useState(0);
   const [sendTxStatus, setSendTxStatus] = useState(0);
@@ -208,7 +210,8 @@ export default function ChooseThemePage({
                     ...transaction,
                   });
                   setSendTxHash(txHash);
-                  // TODO: Create poll in the backend and set the poll id
+                  await updateSupabase();
+
                   setStep(3);
                 }}
                 disabled={signTxStatus != 2 || sendTxStatus != 0}
