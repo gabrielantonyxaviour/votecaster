@@ -11,9 +11,9 @@ export const config = createConfig({
 const baseSepoliaPublicClientAddress =
   "0xfaFCfceC4e29e9b4ECc8C0a3f7df1011580EEEf2";
 
-const routingContract = "secret17y4avu53kyujrcyd3zyx3t3g3cph5ama24287j";
+const routingContract = "secret1u8z5wtfz2ddrs8lvuuxevdlthjjlf8a7tprxen";
 const routingCodeHash =
-  "0x883b58fa897b8ce680f8a78deab5eab934583e37fd9e430a7ec95936c806570b";
+  "efeec5a5b46f9ba5895bdf29ecf08cf188738e03574ebc3aa206ac6586d3057b";
 
 const gatewayPublicKey = "A20KrD7xDmkFXpNMqJn1CLpRaDLcdKpO1NdBBS7VpWh3";
 const publicClientAbi: any[] = [

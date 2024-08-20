@@ -2,9 +2,7 @@ import { SecretNetworkClient, Wallet, coinsFromString } from "secretjs";
 import dotenv from "dotenv";
 dotenv.config();
 
-const wallet = new Wallet(
-  "desk pigeon hammer sleep only mistake stool december offer patrol once vacant"
-);
+const wallet = new Wallet(process.env.MNEMONIC);
 
 const secretjs = new SecretNetworkClient({
   chainId: "pulsar-3",
@@ -14,8 +12,8 @@ const secretjs = new SecretNetworkClient({
 });
 
 let codeHash =
-  "6c0281401b31d5af254bf9291ea1a2aa90da5cb5074c4eb06bf39447fdd66915";
-let contractAddress = "secret1wl0srn0x8rkddf4grsfz7hfeapflchg62uw4x9";
+  "efeec5a5b46f9ba5895bdf29ecf08cf188738e03574ebc3aa206ac6586d3057b";
+let contractAddress = "secret1u8z5wtfz2ddrs8lvuuxevdlthjjlf8a7tprxen";
 
 let try_execute = async () => {
   const tx = await secretjs.tx.compute.executeContract(
@@ -23,7 +21,10 @@ let try_execute = async () => {
       sender: wallet.address,
       contract_address: contractAddress,
       msg: {
-        increment: {},
+        create_poll: {
+          poll_uri: "Hello",
+          validity: 1000000000,
+        },
       },
       code_hash: codeHash,
     },
