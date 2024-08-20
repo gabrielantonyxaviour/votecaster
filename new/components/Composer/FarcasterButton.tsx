@@ -1,53 +1,22 @@
-import React, { useEffect, useState } from "react";
-import { useQuery } from "@airstack/airstack-react";
-import { Data, QueryResponse } from "@/utils/airstackInterface";
-import Logo from "./Logo";
 import Image from "next/image";
+import React, { useEffect, useState } from "react";
 
-export default function FarcasterButton() {
-  const [fetched, setFetched] = useState(false);
-  const [profileImage, setProfileImage] = useState("");
-  const [userId, setUserId] = useState("");
-  const fid = process.env.FARCASTER_ID || "1"; // TODO: Use this fid to fetch the profile
-  const {
-    data,
-    loading,
-    error: queryError,
-  }: QueryResponse = useQuery<Data>(
-    `  query MyQuery {
-  Socials(
-    input: {filter: {dappName: {_eq: farcaster}, userId: {_eq: "${fid}"}}, blockchain: ethereum}
-  ) {
-    Social {
-      profileImage
-      profileHandle
-    }
-  }
-}`,
-    {},
-    { cache: true }
-  );
-  useEffect(() => {
-    console.log("HI");
-    if (
-      data != null &&
-      (data as any).Socials != null &&
-      (data as any).Socials.Social != null &&
-      (data as any).Socials.Social.length > 0
-    ) {
-      setProfileImage((data as any).Socials.Social[0].profileImage);
-      setUserId((data as any).Socials.Social[0].profileHandle);
-      console.log(data);
-      setFetched(true);
-    } else {
-    }
-  }, [data, loading, queryError]);
-
+export default function FarcasterButton({
+  fetched,
+  profileImage,
+  userId,
+}: {
+  fetched: boolean;
+  profileImage: string;
+  userId: string;
+}) {
   return (
     fetched && (
-      <div className={`bg-[#4A0C63] rounded-sm my-auto`}>
+      <div
+        className={`  bg-[#4A0C63] translate-y-[3px] rounded-lg text-center select-none`}
+      >
         <div
-          className={`bg-[#8A08BF] -translate-y-[2px] -translate-x-[2px] border-2 border-[#4A0C63]  px-3 py-1 flex space-x-2 cursor-default`}
+          className={`${"bg-[#8A08BF] text-white"} -translate-y-1  translate-x-1 rounded-lg border-2 ${"border-[#4A0C63]"} cursor-pointer flex py-[5px] px-3 space-x-3`}
         >
           <Image
             src={profileImage}
@@ -56,7 +25,7 @@ export default function FarcasterButton() {
             alt="pfp"
             className="rounded-full"
           />
-          <p className={`text-white text-xs font-semibold my-auto`}>{userId}</p>
+          <p className={`text-white text-md font-normal my-auto`}>{userId}</p>
         </div>
       </div>
     )
