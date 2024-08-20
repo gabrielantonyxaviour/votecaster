@@ -54,6 +54,12 @@ export default function ComposerAction() {
                 setPoll({ ...poll, proofOfHumanity: value });
               }}
               setPollId={setPollId}
+              setTheme={(theme: boolean) => {
+                setPoll({
+                  ...poll,
+                  theme: theme ? (poll.theme + 1) % 7 : (poll.theme + 6) % 7,
+                });
+              }}
             />
           ) : (
             <PollCreatedPage pollId={pollId} poll={poll} setStep={setStep} />

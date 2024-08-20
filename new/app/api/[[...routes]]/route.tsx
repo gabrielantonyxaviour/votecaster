@@ -6,7 +6,6 @@ import { Button, Frog, TextInput } from "frog";
 import { devtools } from "frog/dev";
 import { handle } from "frog/next";
 import { serveStatic } from "frog/serve-static";
-
 type State = {
   question: string;
   options: {
@@ -4760,7 +4759,114 @@ app.frame("/", (c) => {
 //     ],
 //   });
 // });
-
+app.frame(
+  "/visualize/:question/a/:a/b/:b/c/:c/d/:d/theme/:theme",
+  async (context) => {
+    const { a, b, c, d, question, theme } = context.req.param();
+    return context.res({
+      image: (
+        <div
+          style={{
+            alignItems: "center",
+            background: "white",
+            backgroundSize: "100% 100%",
+            display: "flex",
+            flexDirection: "column",
+            flexWrap: "nowrap",
+            height: "100%",
+            justifyContent: "center",
+            textAlign: "center",
+            width: "100%",
+          }}
+        >
+          <div style={{ display: "flex" }}>
+            <img
+              style={{ zIndex: 1, width: "102%" }}
+              src={`/frames/theme${theme}.png`}
+            />
+          </div>
+          <div
+            style={{
+              fontFamily: "fantasy",
+              fontSize: "50px",
+              position: "absolute",
+              top: "210px",
+              left: "200px",
+              width: "800px",
+              textWrap: "wrap",
+              zIndex: 10,
+              color: theme == "0" || theme == "6" ? "black" : "white",
+              justifyContent: "center",
+              textAlign: "center",
+            }}
+          >
+            {question}
+          </div>
+          <div
+            style={{
+              fontFamily: "fantasy",
+              fontSize: "30px",
+              position: "absolute",
+              top: "418px",
+              left: "230px",
+              width: "800px",
+              textWrap: "wrap",
+              zIndex: 10,
+              color: theme == "0" || theme == "6" ? "black" : "white",
+            }}
+          >
+            {a}
+          </div>
+          <div
+            style={{
+              fontFamily: "fantasy",
+              fontSize: "30px",
+              position: "absolute",
+              top: "418px",
+              left: "670px",
+              width: "800px",
+              textWrap: "wrap",
+              zIndex: 10,
+              color: theme == "0" || theme == "6" ? "black" : "white",
+            }}
+          >
+            {b}
+          </div>
+          <div
+            style={{
+              fontFamily: "fantasy",
+              fontSize: "30px",
+              position: "absolute",
+              top: "535px",
+              left: "230px",
+              width: "800px",
+              textWrap: "wrap",
+              zIndex: 10,
+              color: theme == "0" || theme == "6" ? "black" : "white",
+            }}
+          >
+            {c}
+          </div>
+          <div
+            style={{
+              fontFamily: "fantasy",
+              fontSize: "30px",
+              position: "absolute",
+              top: "535px",
+              left: "670px",
+              width: "800px",
+              textWrap: "wrap",
+              zIndex: 10,
+              color: theme == "0" || theme == "6" ? "black" : "white",
+            }}
+          >
+            {d}
+          </div>
+        </div>
+      ),
+    });
+  }
+);
 app.frame("/poll/:[pollid]", async (c) => {
   const params = c.req.param();
   const fetched = await fetchEntryById(parseInt(params["[pollid]"]));
@@ -4796,7 +4902,9 @@ app.frame("/poll/:[pollid]", async (c) => {
             width: "800px",
             textWrap: "wrap",
             zIndex: 10,
-            color: "black",
+            color:
+              fetched?.theme == 0 || fetched?.theme == 6 ? "black" : "white",
+
             justifyContent: "center",
             textAlign: "center",
           }}
@@ -4813,7 +4921,8 @@ app.frame("/poll/:[pollid]", async (c) => {
             width: "800px",
             textWrap: "wrap",
             zIndex: 10,
-            color: "black",
+            color:
+              fetched?.theme == 0 || fetched?.theme == 6 ? "black" : "white",
           }}
         >
           {fetched?.op1}
@@ -4828,7 +4937,8 @@ app.frame("/poll/:[pollid]", async (c) => {
             width: "800px",
             textWrap: "wrap",
             zIndex: 10,
-            color: "black",
+            color:
+              fetched?.theme == 0 || fetched?.theme == 6 ? "black" : "white",
           }}
         >
           {fetched?.op2}
@@ -4843,7 +4953,8 @@ app.frame("/poll/:[pollid]", async (c) => {
             width: "800px",
             textWrap: "wrap",
             zIndex: 10,
-            color: "black",
+            color:
+              fetched?.theme == 0 || fetched?.theme == 6 ? "black" : "white",
           }}
         >
           {fetched?.op3}
@@ -4858,7 +4969,8 @@ app.frame("/poll/:[pollid]", async (c) => {
             width: "800px",
             textWrap: "wrap",
             zIndex: 10,
-            color: "black",
+            color:
+              fetched?.theme == 0 || fetched?.theme == 6 ? "black" : "white",
           }}
         >
           {fetched?.op4}
