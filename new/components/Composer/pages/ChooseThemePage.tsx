@@ -34,23 +34,26 @@ interface Transaction {
 export default function ChooseThemePage({
   poll,
   setStep,
+  proofOfHumanity,
   setProofOfHumanity,
   setPollId,
   setTheme,
+  pollImage,
+  setSendTxHash,
 }: {
   poll: Poll;
   setStep: (step: number) => void;
+  proofOfHumanity: boolean;
   setProofOfHumanity: (value: boolean) => void;
   setPollId: (pollId: string) => void;
   setTheme: (theme: boolean) => void;
+  pollImage: string;
+  setSendTxHash: (txHash: string) => void;
 }) {
-  const [worldcoinEnable, setWorldcoinEnable] = useState(false);
   const [signTxStatus, setSignTxStatus] = useState(0);
   const [sendTxStatus, setSendTxStatus] = useState(0);
-  const [sendTxHash, setSendTxHash] = useState("");
   const { address, chainId } = useAccount();
   const { switchChainAsync } = useSwitchChain();
-  const [pollImage, setPollImage] = useState<string>("");
   const [transaction, setTransaction] = useState<Transaction>({
     account: "0x",
     data: "0x",
@@ -58,38 +61,6 @@ export default function ChooseThemePage({
     to: "0x",
     value: BigInt(0),
   });
-
-  useEffect(() => {
-    (async function () {
-      const response = await fetch(
-        `/api/visualize/${encodeURIComponent(
-          poll.question
-        )}/a/${encodeURIComponent(poll.options[0])}/b/${encodeURIComponent(
-          poll.options[1]
-        )}/c/${encodeURIComponent(poll.options[2])}/d/${encodeURIComponent(
-          poll.options[3]
-        )}/theme/${poll.theme}`
-      ); // Get the HTML text from the response
-      const html = await response.text();
-      console.log(html);
-      const regex = /<meta\s+property="fc:frame:image"\s+content="([^"]*)"/;
-      const match = html.match(regex);
-      if (match) {
-        const metaTagContent = match[1];
-        console.log(metaTagContent);
-        const metaRegex = /\/api\/visualize\/.*/;
-        const metaMatch = metaTagContent.match(metaRegex);
-        if (metaMatch) {
-          console.log(metaMatch[0]);
-          setPollImage(metaMatch[0]);
-        } else {
-          console.log("No match found");
-        }
-      } else {
-        console.log("Meta tag not found");
-      }
-    })();
-  }, [poll]);
 
   return (
     <div className="h-full w-full flex flex-col justify-center ">
@@ -108,7 +79,7 @@ export default function ChooseThemePage({
           />
         </div>
 
-        <div className="relative border-2 border-[#450C63] mx-auto rounded-lg flex items-center justify-center w-full max-w-[70%] aspect-[1.91/1]">
+        <div className="relative border-2 border-[#450C63] mx-auto rounded-lg flex items-center justify-center w-full max-w-[65%] aspect-[1.91/1]">
           {pollImage ? (
             <div className="relative w-full h-full">
               <Image
@@ -143,11 +114,10 @@ export default function ChooseThemePage({
           </p>
           <div className="flex justify-center pb-4">
             <SelectableButton
-              text={worldcoinEnable ? "✅ Enabled" : "❌ Disabled"}
-              isSelected={worldcoinEnable}
+              text={proofOfHumanity ? "✅ Enabled" : "❌ Disabled"}
+              isSelected={proofOfHumanity}
               click={() => {
-                setWorldcoinEnable(!worldcoinEnable);
-                setProofOfHumanity(!worldcoinEnable);
+                setProofOfHumanity(!proofOfHumanity);
               }}
               disabled={false}
             />

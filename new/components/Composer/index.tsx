@@ -20,16 +20,51 @@ export default function ComposerAction() {
     options: ["Option 1", "Option 2", "Option 3", "Option 4"],
     duration: 0,
     theme: 0,
-    proofOfHumanity: false,
   });
+  const [pollImage, setPollImage] = useState<string>("");
+  const [proofOfHumanity, setProofOfHumanity] = useState<boolean>(false);
 
   const [durationInput, setDurationInput] = useState("");
-  const router = useRouter();
-  const { address, status } = useAccount();
+  const [sendTxHash, setSendTxHash] = useState("");
+  const { status } = useAccount();
   useEffect(() => {
     if (status != "connected") setStep(0);
     else if (status == "connected" && step == 0) setStep(1);
   }, [status]);
+
+  useEffect(() => {
+    if (step == 2) {
+      (async function () {
+        const response = await fetch(
+          `/api/visualize/${encodeURIComponent(
+            poll.question
+          )}/a/${encodeURIComponent(poll.options[0])}/b/${encodeURIComponent(
+            poll.options[1]
+          )}/c/${encodeURIComponent(poll.options[2])}/d/${encodeURIComponent(
+            poll.options[3]
+          )}/theme/${poll.theme}`
+        ); // Get the HTML text from the response
+        const html = await response.text();
+        console.log(html);
+        const regex = /<meta\s+property="fc:frame:image"\s+content="([^"]*)"/;
+        const match = html.match(regex);
+        if (match) {
+          const metaTagContent = match[1];
+          console.log(metaTagContent);
+          const metaRegex = /\/api\/visualize\/.*/;
+          const metaMatch = metaTagContent.match(metaRegex);
+          if (metaMatch) {
+            console.log(metaMatch[0]);
+            setPollImage(metaMatch[0]);
+          } else {
+            console.log("No match found");
+          }
+        } else {
+          console.log("Meta tag not found");
+        }
+      })();
+    }
+  }, [step, poll]);
   return (
     <div className="px-3 h-screen">
       <div className="w-full bg-[#FBF6FF] text-[#450C63] h-full">
@@ -50,9 +85,7 @@ export default function ComposerAction() {
             <ChooseThemePage
               poll={poll}
               setStep={setStep}
-              setProofOfHumanity={(value: boolean) => {
-                setPoll({ ...poll, proofOfHumanity: value });
-              }}
+              setProofOfHumanity={setProofOfHumanity}
               setPollId={setPollId}
               setTheme={(theme: boolean) => {
                 setPoll({
@@ -60,9 +93,16 @@ export default function ComposerAction() {
                   theme: theme ? (poll.theme + 1) % 7 : (poll.theme + 6) % 7,
                 });
               }}
+              proofOfHumanity={proofOfHumanity}
+              pollImage={pollImage}
+              setSendTxHash={setSendTxHash}
             />
           ) : (
-            <PollCreatedPage pollId={pollId} poll={poll} setStep={setStep} />
+            <PollCreatedPage
+              pollId={pollId}
+              pollImage={pollImage}
+              sendTxHash={sendTxHash}
+            />
           )}
         </div>
       </div>
