@@ -62,7 +62,7 @@ export async function fetchEntryById(id: number): Promise<FetchedData | null> {
     .select("question, option_a, option_b, option_c, option_d, theme")
     .eq("id", id)
     .single();
-
+  console.log(data);
   if (error) {
     console.error("Error fetching data:", error);
     return null;
