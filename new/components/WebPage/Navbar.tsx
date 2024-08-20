@@ -15,13 +15,13 @@ export default function Navbar() {
 
       <div className="flex space-x-4 my-auto">
         <Link
-          href={"/create"}
+          href={"/composer"}
           className={usePathname() == "/create" ? "underline" : ""}
         >
           Create
         </Link>
         <Link
-          href={"/polls"}
+          href={"/"}
           className={usePathname() == "/polls" ? "underline" : ""}
         >
           Polls

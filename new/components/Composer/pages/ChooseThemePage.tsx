@@ -1,7 +1,7 @@
 import { Poll } from "@/utils/types";
-import PollPreview from "./PollPreview";
-import SelectableButton from "../SelectableButton";
-import HoverButton from "../HoverButton";
+import PollPreview from "../PollPreview";
+import SelectableButton from "../../SelectableButton";
+import HoverButton from "../../HoverButton";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";

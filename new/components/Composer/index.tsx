@@ -4,12 +4,12 @@ import { useRouter } from "next/navigation";
 import TopBar from "./TopBar";
 
 import Steps from "./Steps";
-import QuestionPage from "./QuestionPage";
+import QuestionPage from "@/components/Composer/pages/QuestionPage";
 import { Poll } from "@/utils/types";
-import ChooseThemePage from "./ChooseThemePage";
+import ChooseThemePage from "./pages/ChooseThemePage";
 import { useAccount } from "wagmi";
-import ConnectPage from "./ConnectPage";
-import PollCreatedPage from "./PollCreatedPage";
+import ConnectPage from "./pages/ConnectPage";
+import PollCreatedPage from "@/components/Composer/pages/PollCreatedPage";
 
 export default function ComposerAction() {
   const [pollId, setPollId] = useState("");
