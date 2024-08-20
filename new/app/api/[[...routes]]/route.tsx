@@ -4889,7 +4889,7 @@ app.frame("/poll/:[pollid]", async (c) => {
         <div style={{ display: "flex" }}>
           <img
             style={{ zIndex: 1, width: "102%" }}
-            src={`/frames/theme${fetched?.theme}.png`}
+            src={`https://privcast.com/frames/theme${fetched?.theme}.png`}
           />
         </div>
         <div

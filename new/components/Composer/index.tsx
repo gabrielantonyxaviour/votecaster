@@ -53,14 +53,14 @@ export default function ComposerAction() {
         if (match) {
           const metaTagContent = match[1];
           console.log(metaTagContent);
-          if (process.env.NEXT_PUBLIC_PRODUCTION) {
+          if (process.env.NEXT_PUBLIC_PRODUCTION == "true") {
             setPollImage(metaTagContent);
           } else {
             const metaRegex = /\/api\/visualize\/.*/;
             const metaMatch = metaTagContent.match(metaRegex);
             if (metaMatch) {
-              console.log(metaMatch[0]);
-              setPollImage(metaMatch[0]);
+              console.log("https://privcast.com" + metaMatch[0]);
+              setPollImage("https://privcast.com" + metaMatch[0]);
             } else {
               console.log("No match found");
             }
