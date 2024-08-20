@@ -55,7 +55,6 @@ export type FetchedData = {
   question: string;
   theme: number;
 };
-
 export async function fetchEntryById(id: number): Promise<FetchedData | null> {
   const { data, error } = await supabase
     .from("polls") // Replace 'polls' with your table name
