@@ -28,27 +28,22 @@ export default function PollsPage() {
               )}/theme/${poll.theme}`
             ); // Get the HTML text from the response
             const html = await response.text();
-            console.log(html);
             const regex =
               /<meta\s+property="fc:frame:image"\s+content="([^"]*)"/;
             const match = html.match(regex);
             if (match) {
               const metaTagContent = match[1];
-              console.log(metaTagContent);
               if (process.env.NEXT_PUBLIC_PRODUCTION == "true") {
                 temp.push(metaTagContent);
               } else {
                 const metaRegex = /\/api\/visualize\/.*/;
                 const metaMatch = metaTagContent.match(metaRegex);
                 if (metaMatch) {
-                  console.log(metaMatch[0]);
                   temp.push(metaMatch[0]);
                 } else {
                   console.log("No match found");
                 }
               }
-              console.log("TEMPPPPPPPPPPPPPPP");
-              console.log(temp);
               setPollUris(temp);
             } else {
               console.log("Meta tag not found");
