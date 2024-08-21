@@ -67,7 +67,7 @@ export default function TopBar({
           Create
         </Link>
         <Link
-          href={"/"}
+          href={"/polls"}
           className={
             usePathname() == "/polls"
               ? "underline text-xs lg:text-sm font-normal"

@@ -49,6 +49,10 @@ export default function ViewPollsPage({
                           src={uri}
                           alt="poll image"
                           className="absolute inset-0 object-cover rounded-lg w-full h-full"
+                          onError={(e) => {
+                            console.log("Error loading image");
+                            console.log(e);
+                          }}
                         />
                       </div>
                     </Link>
