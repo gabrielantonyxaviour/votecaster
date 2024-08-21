@@ -1,7 +1,8 @@
+"use client";
 import React, { useEffect, useState } from "react";
 
 import { useRouter } from "next/navigation";
-import TopBar from "./TopBar";
+import TopBar from "../TopBar";
 
 import Steps from "./Steps";
 import QuestionPage from "@/components/Composer/pages/QuestionPage";

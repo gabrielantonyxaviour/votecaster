@@ -6,7 +6,7 @@ export default function TopBar() {
     <div className="flex">
       <Image
         src="/logo.png"
-        className="rounded-md border border-2 border-[#450C63]"
+        className="rounded-md border-2 border-[#450C63]"
         alt="Logo"
         width={30}
         height={30}

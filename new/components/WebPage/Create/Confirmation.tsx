@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import SelectableButton from "../../SelectableButton";
+import SelectableButton from "../../Common/SelectableButton";
 
 export default function Confirmation({
   post,

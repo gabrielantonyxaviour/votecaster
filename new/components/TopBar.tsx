@@ -1,11 +1,13 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Logo from "./Logo";
-import FarcasterButton from "../Composer/FarcasterButton";
+import Logo from "@/components/Common/Logo";
+import FarcasterButton from "@/components/Common/FarcasterButton";
 import { useAccount } from "wagmi";
 import { ConnectKitButton } from "connectkit";
 import { useQuery } from "@airstack/airstack-react";
 import { Data, QueryResponse } from "@/utils/airstackInterface";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 export default function TopBar({
   fName,
   setFName,
@@ -53,6 +55,28 @@ export default function TopBar({
   return (
     <div className="flex justify-between w-full px-6">
       <Logo />
+      <div className="flex space-x-4 my-auto">
+        <Link
+          href={"/composer"}
+          className={
+            usePathname() == "/composer"
+              ? "underline text-xs lg:text-sm font-normal"
+              : " text-xs lg:text-sm font-normal"
+          }
+        >
+          Create
+        </Link>
+        <Link
+          href={"/"}
+          className={
+            usePathname() == "/polls"
+              ? "underline text-xs lg:text-sm font-normal"
+              : " text-xs lg:text-sm font-normal"
+          }
+        >
+          Polls
+        </Link>
+      </div>
       <div className="flex items-end space-x-4">
         <FarcasterButton
           fetched={fetched}

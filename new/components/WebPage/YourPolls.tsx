@@ -1,6 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
-import Button from "../Button";
+import Button from "../Common/Button";
 
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";

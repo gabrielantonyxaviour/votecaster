@@ -1,6 +1,6 @@
 import InputButton from "../InputButton";
 import DurationDropdown from "../DurationDropdown";
-import SelectableButton from "../../SelectableButton";
+import SelectableButton from "../../Common/SelectableButton";
 import { useState } from "react";
 import { Poll } from "@/utils/types";
 

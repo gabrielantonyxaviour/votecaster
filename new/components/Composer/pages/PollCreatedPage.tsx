@@ -3,7 +3,7 @@ import Image from "next/image";
 import styles from "@/styles/spinner.module.css";
 import Confetti from "react-confetti";
 import { useEffect, useState } from "react";
-import HoverButton from "@/components/HoverButton";
+import HoverButton from "@/components/Common/HoverButton";
 export default function PollCreatedPage({
   pollId,
   pollImage,

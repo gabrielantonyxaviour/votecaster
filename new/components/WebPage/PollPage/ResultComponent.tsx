@@ -5,7 +5,7 @@ import FarcasterButton from "../FarcasterButton";
 import { ConnectKitButton } from "connectkit";
 import getVotes from "@/utils/supabase/getVotes";
 import LoaderButton from "../LoaderButton";
-import SelectableButton from "../../SelectableButton";
+import SelectableButton from "../../Common/SelectableButton";
 export default function ResultComponent({ poll }: { poll: any }) {
   const [votesPercent, setVotesPercent] = useState([0, 0, 0, 0]);
   const [votes, setVotes] = useState([0, 0, 0, 0]);
