@@ -1,4 +1,5 @@
 import ComposerAction from "@/components/Composer";
+import Poll from "@/components/Poll";
 import Head from "next/head";
 
 export default function PollPage() {
@@ -9,7 +10,7 @@ export default function PollPage() {
       </Head>
       <main style={{ fontFamily: "Inter, sans-serif" }}>
         <div className="max-w-[800px] mx-auto h-screen ">
-          <ComposerAction />
+          <Poll />
         </div>
       </main>
     </>

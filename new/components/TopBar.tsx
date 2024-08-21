@@ -55,28 +55,30 @@ export default function TopBar({
   return (
     <div className="flex justify-between w-full px-6">
       <Logo />
-      <div className="flex space-x-4 my-auto">
-        <Link
-          href={"/composer"}
-          className={
-            usePathname() == "/composer"
-              ? "underline text-xs lg:text-sm font-normal"
-              : " text-xs lg:text-sm font-normal"
-          }
-        >
-          Create
-        </Link>
-        <Link
-          href={"/polls"}
-          className={
-            usePathname() == "/polls"
-              ? "underline text-xs lg:text-sm font-normal"
-              : " text-xs lg:text-sm font-normal"
-          }
-        >
-          Polls
-        </Link>
-      </div>
+      {usePathname() != "/composer" && (
+        <div className="flex space-x-4 my-auto">
+          <Link
+            href={"/composer"}
+            className={
+              usePathname() == "/composer"
+                ? "underline text-xs lg:text-sm font-normal"
+                : " text-xs lg:text-sm font-normal"
+            }
+          >
+            Create
+          </Link>
+          <Link
+            href={"/polls"}
+            className={
+              usePathname() == "/polls"
+                ? "underline text-xs lg:text-sm font-normal"
+                : " text-xs lg:text-sm font-normal"
+            }
+          >
+            Polls
+          </Link>
+        </div>
+      )}
       <div className="flex items-end space-x-4">
         <FarcasterButton
           fetched={fetched}

@@ -8,8 +8,8 @@ export default function TopBar() {
         src="/logo.png"
         className="rounded-md border-2 border-[#450C63]"
         alt="Logo"
-        width={30}
-        height={30}
+        width={38}
+        height={38}
       />
       <p className="text-[#450C63] text-lg font-semibold mx-2 my-auto">
         PRIV.CAST

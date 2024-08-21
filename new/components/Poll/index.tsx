@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 import TopBar from "../TopBar";
 
-export default function Polls() {
+export default function Poll() {
   const { status, address } = useAccount();
   const [fName, setFName] = useState("");
 
