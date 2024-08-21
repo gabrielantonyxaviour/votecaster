@@ -1,19 +1,13 @@
-export default function preloadImages(
-  urls: string[],
-  callback: (images: HTMLImageElement[]) => void
-): void {
-  let loadedCount = 0;
-  const images: HTMLImageElement[] = [];
-
-  urls.forEach((url, index) => {
-    const img = new Image();
-    img.src = url;
-    img.onload = () => {
-      loadedCount++;
-      images[index] = img;
-      if (loadedCount === urls.length) {
-        callback(images);
-      }
-    };
-  });
+export default async function preloadImages(
+  urls: string[]
+): Promise<HTMLImageElement[]> {
+  return Promise.all(
+    urls.map((url) => {
+      return new Promise<HTMLImageElement>((resolve) => {
+        const img = new Image();
+        img.src = url;
+        img.onload = () => resolve(img);
+      });
+    })
+  );
 }

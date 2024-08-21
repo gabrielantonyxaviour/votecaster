@@ -19,14 +19,17 @@ export default function ViewPollsPage({
   const [loadedImages, setLoadedImages] = useState<HTMLImageElement[]>([]);
 
   useEffect(() => {
-    if (pollUris != null) {
-      preloadImages(pollUris, (images) => {
-        console.log("IMGAES LOADDED");
-        console.log(images);
+    if (pollUris != null && loadedImages.length != pollUris.length) {
+      preloadImages(pollUris).then((images) => {
         setLoadedImages(images);
       });
     }
-  }, [pollUris]);
+  }, [pollUris, loadedImages]);
+
+  useEffect(() => {
+    console.log(loadedImages);
+    console.log(pollUris);
+  }, [loadedImages, pollUris]);
   return (
     <div className="px-3 min-h-screen flex flex-col">
       <div className="w-full bg-[#FBF6FF] text-[#450C63] flex-1 flex flex-col h-full justify-start items-center  pt-6">
