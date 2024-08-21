@@ -17,19 +17,21 @@ export default function ViewPollsPage({
   const { status, address } = useAccount();
   const [fName, setFName] = useState("");
   const [loadedImages, setLoadedImages] = useState<HTMLImageElement[]>([]);
-
+  const [loading, setLoading] = useState<boolean>(true);
+  const [steps, setSteps] = useState(0);
   useEffect(() => {
-    if (pollUris != null && loadedImages.length != pollUris.length) {
-      preloadImages(pollUris).then((images) => {
-        setLoadedImages(images);
+    if (pollUris && loading && pollUris.length != steps) {
+      preloadImages(pollUris[steps]).then((image) => {
+        setLoadedImages([...loadedImages, image]);
+        setSteps(steps + 1);
       });
+    } else {
+      if (pollUris && steps == pollUris.length) {
+        setLoading(false);
+      }
     }
-  }, [pollUris, loadedImages]);
+  }, [pollUris, steps]);
 
-  useEffect(() => {
-    console.log(loadedImages);
-    console.log(pollUris);
-  }, [loadedImages, pollUris]);
   return (
     <div className="px-3 min-h-screen flex flex-col">
       <div className="w-full bg-[#FBF6FF] text-[#450C63] flex-1 flex flex-col h-full justify-start items-center  pt-6">
@@ -38,23 +40,21 @@ export default function ViewPollsPage({
           <>
             <p className="pt-12 pb-6 font-bold text-xl">Your Polls</p>
 
-            {loadedImages.length == 0 ? (
-              pollUris == null || pollUris.length > 0 ? (
-                <div className="flex-1 flex items-center">
-                  <div className={`${styles.spinner} `}></div>
-                </div>
-              ) : (
-                <div className="flex-1 flex flex-col justify-center items-center space-y-4">
-                  <p className="text-center text-md ">No Polls Found 😢</p>
-                  <Link href="/composer">
-                    <HoverButton
-                      text="Create Polls 🚀"
-                      disabled={false}
-                      click={() => {}}
-                    />
-                  </Link>
-                </div>
-              )
+            {pollUris != null && pollUris.length == 0 ? (
+              <div className="flex-1 flex flex-col justify-center items-center space-y-4">
+                <p className="text-center text-md ">No Polls Found 😢</p>
+                <Link href="/composer">
+                  <HoverButton
+                    text="Create Polls 🚀"
+                    disabled={false}
+                    click={() => {}}
+                  />
+                </Link>
+              </div>
+            ) : pollUris == null || loading ? (
+              <div className="flex-1 flex items-center">
+                <div className={`${styles.spinner} `}></div>
+              </div>
             ) : (
               <div className="grid grid-cols-2 gap-8 w-full mx-auto">
                 {loadedImages.map((uri, i) => (
@@ -65,6 +65,7 @@ export default function ViewPollsPage({
                   >
                     <div className="relative w-full h-full">
                       <img
+                        key={i}
                         src={loadedImages[i].src}
                         alt="poll image"
                         className="absolute inset-0 object-cover rounded-lg w-full h-full"
