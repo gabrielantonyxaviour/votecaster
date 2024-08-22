@@ -10,6 +10,7 @@ import { sendTransaction } from "@wagmi/core";
 import styles from "@/styles/spinner.module.css";
 import getSecretPathData from "@/utils/write/helpers/getSecretPathData";
 import uploadInIPFS from "@/utils/uploadInIPFS";
+import { hexToBigInt } from "viem";
 
 export default function ChooseThemePage({
   poll,
@@ -165,7 +166,11 @@ export default function ChooseThemePage({
                       chainId: baseSepolia.id,
                     });
                   const txHash = await sendTransaction(config, {
-                    ...transaction,
+                    account: transaction.from as `0x${string}`,
+                    to: transaction.to as `0x${string}`,
+                    value: hexToBigInt(transaction.value as `0x${string}`),
+                    data: transaction.data as `0x${string}`,
+                    gas: hexToBigInt(transaction.gas as `0x${string}`),
                   });
                   setSendTxHash(txHash);
                   await updateSupabase();

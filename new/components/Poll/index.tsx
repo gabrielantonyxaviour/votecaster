@@ -13,15 +13,7 @@ import {
   ISuccessResult,
 } from "@worldcoin/idkit";
 import HoverButton from "../Common/HoverButton";
-import getCastVoteSignData from "@/utils/write/helpers/getCastVoteSignData";
-import {
-  concat,
-  createWalletClient,
-  custom,
-  decodeAbiParameters,
-  hexToBigInt,
-  recoverPublicKey,
-} from "viem";
+import { decodeAbiParameters, hexToBigInt } from "viem";
 import { baseSepolia } from "viem/chains";
 import { sendTransaction } from "@wagmi/core";
 import { config } from "@/utils/constants";
@@ -363,7 +355,15 @@ export default function Poll({ pollId }: { pollId: string }) {
                                     chainId: baseSepolia.id,
                                   });
                                 const txHash = await sendTransaction(config, {
-                                  ...transaction,
+                                  account: transaction.from as `0x${string}`,
+                                  to: transaction.to as `0x${string}`,
+                                  value: hexToBigInt(
+                                    transaction.value as `0x${string}`
+                                  ),
+                                  data: transaction.data as `0x${string}`,
+                                  gas: hexToBigInt(
+                                    transaction.gas as `0x${string}`
+                                  ),
                                 });
                                 setSendTxHash(txHash);
                                 console.log({
