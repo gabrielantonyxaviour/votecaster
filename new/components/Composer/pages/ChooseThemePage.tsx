@@ -1,23 +1,13 @@
 import { Poll, Transaction } from "@/utils/types";
-import PollPreview from "../PollPreview";
 import SelectableButton from "../../Common/SelectableButton";
 import HoverButton from "../../Common/HoverButton";
 import { useEffect, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
-import { simulateContract, writeContract } from "@wagmi/core";
 import { config } from "@/utils/constants";
-import getCreatePollSignData from "@/utils/write/helpers/getCreatePollSignData";
 import { useAccount, useSwitchChain } from "wagmi";
-import createPollSupabase from "@/utils/supabase/createPoll";
 
 import { baseSepolia } from "viem/chains";
 import { sendTransaction } from "@wagmi/core";
-import Image from "next/image";
 import styles from "@/styles/spinner.module.css";
-import { ethers } from "ethers";
-import { recoverPublicKey } from "ethers/lib/utils";
-import { hexToBigInt } from "viem";
 import getSecretPathData from "@/utils/write/helpers/getSecretPathData";
 import uploadInIPFS from "@/utils/uploadInIPFS";
 
@@ -124,7 +114,7 @@ export default function ChooseThemePage({
                   signTxStatus == 0
                     ? "✏️ Sign Message"
                     : signTxStatus == 1
-                    ? "⌛ Preparing Data"
+                    ? "🔏 Preparing Data"
                     : signTxStatus == 2
                     ? "⌛ Waiting"
                     : "✅ Poll Created"

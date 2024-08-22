@@ -23,13 +23,13 @@ import {
   recoverPublicKey,
 } from "viem";
 import { baseSepolia } from "viem/chains";
-import castVote from "@/utils/write/castVote";
 import { sendTransaction } from "@wagmi/core";
 import { config } from "@/utils/constants";
 import vote from "@/utils/supabase/vote";
 import getVoted from "@/utils/supabase/getVoted";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
+import getSecretPathData from "@/utils/write/helpers/getSecretPathData";
 
 export default function Poll({ pollId }: { pollId: string }) {
   const { status, chainId, address } = useAccount();
@@ -53,11 +53,11 @@ export default function Poll({ pollId }: { pollId: string }) {
   const [userVote, setUserVote] = useState<number>(-1);
   const { switchChainAsync } = useSwitchChain();
   const [transaction, setTransaction] = useState<Transaction>({
-    account: "0x",
+    from: "0x",
     data: "0x",
-    gas: BigInt(0),
+    gas: "0x",
     to: "0x",
-    value: BigInt(0),
+    value: "0x",
   });
   const [voteResults, setVoteResults] = useState<number[]>([2, 8, 9, 12]);
   const [highestIndex, setHighestIndex] = useState<number>(
@@ -313,64 +313,31 @@ export default function Poll({ pollId }: { pollId: string }) {
                                 signTxStatus == 0
                                   ? "✏️ Sign Message"
                                   : signTxStatus == 1
-                                  ? "⌛ Pending"
-                                  : "✅ Signed Data"
+                                  ? "🔏 Encrypting Vote"
+                                  : signTxStatus == 2
+                                  ? "⌛ Waiting"
+                                  : "✅ Vote Encrypted"
                               }
                               isSelected={false}
                               click={async () => {
                                 setSignTxStatus(1);
+                                const input = {
+                                  farcaster_id: fId,
+                                  poll_id: pollId,
+                                  vote,
+                                };
 
-                                const {
-                                  ciphertext,
-                                  nonce,
-                                  payloadHash,
-                                  signData,
-                                  userPublicKeyBytes,
-                                } = await getCastVoteSignData({
-                                  callerAddress: address as `0x${string}`,
-                                  pollId: parseInt(pollId),
-                                  vote: selectedOption as number,
-                                  fId: fId as number,
-                                });
-                                const params = [
-                                  address as `0x${string}`,
-                                  signData,
-                                ];
-                                const client = createWalletClient({
-                                  account: address as `0x${string}`,
-                                  chain: baseSepolia,
-                                  transport: custom(window.ethereum),
-                                });
-
-                                const payloadSignature =
-                                  await client.signMessage({
-                                    message: concat(params),
-                                  });
-                                const user_pubkey = await recoverPublicKey({
-                                  hash: payloadHash,
-                                  signature: payloadSignature,
-                                });
-                                console.log(user_pubkey);
                                 const { gas, to, from, value, data } =
-                                  await castVote({
-                                    nonce,
-                                    payloadHash,
-                                    ciphertext,
-                                    signature: signData,
-                                    userAddress: address as `0x${string}`,
-                                    userPublicKey: user_pubkey,
-                                    userPublicKeyBytes,
+                                  await getSecretPathData({
+                                    callerAddress: address as `0x${string}`,
+                                    functionName: "vote",
+                                    input,
+                                    setSignTxStatus,
                                   });
                                 console.log({ gas, to, from, value, data });
 
-                                setTransaction({
-                                  to,
-                                  account: address as `0x${string}`,
-                                  value: hexToBigInt(value),
-                                  data,
-                                  gas: hexToBigInt(gas),
-                                });
-                                setSignTxStatus(2);
+                                setTransaction({ gas, to, from, value, data });
+                                setSignTxStatus(3);
                               }}
                               disabled={
                                 signTxStatus != 0 ||
@@ -424,7 +391,7 @@ export default function Poll({ pollId }: { pollId: string }) {
                                 console.log(response);
                                 setSendTxStatus(2);
                               }}
-                              disabled={signTxStatus != 2 || sendTxStatus != 0}
+                              disabled={signTxStatus != 3 || sendTxStatus != 0}
                             />
                           </div>
                         </div>
