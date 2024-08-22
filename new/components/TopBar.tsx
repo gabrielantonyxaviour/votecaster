@@ -11,9 +11,13 @@ import { usePathname } from "next/navigation";
 export default function TopBar({
   fName,
   setFName,
+  setFid,
+  isComposer,
 }: {
+  isComposer: boolean;
   fName: string;
   setFName: (name: string) => void;
+  setFid: (id: number) => void;
 }) {
   const { address, status } = useAccount();
   const [fetched, setFetched] = useState(false);
@@ -24,13 +28,26 @@ export default function TopBar({
     loading,
     error: queryError,
   }: QueryResponse = useQuery<Data>(
-    `  query MyQuery {
+    isComposer
+      ? `  query MyQuery {
   Socials(
     input: {filter: {dappName: {_eq: farcaster}, userId: {_eq: "${fid}"}}, blockchain: ethereum}
   ) {
     Social {
       profileImage
       profileHandle
+      userId
+    }
+  }
+}`
+      : ` query MyQuery {
+  Socials(
+    input: {blockchain: ethereum, filter: {dappName: {_eq: farcaster}, identity: {_eq: "${address}"}}}
+  ) {
+    Social {
+      profileImage
+      profileHandle
+      userId
     }
   }
 }`,
@@ -48,8 +65,11 @@ export default function TopBar({
       setProfileImage((data as any).Socials.Social[0].profileImage);
       setFName((data as any).Socials.Social[0].profileHandle);
       console.log(data);
+      setFid((data as any).Socials.Social[0].userId);
       setFetched(true);
     } else {
+      console.log("No profile found");
+      console.log(data);
     }
   }, [data, loading, queryError]);
   return (

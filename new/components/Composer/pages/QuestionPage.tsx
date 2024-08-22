@@ -115,9 +115,12 @@ export default function QuestionPage({
                   const textInput = e.target.value;
                   const filteredValue = textInput.replace(/[^0-9]/g, "");
                   setDurationInput(filteredValue);
+                  const timeFromCurrentTimestamp =
+                    Date.now() +
+                    parseInt(filteredValue) * values[selectedIndex];
                   setPoll({
                     ...poll,
-                    duration: parseInt(filteredValue) * values[selectedIndex],
+                    duration: timeFromCurrentTimestamp,
                   });
                 }}
                 className="text-[#8A08BF] text-xs font-semibold mx-4 my-2 bg-transparent border-none focus:outline-none w-full"

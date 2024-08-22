@@ -1,4 +1,4 @@
-import { Poll } from "@/utils/types";
+import { Poll, Transaction } from "@/utils/types";
 import PollPreview from "../PollPreview";
 import SelectableButton from "../../Common/SelectableButton";
 import HoverButton from "../../Common/HoverButton";
@@ -22,14 +22,6 @@ import { baseSepolia } from "viem/chains";
 import { sendTransaction } from "@wagmi/core";
 import Image from "next/image";
 import styles from "@/styles/spinner.module.css";
-
-interface Transaction {
-  gas: bigint;
-  to: `0x${string}`;
-  account: `0x${string}`;
-  value: bigint;
-  data: `0x${string}`;
-}
 
 export default function ChooseThemePage({
   poll,
@@ -109,7 +101,7 @@ export default function ChooseThemePage({
           <p className="text-center font-semibold text-md ">
             PROOF OF HUMANITY
           </p>
-          <p className="text-center font-semibold text-xs  pb-4">
+          <p className="text-center font-semibold text-xs w-[80%] pb-4 mx-auto">
             Verifies World ID on-chain on casting a vote 🤖
           </p>
           <div className="flex justify-center pb-4">

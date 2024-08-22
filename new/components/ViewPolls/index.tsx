@@ -19,6 +19,7 @@ export default function ViewPollsPage({
   const [loadedImages, setLoadedImages] = useState<HTMLImageElement[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [steps, setSteps] = useState(0);
+  const [fid, setFid] = useState<number | null>(null);
   useEffect(() => {
     if (pollUris && loading && pollUris.length != steps) {
       preloadImages(pollUris[steps]).then((image) => {
@@ -35,7 +36,12 @@ export default function ViewPollsPage({
   return (
     <div className="px-3 min-h-screen flex flex-col">
       <div className="w-full bg-[#FBF6FF] text-[#450C63] flex-1 flex flex-col h-full justify-start items-center  pt-6">
-        <TopBar setFName={setFName} fName={fName} />
+        <TopBar
+          setFName={setFName}
+          fName={fName}
+          setFid={setFid}
+          isComposer={false}
+        />
         {status == "connected" ? (
           <>
             <p className="pt-12 pb-6 font-bold text-xl">Your Polls</p>

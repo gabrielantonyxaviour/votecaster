@@ -1,3 +1,4 @@
+import { toFunctionSelector } from "viem";
 import { baseSepolia } from "viem/chains";
 import { createConfig, http } from "wagmi";
 
@@ -9,7 +10,8 @@ export const config = createConfig({
 });
 
 const baseSepoliaPublicClientAddress =
-  "0xfaFCfceC4e29e9b4ECc8C0a3f7df1011580EEEf2";
+  "0xfaFCfceC4e29e9b4ECc8C0a3f7df1011580EEEf2".toLowerCase();
+export const callbackSelector = toFunctionSelector("upgradeHandler()");
 
 const routingContract = "secret1u8z5wtfz2ddrs8lvuuxevdlthjjlf8a7tprxen";
 const routingCodeHash =

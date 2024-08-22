@@ -29,6 +29,7 @@ export default function ComposerAction() {
   const [durationInput, setDurationInput] = useState("");
   const [sendTxHash, setSendTxHash] = useState("");
   const { status, address } = useAccount();
+  const [fId, setFId] = useState<number | null>(null);
   const [fName, setFName] = useState("");
   useEffect(() => {
     if (status != "connected") setStep(0);
@@ -77,7 +78,12 @@ export default function ComposerAction() {
       <div className="w-full bg-[#FBF6FF] text-[#450C63] h-full">
         <Steps step={step} />
         <div className="flex flex-col h-full justify-between items-center  pt-6">
-          <TopBar setFName={setFName} fName={fName} />
+          <TopBar
+            setFName={setFName}
+            fName={fName}
+            setFid={setFId}
+            isComposer={true}
+          />
           {step == 0 ? (
             <ConnectPage />
           ) : step == 1 ? (
