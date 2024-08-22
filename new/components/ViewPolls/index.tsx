@@ -49,7 +49,7 @@ export default function ViewPollsPage({
             {pollUris != null && pollUris.length == 0 ? (
               <div className="flex-1 flex flex-col justify-center items-center space-y-4">
                 <p className="text-center text-md ">No Polls Found 😢</p>
-                <Link href="/composer">
+                <Link href="/create">
                   <HoverButton
                     text="Create Polls 🚀"
                     disabled={false}

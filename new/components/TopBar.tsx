@@ -75,12 +75,12 @@ export default function TopBar({
   return (
     <div className="flex justify-between w-full px-6">
       <Logo />
-      {usePathname() != "/composer" && (
+      {usePathname() != "/create" && (
         <div className="flex space-x-4 my-auto">
           <Link
-            href={"/composer"}
+            href={"/create"}
             className={
-              usePathname() == "/composer"
+              usePathname() == "/create"
                 ? "underline text-xs lg:text-sm font-normal"
                 : " text-xs lg:text-sm font-normal"
             }
