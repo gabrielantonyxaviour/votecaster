@@ -7,7 +7,7 @@ export default function PollPage({ params }: { params: { id: string } }) {
   return (
     <>
       <Head>
-        <title>Home</title>
+        <title>priv.cast | Poll {params.id}</title>
       </Head>
       <main style={{ fontFamily: "Inter, sans-serif" }}>
         <div className="max-w-[800px] mx-auto h-screen ">
