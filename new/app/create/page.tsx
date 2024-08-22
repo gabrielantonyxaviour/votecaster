@@ -6,7 +6,8 @@ export default function HomePage() {
   return (
     <>
       <Head>
-        <title>priv.cast | Home</title>
+        <title>priv.cast | Create</title>
+        <link rel="icon" href="/logo.png" />
       </Head>
       <main style={{ fontFamily: "Inter, sans-serif" }}>
         <div className="max-w-[800px] mx-auto h-screen ">

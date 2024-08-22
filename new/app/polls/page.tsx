@@ -60,6 +60,7 @@ export default function PollsPage() {
     <>
       <Head>
         <title>Your Polls</title>
+        <link rel="icon" href="/logo.png" />
       </Head>
       <main style={{ fontFamily: "Inter, sans-serif" }}>
         <div className="max-w-[800px] mx-auto h-screen ">
