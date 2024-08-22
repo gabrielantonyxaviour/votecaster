@@ -56,30 +56,43 @@ export default async function vote(req: {
         };
       }
     } else {
-      const { data, error } = supabase
-        ? await supabase
-            .from("votes")
-            .insert([
-              {
-                poll_id: pollId,
-                nullifier,
-                vote,
-              },
-            ])
-            .select()
-        : {
-            data: null,
-            error: new Error("Supabase client is not initialized"),
-          };
-      if (error) {
-        console.log(error);
+      const { data: fetchedVote, error: fetchError } = await supabase
+        .from("votes")
+        .select("*")
+        .eq("poll_id", pollId);
+      if (fetchError || fetchedVote == null || fetchedVote.length === 0) {
+        const { data, error } = supabase
+          ? await supabase
+              .from("votes")
+              .insert([
+                {
+                  poll_id: pollId,
+                  nullifier,
+                  vote,
+                  tx,
+                  fid,
+                },
+              ])
+              .select()
+          : {
+              data: null,
+              error: new Error("Supabase client is not initialized"),
+            };
+        if (error) {
+          console.log(error);
 
-        return { message: "Error voting", response: error };
+          return { message: "Error voting", response: error };
+        }
+        return {
+          message: "Voted",
+          response: data != null ? data[0] : "",
+        };
+      } else {
+        return {
+          message: "Already voted",
+          response: fetchedVote[0],
+        };
       }
-      return {
-        message: "Voted",
-        response: data != null ? data[0] : "",
-      };
     }
   } catch (error) {
     console.error("Error voting:", error);

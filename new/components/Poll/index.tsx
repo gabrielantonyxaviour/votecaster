@@ -399,7 +399,7 @@ export default function Poll({ pollId }: { pollId: string }) {
                                   ...transaction,
                                 });
                                 setSendTxHash(txHash);
-                                const { message } = await vote({
+                                console.log({
                                   pollId,
                                   nullifier:
                                     worldcoin != null
@@ -410,6 +410,18 @@ export default function Poll({ pollId }: { pollId: string }) {
                                   tx: txHash,
                                   fid: fId.toString(),
                                 });
+                                const { message, response } = await vote({
+                                  pollId,
+                                  nullifier:
+                                    worldcoin != null
+                                      ? worldcoin.nullifier_hash
+                                      : 123,
+                                  vote: selectedOption || 0,
+                                  isAnon: proofOfHumanity,
+                                  tx: txHash,
+                                  fid: fId.toString(),
+                                });
+                                console.log(response);
                                 setSendTxStatus(2);
                               }}
                               disabled={signTxStatus != 2 || sendTxStatus != 0}
