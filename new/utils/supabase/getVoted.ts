@@ -6,26 +6,38 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 export default async function getVoted(req: {
   pollId: string;
   nullifier: string;
+  fid: string;
 }): Promise<{ message: string; response: any }> {
-  const { pollId, nullifier } = req;
+  const { pollId, nullifier, fid } = req;
 
   try {
-    const { data: fetchedVote, error: fetchError } = await supabase
+    const { data: fetchedVoteByNullifer, error: fetchErrorByNullifer } =
+      await supabase
+        .from("votes")
+        .select("*")
+        .eq("poll_id", pollId)
+        .eq("nullifier", nullifier);
+
+    const { data: fetchedVoteByFid, error: fetchErrorByFid } = await supabase
       .from("votes")
       .select("*")
       .eq("poll_id", pollId)
-      .eq("nullifier", nullifier);
+      .eq("fid", fid);
 
-    console.log(fetchedVote);
-    if (fetchError || fetchedVote == null || fetchedVote.length === 0) {
-      return {
-        message: "Not Voted",
-        response: false,
-      };
-    } else {
+    if (fetchedVoteByNullifer != null && fetchedVoteByNullifer.length > 0) {
       return {
         message: "Already voted",
         response: true,
+      };
+    } else if (fetchedVoteByFid != null && fetchedVoteByFid.length > 0) {
+      return {
+        message: "Already voted",
+        response: true,
+      };
+    } else {
+      return {
+        message: "Not Voted",
+        response: false,
       };
     }
   } catch (error) {
