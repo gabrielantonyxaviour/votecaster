@@ -118,6 +118,7 @@ export default function QuestionPage({
                   const timeFromCurrentTimestamp =
                     Date.now() +
                     parseInt(filteredValue) * values[selectedIndex];
+                  console.log(timeFromCurrentTimestamp);
                   setPoll({
                     ...poll,
                     duration: timeFromCurrentTimestamp,
@@ -135,6 +136,14 @@ export default function QuestionPage({
               if (option === "hours") setSelectedIndex(1);
               if (option === "days") setSelectedIndex(2);
               if (option === "months") setSelectedIndex(3);
+
+              const timeFromCurrentTimestamp =
+                Date.now() + parseInt(durationInput) * values[selectedIndex];
+              console.log(timeFromCurrentTimestamp);
+              setPoll({
+                ...poll,
+                duration: timeFromCurrentTimestamp,
+              });
             }}
           />
           <div className="flex-1 flex justify-end">

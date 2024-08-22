@@ -28,7 +28,6 @@ export default function ChooseThemePage({
   setStep,
   proofOfHumanity,
   setProofOfHumanity,
-  setPollId,
   setTheme,
   pollImage,
   setSendTxHash,
@@ -38,7 +37,6 @@ export default function ChooseThemePage({
   setStep: (step: number) => void;
   proofOfHumanity: boolean;
   setProofOfHumanity: (value: boolean) => void;
-  setPollId: (pollId: string) => void;
   setTheme: (theme: boolean) => void;
   pollImage: string;
   setSendTxHash: (txHash: string) => void;
@@ -134,7 +132,6 @@ export default function ChooseThemePage({
                 isSelected={false}
                 click={async () => {
                   setSignTxStatus(1);
-
                   const {
                     ciphertext,
                     nonce,

@@ -97,7 +97,6 @@ export default function ComposerAction() {
               poll={poll}
               setStep={setStep}
               setProofOfHumanity={setProofOfHumanity}
-              setPollId={setPollId}
               setTheme={(t: boolean) => {
                 setPollImage("");
                 setPoll({
@@ -124,7 +123,7 @@ export default function ComposerAction() {
                   fid: "123",
                   theme: poll.theme.toString(),
                   isAnon: proofOfHumanity,
-                  validity: durationInput ? parseInt(durationInput) : 0,
+                  validity: poll.duration,
                 });
                 if (message == "Poll created") {
                   setPollId(pId);

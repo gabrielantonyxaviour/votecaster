@@ -76,11 +76,13 @@ export default function Poll({ pollId }: { pollId: string }) {
           setPoll({
             question: res.question,
             options: [res.option_a, res.option_b, res.option_c, res.option_d],
-            duration: res.duration,
+            duration: res.validity,
             theme: res.theme,
           });
           setProofOfHumanity(res.is_anon);
-          updateCountdown(new Date(res.duration));
+          console.log("DURATION");
+          console.log(res.validity);
+          updateCountdown(new Date(res.validity));
         }
       })();
     }
