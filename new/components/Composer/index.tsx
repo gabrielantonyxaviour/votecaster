@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 
-import { useRouter } from "next/navigation";
 import TopBar from "../TopBar";
 
 import Steps from "./Steps";
@@ -16,7 +15,6 @@ import createPollSupabase from "@/utils/supabase/createPoll";
 export default function ComposerAction() {
   const [pollId, setPollId] = useState("");
   const [step, setStep] = useState(1);
-  const [error, setError] = useState(false);
   const [poll, setPoll] = useState<Poll>({
     question: "",
     options: ["Option 1", "Option 2", "Option 3", "Option 4"],

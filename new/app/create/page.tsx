@@ -1,8 +1,6 @@
 "use client";
 import Head from "next/head";
 import ComposerAction from "@/components/Composer";
-import { useEffect } from "react";
-import { useAccount } from "wagmi";
 
 export default function HomePage() {
   return (

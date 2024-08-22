@@ -56,6 +56,10 @@ export default function ChooseThemePage({
     value: BigInt(0),
   });
 
+  useEffect(() => {
+    console.log(pollImage);
+  }, [pollImage]);
+
   return (
     <div className="h-full w-full flex flex-col justify-center ">
       <p className="text-center font-bold text-md ">POLL PREVIEW</p>

@@ -4759,6 +4759,7 @@ app.frame("/", (c) => {
 //     ],
 //   });
 // });
+
 app.frame(
   "/visualize/:question/a/:a/b/:b/c/:c/d/:d/theme/:theme",
   async (context) => {
@@ -4980,7 +4981,7 @@ app.frame("/poll/:[pollid]", async (c) => {
 
     intents: [
       <Button.Link href={`https://privcast.com/polls/${params["[pollid]"]}`}>
-        Google
+        Vote privately
       </Button.Link>,
     ],
   });
