@@ -406,7 +406,9 @@ export default function Poll({ pollId }: { pollId: string }) {
                                 const { message } = await vote({
                                   pollId,
                                   nullifier:
-                                    worldcoin.nullifier_hash || Math.random(),
+                                    worldcoin != null
+                                      ? worldcoin.nullifier_hash
+                                      : 123,
                                   vote: selectedOption || 0,
                                   isAnon: proofOfHumanity,
                                   tx: txHash,
