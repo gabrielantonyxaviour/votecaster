@@ -125,14 +125,10 @@ export default function Poll({ pollId }: { pollId: string }) {
 
       if (remaining.total <= 0) {
         clearInterval(interval);
-        setTimeLeft({
-          total: 0,
-          days: 0,
-          hours: 0,
-          minutes: 0,
-          seconds: 0,
-        });
+        setPollEnded(true);
+        setTimeLeft(null);
       } else {
+        setPollEnded(false);
         setTimeLeft(remaining);
       }
     }, 1000);
