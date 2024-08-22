@@ -80,7 +80,7 @@ export default function Poll({ pollId }: { pollId: string }) {
             theme: res.theme,
           });
           setProofOfHumanity(res.is_anon);
-          updateCountdown(new Date(1800000000 * 1000));
+          updateCountdown(new Date(1800000000 * 1000)); // TODO: Change to res.duration
         }
       })();
     }
