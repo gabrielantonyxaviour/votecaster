@@ -118,7 +118,7 @@ export default function ChooseThemePage({
                     ? "🔏 Preparing Data"
                     : signTxStatus == 2
                     ? "⌛ Waiting"
-                    : "✅ Poll Created"
+                    : "✅ Data Signed"
                 }
                 isSelected={false}
                 click={async () => {
