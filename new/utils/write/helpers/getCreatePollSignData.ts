@@ -3,8 +3,8 @@ import {
   bytes_to_base64,
   json_to_bytes,
   text_to_bytes,
+  concat,
 } from "@blake.regalia/belt";
-import { concat, keccak256, toBytes } from "viem";
 import {
   baseSepoliaPublicClientAddress,
   callbackSelector,
@@ -14,6 +14,7 @@ import {
 import { chacha20_poly1305_seal } from "@solar-republic/neutrino";
 import uploadInIPFS from "@/utils/uploadInIPFS";
 import generateKeys from "./generateKeys";
+import { arrayify, keccak256 } from "ethers/lib/utils";
 
 export default async function getCreatePollSignData({
   callerAddress,
@@ -26,9 +27,9 @@ export default async function getCreatePollSignData({
 }): Promise<{
   nonce: Uint8Array;
   ciphertext: Uint8Array;
-  payloadHash: `0x${string}`;
-  signData: `0x${string}`;
+  payloadHash: string;
   userPublicKeyBytes: Uint8Array;
+  ciphertextHash: string;
 }> {
   try {
     const { userPublicKeyBytes, sharedKey } = await generateKeys();
@@ -48,9 +49,9 @@ export default async function getCreatePollSignData({
       user_address: callerAddress,
       user_key: bytes_to_base64(userPublicKeyBytes),
       callback_address: bytes_to_base64(
-        toBytes(baseSepoliaPublicClientAddress)
+        arrayify(baseSepoliaPublicClientAddress)
       ),
-      callback_selector: bytes_to_base64(toBytes(callbackSelector)),
+      callback_selector: bytes_to_base64(arrayify(callbackSelector)),
       callback_gas_limit: callbackGasLimit.toString(),
     };
 
@@ -69,7 +70,7 @@ export default async function getCreatePollSignData({
     const payloadHash = keccak256(
       concat([
         text_to_bytes("\x19Ethereum Signed Message:\n32"),
-        toBytes(ciphertextHash),
+        arrayify(ciphertextHash),
       ])
     );
 
@@ -77,8 +78,8 @@ export default async function getCreatePollSignData({
       nonce,
       ciphertext,
       payloadHash,
-      signData: ciphertextHash,
       userPublicKeyBytes,
+      ciphertextHash,
     };
   } catch (e) {
     console.log("ERROR");
@@ -87,7 +88,7 @@ export default async function getCreatePollSignData({
       nonce: new Uint8Array(),
       ciphertext: new Uint8Array(),
       payloadHash: "0x",
-      signData: "0x",
+      ciphertextHash: "0x",
       userPublicKeyBytes: new Uint8Array(),
     };
   }

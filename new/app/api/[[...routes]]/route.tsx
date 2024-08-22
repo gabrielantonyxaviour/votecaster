@@ -4872,6 +4872,8 @@ app.frame("/polls/:[pollid]", async (c) => {
   const params = c.req.param();
   const fetched = await fetchEntryById(parseInt(params["[pollid]"]));
   return c.res({
+    title: fetched?.question,
+
     image: (
       <div
         style={{

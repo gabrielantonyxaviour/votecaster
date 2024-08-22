@@ -10,18 +10,16 @@ import { config } from "@/utils/constants";
 import getCreatePollSignData from "@/utils/write/helpers/getCreatePollSignData";
 import { useAccount, useSwitchChain } from "wagmi";
 import createPollSupabase from "@/utils/supabase/createPoll";
-import createPoll from "@/utils/write/createPoll";
-import {
-  concat,
-  createWalletClient,
-  custom,
-  hexToBigInt,
-  recoverPublicKey,
-} from "viem";
+
 import { baseSepolia } from "viem/chains";
 import { sendTransaction } from "@wagmi/core";
 import Image from "next/image";
 import styles from "@/styles/spinner.module.css";
+import { ethers } from "ethers";
+import { recoverPublicKey } from "ethers/lib/utils";
+import { hexToBigInt } from "viem";
+import getSecretPathData from "@/utils/write/helpers/getSecretPathData";
+import uploadInIPFS from "@/utils/uploadInIPFS";
 
 export default function ChooseThemePage({
   poll,
@@ -47,11 +45,11 @@ export default function ChooseThemePage({
   const { address, chainId } = useAccount();
   const { switchChainAsync } = useSwitchChain();
   const [transaction, setTransaction] = useState<Transaction>({
-    account: "0x",
+    from: "0x",
     data: "0x",
-    gas: BigInt(0),
+    gas: "0x",
     to: "0x",
-    value: BigInt(0),
+    value: "0x",
   });
 
   useEffect(() => {
@@ -126,57 +124,36 @@ export default function ChooseThemePage({
                   signTxStatus == 0
                     ? "✏️ Sign Message"
                     : signTxStatus == 1
-                    ? "⌛ Tx Pending"
-                    : "✅ Signed Data"
+                    ? "⌛ Preparing Data"
+                    : signTxStatus == 2
+                    ? "⌛ Waiting"
+                    : "✅ Poll Created"
                 }
                 isSelected={false}
                 click={async () => {
                   setSignTxStatus(1);
-                  const {
-                    ciphertext,
-                    nonce,
-                    payloadHash,
-                    signData,
-                    userPublicKeyBytes,
-                  } = await getCreatePollSignData({
-                    callerAddress: address as `0x${string}`,
-                    poll: poll,
-                    validity: poll.duration,
-                  });
-                  const params = [address as `0x${string}`, signData];
-                  const client = createWalletClient({
-                    account: address as `0x${string}`,
-                    chain: baseSepolia,
-                    transport: custom(window.ethereum),
-                  });
 
-                  const payloadSignature = await client.signMessage({
-                    message: concat(params),
-                  });
-                  const user_pubkey = await recoverPublicKey({
-                    hash: payloadHash,
-                    signature: payloadSignature,
-                  });
-                  console.log(user_pubkey);
-                  const { gas, to, from, value, data } = await createPoll({
-                    nonce,
-                    payloadHash,
-                    ciphertext,
-                    signature: signData,
-                    userAddress: address as `0x${string}`,
-                    userPublicKey: user_pubkey,
-                    userPublicKeyBytes,
-                  });
-                  console.log({ gas, to, from, value, data });
+                  const url = await uploadInIPFS({ poll });
+
+                  const { gas, to, from, value, data } =
+                    await getSecretPathData({
+                      callerAddress: address as `0x${string}`,
+                      functionName: "create_poll",
+                      input: {
+                        poll_uri: url,
+                        validity: 0,
+                      },
+                      setSignTxStatus,
+                    });
 
                   setTransaction({
                     to,
-                    account: address as `0x${string}`,
-                    value: hexToBigInt(value),
+                    from,
+                    value,
                     data,
-                    gas: hexToBigInt(gas),
+                    gas,
                   });
-                  setSignTxStatus(2);
+                  setSignTxStatus(3);
                 }}
                 disabled={signTxStatus != 0}
               />
@@ -205,7 +182,7 @@ export default function ChooseThemePage({
 
                   setStep(3);
                 }}
-                disabled={signTxStatus != 2 || sendTxStatus != 0}
+                disabled={signTxStatus != 3 || sendTxStatus != 0}
               />
             </div>
           </div>

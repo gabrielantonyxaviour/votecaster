@@ -16,9 +16,9 @@ export type TimeLeft = {
 };
 
 export type Transaction = {
-  gas: bigint;
-  to: `0x${string}`;
-  account: `0x${string}`;
-  value: bigint;
-  data: `0x${string}`;
+  gas: string;
+  to: string;
+  from: string;
+  value: string;
+  data: string;
 };
