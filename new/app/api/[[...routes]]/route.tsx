@@ -4868,7 +4868,7 @@ app.frame(
     });
   }
 );
-app.frame("/poll/:[pollid]", async (c) => {
+app.frame("/polls/:[pollid]", async (c) => {
   const params = c.req.param();
   const fetched = await fetchEntryById(parseInt(params["[pollid]"]));
   return c.res({

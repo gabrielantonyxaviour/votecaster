@@ -82,6 +82,7 @@ export default function Poll({ pollId }: { pollId: string }) {
           setProofOfHumanity(res.is_anon);
           console.log("DURATION");
           console.log(res.validity);
+          console.log(Date.now());
           updateCountdown(new Date(res.validity));
         }
       })();

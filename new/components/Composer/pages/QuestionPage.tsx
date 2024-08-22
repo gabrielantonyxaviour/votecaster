@@ -115,9 +115,10 @@ export default function QuestionPage({
                   const textInput = e.target.value;
                   const filteredValue = textInput.replace(/[^0-9]/g, "");
                   setDurationInput(filteredValue);
+                  const currentTime = Date.now();
                   const timeFromCurrentTimestamp =
-                    Date.now() +
-                    parseInt(filteredValue) * values[selectedIndex];
+                    currentTime +
+                    parseInt(filteredValue) * 1000 * values[selectedIndex];
                   console.log(timeFromCurrentTimestamp);
                   setPoll({
                     ...poll,
@@ -136,9 +137,10 @@ export default function QuestionPage({
               if (option === "hours") setSelectedIndex(1);
               if (option === "days") setSelectedIndex(2);
               if (option === "months") setSelectedIndex(3);
-
+              const currentTime = Date.now();
               const timeFromCurrentTimestamp =
-                Date.now() + parseInt(durationInput) * values[selectedIndex];
+                currentTime +
+                parseInt(durationInput) * values[selectedIndex] * 1000;
               console.log(timeFromCurrentTimestamp);
               setPoll({
                 ...poll,

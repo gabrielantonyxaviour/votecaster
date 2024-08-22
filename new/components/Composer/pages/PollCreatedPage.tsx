@@ -39,7 +39,7 @@ export default function PollCreatedPage({
         )}
       </div>
       <p className=" font-bold text-md text-center">
-        {"https://privcast.com/api/poll/" + pollId}
+        {"https://privcast.com/api/polls/" + pollId}
       </p>
       <div className="flex justify-center">
         <HoverButton

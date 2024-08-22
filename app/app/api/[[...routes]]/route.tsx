@@ -4727,7 +4727,7 @@ app.frame("/choosetheme/:theme", (c) => {
   });
 });
 
-app.frame("/poll/:[pollid]", async (c) => {
+app.frame("/polls/:[pollid]", async (c) => {
   const params = c.req.param();
   const fetched = await fetchEntryById(parseInt(params["[pollid]"]));
   return c.res({
@@ -4874,7 +4874,7 @@ app.frame("/createpoll", async (c) => {
         }}
       >
         <div style={{ fontFamily: "fantasy", fontSize: "50px" }}>
-          {`/api/poll/${id}`}
+          {`/api/polls/${id}`}
         </div>
       </div>
     ),
