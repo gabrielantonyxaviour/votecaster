@@ -7,7 +7,7 @@ export default function HomePage() {
     <>
       <Head>
         <title>priv.cast | Create</title>
-        <link rel="icon" href="/logo.png" />
+        <link rel="icon" href="/logo.png" type="image/png" />
       </Head>
       <main style={{ fontFamily: "Inter, sans-serif" }}>
         <div className="max-w-[800px] mx-auto h-screen ">
