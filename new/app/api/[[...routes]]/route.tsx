@@ -1,8 +1,7 @@
 /** @jsxImportSource frog/jsx */
 
-import { fetchEntryById, insertData } from "@/utils/supabase";
-import getCreatePollSignData from "@/utils/write/helpers/getCreatePollSignData";
-import { Button, Frog, TextInput } from "frog";
+import { fetchEntryById } from "@/utils/supabase";
+import { Button, Frog } from "frog";
 import { devtools } from "frog/dev";
 import { handle } from "frog/next";
 import { serveStatic } from "frog/serve-static";
