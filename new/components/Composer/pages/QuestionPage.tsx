@@ -133,10 +133,9 @@ export default function QuestionPage({
             selectedOption={timeframe[selectedIndex]}
             options={timeframe}
             setOption={(option: string) => {
-              if (option === "minutes") setSelectedIndex(0);
+              if (option === "mins") setSelectedIndex(0);
               if (option === "hours") setSelectedIndex(1);
               if (option === "days") setSelectedIndex(2);
-              if (option === "months") setSelectedIndex(3);
               const currentTime = Date.now();
               const timeFromCurrentTimestamp =
                 currentTime +
