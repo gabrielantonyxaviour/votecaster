@@ -14,8 +14,19 @@ import {
 } from "@worldcoin/idkit";
 import HoverButton from "../Common/HoverButton";
 import getCastVoteSignData from "@/utils/write/helpers/getCastVoteSignData";
-import { concat, createWalletClient, custom, recoverPublicKey } from "viem";
+import {
+  concat,
+  createWalletClient,
+  custom,
+  decodeAbiParameters,
+  hexToBigInt,
+  recoverPublicKey,
+} from "viem";
 import { baseSepolia } from "viem/chains";
+import castVote from "@/utils/write/castVote";
+import { sendTransaction } from "@wagmi/core";
+import { config } from "@/utils/constants";
+import vote from "@/utils/supabase/vote";
 
 export default function Poll({ pollId }: { pollId: string }) {
   const { status, chainId, address } = useAccount();
@@ -27,6 +38,7 @@ export default function Poll({ pollId }: { pollId: string }) {
     duration: 0,
     theme: 0,
   });
+  const [sendTxHash, setSendTxHash] = useState("");
   const [viewResults, setViewResults] = useState<boolean>(false);
   const [proofOfHumanity, setProofOfHumanity] = useState<boolean>(false);
   const [worldcoin, setWorldCoin] = useState<any>(null);
@@ -64,6 +76,9 @@ export default function Poll({ pollId }: { pollId: string }) {
       })();
     }
   }, [address]);
+  const unpack = (proof: `0x${string}`) => {
+    return decodeAbiParameters([{ type: "uint256[8]" }], proof)[0];
+  };
   const updateCountdown = (targetTimestamp: Date) => {
     const remainingTime = calculateTimeLeft(targetTimestamp);
     console.log(remainingTime);
@@ -183,19 +198,58 @@ export default function Poll({ pollId }: { pollId: string }) {
                     </>
                   ) : (
                     <div className="flex justify-between pt-12">
-                      <div className="flex-1">
-                        <p className="text-lg font-bold">PROOF OF HUMANITY</p>
-                        <p className="text-center font-semibold text-xs w-[80%] pb-4 mx-auto">
-                          Prove your huamnity using World ID 🤖
-                        </p>
-                        <div className="flex justify-center">
-                          <HoverButton
-                            text={worldVerified ? "Verified ✅" : "Verify 🤖"}
-                            disabled={!worldVerified}
-                            click={() => {}}
-                          />
+                      {proofOfHumanity && (
+                        <div className="flex-1">
+                          <p className="text-lg font-bold">PROOF OF HUMANITY</p>
+                          <p className="text-center font-semibold text-xs w-[80%] pb-4 mx-auto">
+                            Prove your huamnity using World ID
+                          </p>
+                          <div className="flex justify-center">
+                            {worldVerified && (
+                              <HoverButton
+                                text={"Verified ✅"}
+                                disabled={true}
+                                click={() => {}}
+                              />
+                            )}
+                            {address != undefined && !worldVerified && (
+                              <IDKitWidget
+                                app_id={
+                                  (process.env
+                                    .NEXT_PUBLIC_WORLDCOIN_APP_ID as `app_${string}`) ||
+                                  "app_"
+                                }
+                                action="unique-human-airdrop"
+                                onSuccess={(result: ISuccessResult) => {
+                                  const bigNumProofs = unpack(
+                                    (result as any).proof
+                                  );
+                                  setWorldCoin({
+                                    ...result,
+                                    proofs: bigNumProofs,
+                                  });
+                                  console.log("Success");
+                                  console.log(result);
+                                  setWorldVerified(true);
+                                }}
+                                onError={(error: any) => {
+                                  console.log(error);
+                                }}
+                                signal={address as `0x${string}`}
+                                verification_level={VerificationLevel.Orb}
+                              >
+                                {({ open }: any) => (
+                                  <HoverButton
+                                    text={"Verify 🤖"}
+                                    disabled={selectedOption == null}
+                                    click={open}
+                                  />
+                                )}
+                              </IDKitWidget>
+                            )}
+                          </div>
                         </div>
-                      </div>
+                      )}
                       <div className="flex-1">
                         <p className="text-lg font-bold">CONFIRMATION</p>
                         <div className="flex flex-col space-y-4 pt-2 items-center justify-center pb-4">
@@ -205,7 +259,7 @@ export default function Poll({ pollId }: { pollId: string }) {
                                 signTxStatus == 0
                                   ? "✏️ Sign Message"
                                   : signTxStatus == 1
-                                  ? "⌛ Tx Pending"
+                                  ? "⌛ Pending"
                                   : "✅ Signed Data"
                               }
                               isSelected={false}
@@ -224,58 +278,61 @@ export default function Poll({ pollId }: { pollId: string }) {
                                   vote: selectedOption as number,
                                   fId: fId as number,
                                 });
-                                // const params = [
-                                //   address as `0x${string}`,
-                                //   signData,
-                                // ];
-                                // const client = createWalletClient({
-                                //   account: address as `0x${string}`,
-                                //   chain: baseSepolia,
-                                //   transport: custom(window.ethereum),
-                                // });
+                                const params = [
+                                  address as `0x${string}`,
+                                  signData,
+                                ];
+                                const client = createWalletClient({
+                                  account: address as `0x${string}`,
+                                  chain: baseSepolia,
+                                  transport: custom(window.ethereum),
+                                });
 
-                                // const payloadSignature = await client.signMessage(
-                                //   {
-                                //     message: concat(params),
-                                //   }
-                                // );
-                                // const user_pubkey = await recoverPublicKey({
-                                //   hash: payloadHash,
-                                //   signature: payloadSignature,
-                                // });
-                                // console.log(user_pubkey);
-                                // const { gas, to, from, value, data } =
-                                //   await createPoll({
-                                //     nonce,
-                                //     payloadHash,
-                                //     ciphertext,
-                                //     signature: signData,
-                                //     userAddress: address as `0x${string}`,
-                                //     userPublicKey: user_pubkey,
-                                //     userPublicKeyBytes,
-                                //   });
-                                // console.log({ gas, to, from, value, data });
+                                const payloadSignature =
+                                  await client.signMessage({
+                                    message: concat(params),
+                                  });
+                                const user_pubkey = await recoverPublicKey({
+                                  hash: payloadHash,
+                                  signature: payloadSignature,
+                                });
+                                console.log(user_pubkey);
+                                const { gas, to, from, value, data } =
+                                  await castVote({
+                                    nonce,
+                                    payloadHash,
+                                    ciphertext,
+                                    signature: signData,
+                                    userAddress: address as `0x${string}`,
+                                    userPublicKey: user_pubkey,
+                                    userPublicKeyBytes,
+                                  });
+                                console.log({ gas, to, from, value, data });
 
-                                // setTransaction({
-                                //   to,
-                                //   account: address as `0x${string}`,
-                                //   value: hexToBigInt(value),
-                                //   data,
-                                //   gas: hexToBigInt(gas),
-                                // });
-                                // setSignTxStatus(2);
+                                setTransaction({
+                                  to,
+                                  account: address as `0x${string}`,
+                                  value: hexToBigInt(value),
+                                  data,
+                                  gas: hexToBigInt(gas),
+                                });
+                                setSignTxStatus(2);
                               }}
-                              disabled={signTxStatus != 0}
+                              disabled={
+                                signTxStatus != 0 ||
+                                (proofOfHumanity && !worldVerified) ||
+                                selectedOption == null
+                              }
                             />
                           </div>
                           <div className="flex items-center space-x-2">
                             <SelectableButton
                               text={
                                 sendTxStatus == 0
-                                  ? "🖼️ Create Poll"
+                                  ? "🖼️ Cast Vote"
                                   : sendTxStatus == 1
                                   ? "⌛ Tx Pending"
-                                  : "✅ Created Poll"
+                                  : "✅ Vote Casted"
                               }
                               isSelected={false}
                               click={async () => {
@@ -284,13 +341,18 @@ export default function Poll({ pollId }: { pollId: string }) {
                                   await switchChainAsync({
                                     chainId: baseSepolia.id,
                                   });
-                                // const txHash = await sendTransaction(config, {
-                                //   ...transaction,
-                                // });
-                                // setSendTxHash(txHash);
-                                // await updateSupabase();
-
-                                // setStep(3);
+                                const txHash = await sendTransaction(config, {
+                                  ...transaction,
+                                });
+                                setSendTxHash(txHash);
+                                const { message } = await vote({
+                                  pollId,
+                                  nullifier:
+                                    worldcoin.nullifier_hash || Math.random(),
+                                  vote: selectedOption || 0,
+                                  isAnon: proofOfHumanity,
+                                });
+                                setSendTxStatus(2);
                               }}
                               disabled={signTxStatus != 2 || sendTxStatus != 0}
                             />

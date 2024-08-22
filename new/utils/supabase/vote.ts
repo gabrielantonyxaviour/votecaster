@@ -7,18 +7,51 @@ export default async function vote(req: {
   pollId: string;
   nullifier: string;
   vote: number;
+  isAnon: boolean;
 }): Promise<{ message: string; response: any }> {
-  const { pollId, vote, nullifier } = req;
+  const { pollId, vote, nullifier, isAnon } = req;
 
   try {
-    const { data: fetchedVote, error: fetchError } = await supabase
-      .from("votes")
-      .select("*")
-      .eq("pollId", pollId)
-      .eq("nullifier", nullifier);
+    if (isAnon) {
+      const { data: fetchedVote, error: fetchError } = await supabase
+        .from("votes")
+        .select("*")
+        .eq("poll_id", pollId)
+        .eq("nullifier", nullifier);
 
-    console.log(fetchedVote);
-    if (fetchError || fetchedVote == null || fetchedVote.length === 0) {
+      console.log(fetchedVote);
+      if (fetchError || fetchedVote == null || fetchedVote.length === 0) {
+        const { data, error } = supabase
+          ? await supabase
+              .from("votes")
+              .insert([
+                {
+                  poll_id: pollId,
+                  nullifier,
+                  vote,
+                },
+              ])
+              .select()
+          : {
+              data: null,
+              error: new Error("Supabase client is not initialized"),
+            };
+        if (error) {
+          console.log(error);
+
+          return { message: "Error voting", response: error };
+        }
+        return {
+          message: "Voted",
+          response: data != null ? data[0] : "",
+        };
+      } else {
+        return {
+          message: "Already voted",
+          response: fetchedVote[0],
+        };
+      }
+    } else {
       const { data, error } = supabase
         ? await supabase
             .from("votes")
@@ -42,11 +75,6 @@ export default async function vote(req: {
       return {
         message: "Voted",
         response: data != null ? data[0] : "",
-      };
-    } else {
-      return {
-        message: "Already voted",
-        response: fetchedVote[0],
       };
     }
   } catch (error) {
