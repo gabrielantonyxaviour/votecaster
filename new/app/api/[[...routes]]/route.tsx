@@ -4977,6 +4977,7 @@ app.frame("/poll/:[pollid]", async (c) => {
         </div>
       </div>
     ),
+
     intents: [
       <Button.Link href={`https://privcast.com/polls/${params["[pollid]"]}`}>
         Google

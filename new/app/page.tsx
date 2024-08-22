@@ -1,7 +1,5 @@
 "use client";
 import Head from "next/head";
-import Navbar from "@/components/WebPage/Navbar";
-import Landing from "@/components/WebPage/Landing";
 
 export default function HomePage() {
   return (
@@ -10,10 +8,7 @@ export default function HomePage() {
         <title>priv.cast | Home</title>
       </Head>
       <main style={{ fontFamily: "Inter, sans-serif" }}>
-        <div className="max-w-[1200px] mx-auto h-screen py-8">
-          <Navbar />
-          <Landing />
-        </div>
+        <div className="max-w-[1200px] mx-auto h-screen py-8"></div>
       </main>
     </>
   );
