@@ -27,6 +27,9 @@ import castVote from "@/utils/write/castVote";
 import { sendTransaction } from "@wagmi/core";
 import { config } from "@/utils/constants";
 import vote from "@/utils/supabase/vote";
+import getVoted from "@/utils/supabase/getVoted";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
 
 export default function Poll({ pollId }: { pollId: string }) {
   const { status, chainId, address } = useAccount();
@@ -39,15 +42,15 @@ export default function Poll({ pollId }: { pollId: string }) {
     theme: 0,
   });
   const [sendTxHash, setSendTxHash] = useState("");
-  const [viewResults, setViewResults] = useState<boolean>(false);
   const [proofOfHumanity, setProofOfHumanity] = useState<boolean>(false);
   const [worldcoin, setWorldCoin] = useState<any>(null);
   const [worldVerified, setWorldVerified] = useState<boolean>(false);
   const [fName, setFName] = useState("");
-  const [fId, setFId] = useState<number | null>(1); // TODO: Change from null
+  const [fId, setFId] = useState<number | null>(3); // TODO: Change from null
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [signTxStatus, setSignTxStatus] = useState(0);
   const [sendTxStatus, setSendTxStatus] = useState(0);
+  const [userVote, setUserVote] = useState<number>(-1);
   const { switchChainAsync } = useSwitchChain();
   const [transaction, setTransaction] = useState<Transaction>({
     account: "0x",
@@ -56,6 +59,12 @@ export default function Poll({ pollId }: { pollId: string }) {
     to: "0x",
     value: BigInt(0),
   });
+  const [voteResults, setVoteResults] = useState<number[]>([2, 8, 9, 12]);
+  const [highestIndex, setHighestIndex] = useState<number>(
+    voteResults.reduce((maxIndex, currentValue, currentIndex, array) => {
+      return currentValue > array[maxIndex] ? currentIndex : maxIndex;
+    }, 0)
+  );
   useEffect(() => {
     console.log(address);
     if (address != undefined) {
@@ -71,11 +80,39 @@ export default function Poll({ pollId }: { pollId: string }) {
             theme: res.theme,
           });
           setProofOfHumanity(res.is_anon);
-          updateCountdown(new Date(10000000000 * 1000));
+          updateCountdown(new Date(1800000000 * 1000));
         }
       })();
     }
   }, [address]);
+
+  useEffect(() => {
+    (async function () {
+      if (proofOfHumanity) {
+        if (worldcoin != null) {
+          const { response: resVoted } = await getVoted({
+            pollId,
+            nullifier: worldcoin.nullifier_hash || Math.random(),
+            fid: fId?.toString() || "1",
+          });
+          if (resVoted != null) {
+            setUserVote(resVoted.vote);
+            setSendTxHash(resVoted.tx);
+          }
+        }
+      } else if (fId != null) {
+        const { response: resVoted } = await getVoted({
+          pollId,
+          nullifier: Math.random().toString(),
+          fid: fId.toString() || "1",
+        });
+        if (resVoted != null) {
+          setUserVote(resVoted.vote);
+          setSendTxHash(resVoted.tx);
+        }
+      }
+    })();
+  }, [worldcoin]);
   const unpack = (proof: `0x${string}`) => {
     return decodeAbiParameters([{ type: "uint256[8]" }], proof)[0];
   };
@@ -108,65 +145,77 @@ export default function Poll({ pollId }: { pollId: string }) {
                 {poll.question}
               </p>
               <div className="grid grid-cols-2 gap-4 w-full ">
-                <div className="flex-1 ">
-                  <SelectableButton
-                    isSelected={selectedOption === 0}
-                    disabled={pollEnded || fId == null}
-                    text={poll.options[0]}
-                    click={() => {
-                      if (selectedOption !== 0) setSelectedOption(0);
-                      else setSelectedOption(4);
-                    }}
-                  />
-                </div>
-
-                <div className="flex-1">
-                  <SelectableButton
-                    isSelected={selectedOption === 1}
-                    disabled={pollEnded || fId == null}
-                    text={poll.options[1]}
-                    click={() => {
-                      if (selectedOption !== 1) setSelectedOption(1);
-                      else setSelectedOption(4);
-                    }}
-                  />
-                </div>
-                <div className="flex-1">
-                  <SelectableButton
-                    isSelected={selectedOption === 2}
-                    disabled={pollEnded || fId == null}
-                    text={poll.options[2]}
-                    click={() => {
-                      if (selectedOption !== 2) setSelectedOption(2);
-                      else setSelectedOption(4);
-                    }}
-                  />
-                </div>
-
-                <div className="flex-1">
-                  <SelectableButton
-                    isSelected={selectedOption === 3}
-                    disabled={pollEnded || fId == null}
-                    text={poll.options[3]}
-                    click={() => {
-                      if (selectedOption !== 3) setSelectedOption(3);
-                      else setSelectedOption(4);
-                    }}
-                  />
-                </div>
-              </div>
-              {pollEnded ? (
-                <div className="text-center py-6">
-                  <p className="text-lg font-bold">Poll has ended.</p>
-                  <div className="pt-4 w-[40%] mx-auto">
-                    <HoverButton
-                      text="View Results"
-                      disabled={false}
+                {poll.options.map((option, index) => (
+                  <div key={index} className="flex-1">
+                    <SelectableButton
+                      isSelected={
+                        selectedOption === index ||
+                        (pollEnded && highestIndex == index) ||
+                        (!pollEnded && userVote == index)
+                      }
+                      text={`${option} ${
+                        pollEnded ? "( " + voteResults[index] + " Votes )" : ""
+                      }`}
+                      disabled={fId == null}
                       click={() => {
-                        setViewResults(true);
+                        if (pollEnded) return;
+                        if (userVote != -1) return;
+                        if (selectedOption !== index) setSelectedOption(index);
                       }}
                     />
                   </div>
+                ))}
+              </div>
+              {pollEnded ? (
+                <div className="text-center py-6">
+                  <p className="text-lg font-bold pt-4">POLL HAS ENDED</p>
+                  {userVote != -1 ? (
+                    <div className="flex flex-col pt-6 space-y-2">
+                      <div className="flex justify-center space-x-2 items-center">
+                        <p className="text-sm font-bold  text-center">
+                          Your vote
+                        </p>
+                        <FontAwesomeIcon
+                          icon={faArrowUpRightFromSquare}
+                          onClick={() => {
+                            window.open(
+                              "https://sepolia.basescan.org/tx/" + sendTxHash,
+                              "_blank",
+                              "noopener,noreferrer"
+                            );
+                          }}
+                          height={13}
+                          width={13}
+                          className="cursor-pointer"
+                        />
+                      </div>
+                      <div className="flex justify-center items-center space-x-2">
+                        <SelectableButton
+                          isSelected={
+                            selectedOption === userVote ||
+                            (pollEnded && highestIndex == userVote)
+                          }
+                          text={`${poll.options[userVote]} ${
+                            pollEnded
+                              ? "( " + voteResults[userVote] + " Votes )"
+                              : ""
+                          }`}
+                          disabled={fId == null}
+                          click={() => {
+                            window.open(
+                              "https://sepolia.basescan.org/tx/" + sendTxHash,
+                              "_blank",
+                              "noopener,noreferrer"
+                            );
+                          }}
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    <p className="text-sm pt-4">
+                      You did not vote on this poll ❌
+                    </p>
+                  )}
                 </div>
               ) : (
                 <div className="text-center py-6">
@@ -187,16 +236,15 @@ export default function Poll({ pollId }: { pollId: string }) {
                   </div>
                   {fId == null ? (
                     <>
-                      {" "}
                       <p className="text-center text-xl pt-12 font-bold">
                         NO FARCASTER PROFILE DETECTED 🔎
-                      </p>{" "}
+                      </p>
                       <p className="text-center text-sm w-[60%] mx-auto">
                         Switch your wallet to an address that is connected to
                         your Farcaster profile.
                       </p>
                     </>
-                  ) : (
+                  ) : userVote == -1 ? (
                     <div className="flex justify-between pt-12">
                       {proofOfHumanity && (
                         <div className="flex-1">
@@ -351,6 +399,8 @@ export default function Poll({ pollId }: { pollId: string }) {
                                     worldcoin.nullifier_hash || Math.random(),
                                   vote: selectedOption || 0,
                                   isAnon: proofOfHumanity,
+                                  tx: txHash,
+                                  fid: fId.toString(),
                                 });
                                 setSendTxStatus(2);
                               }}
@@ -360,11 +410,51 @@ export default function Poll({ pollId }: { pollId: string }) {
                         </div>
                       </div>
                     </div>
+                  ) : (
+                    <div className="flex flex-col pt-6 space-y-2">
+                      <div className="flex justify-center space-x-2 items-center">
+                        <p className="text-sm font-bold  text-center">
+                          Your vote
+                        </p>
+                        <FontAwesomeIcon
+                          icon={faArrowUpRightFromSquare}
+                          onClick={() => {
+                            window.open(
+                              "https://sepolia.basescan.org/tx/" + sendTxHash,
+                              "_blank",
+                              "noopener,noreferrer"
+                            );
+                          }}
+                          height={13}
+                          width={13}
+                          className="cursor-pointer"
+                        />
+                      </div>
+                      <div className="flex justify-center items-center space-x-2">
+                        <SelectableButton
+                          isSelected={
+                            selectedOption === userVote ||
+                            (pollEnded && highestIndex == userVote)
+                          }
+                          text={`${poll.options[userVote]} ${
+                            pollEnded
+                              ? "( " + voteResults[userVote] + " Votes )"
+                              : ""
+                          }`}
+                          disabled={fId == null}
+                          click={() => {
+                            window.open(
+                              "https://sepolia.basescan.org/tx/" + sendTxHash,
+                              "_blank",
+                              "noopener,noreferrer"
+                            );
+                          }}
+                        />
+                      </div>
+                    </div>
                   )}
                 </div>
               )}
-              <div className="flex justify-between space-x-8 pt-12"></div>
-              <div className="flex justify-between space-x-8 mt-4"></div>
             </div>
           )}
         </div>

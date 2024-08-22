@@ -8,8 +8,10 @@ export default async function vote(req: {
   nullifier: string;
   vote: number;
   isAnon: boolean;
+  tx: string;
+  fid: string;
 }): Promise<{ message: string; response: any }> {
-  const { pollId, vote, nullifier, isAnon } = req;
+  const { pollId, vote, nullifier, isAnon, tx, fid } = req;
 
   try {
     if (isAnon) {
@@ -29,6 +31,8 @@ export default async function vote(req: {
                   poll_id: pollId,
                   nullifier,
                   vote,
+                  tx,
+                  fid,
                 },
               ])
               .select()

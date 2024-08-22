@@ -27,17 +27,17 @@ export default async function getVoted(req: {
     if (fetchedVoteByNullifer != null && fetchedVoteByNullifer.length > 0) {
       return {
         message: "Already voted",
-        response: true,
+        response: fetchedVoteByNullifer[0],
       };
     } else if (fetchedVoteByFid != null && fetchedVoteByFid.length > 0) {
       return {
         message: "Already voted",
-        response: true,
+        response: fetchedVoteByFid[0],
       };
     } else {
       return {
         message: "Not Voted",
-        response: false,
+        response: null,
       };
     }
   } catch (error) {
