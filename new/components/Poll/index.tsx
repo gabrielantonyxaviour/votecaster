@@ -119,16 +119,23 @@ export default function Poll({ pollId }: { pollId: string }) {
   const unpack = (proof: `0x${string}`) => {
     return decodeAbiParameters([{ type: "uint256[8]" }], proof)[0];
   };
-  const updateCountdown = (targetTimestamp: Date) => {
-    const remainingTime = calculateTimeLeft(targetTimestamp);
-    console.log(remainingTime);
-    if (remainingTime.total <= 0) {
-      setPollEnded(true);
-      setTimeLeft(null);
-    } else {
-      setPollEnded(false);
-      setTimeLeft(remainingTime);
-    }
+  const updateCountdown = (targetDate: Date) => {
+    const interval = setInterval(() => {
+      const remaining = calculateTimeLeft(targetDate);
+
+      if (remaining.total <= 0) {
+        clearInterval(interval);
+        setTimeLeft({
+          total: 0,
+          days: 0,
+          hours: 0,
+          minutes: 0,
+          seconds: 0,
+        });
+      } else {
+        setTimeLeft(remaining);
+      }
+    }, 1000);
   };
 
   return (
