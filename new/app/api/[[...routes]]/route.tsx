@@ -49,20 +49,19 @@ const app = new Frog<{ State: State }>({
 app.composerAction(
   "/create",
   (c) => {
-    process.env.FARCASTER_ID = c.actionData.fid.toString();
     return c.res({
-      title: "Priv Cast",
-      url: "https://privcast.com/create",
+      title: "Clash Of Balls",
+      url: "https://clash-of-balls.vercel.app?fid=" + c.actionData.fid,
     });
   },
   {
-    name: "Priv Cast Composer action",
-    description: "Create public polls and vote privately",
+    name: "Clash Of Balls Composer action",
+    description:
+      "1v1 Football Prediction Battle on Chiliz with encrypted predictions using FHE.",
     icon: "image",
-    imageUrl: "https://privcast.com/logo.png",
+    imageUrl: "https://clash-of-balls.vercel.app/logo.png",
   }
 );
-
 app.frame("/", (c) => {
   return c.res({
     image: (
